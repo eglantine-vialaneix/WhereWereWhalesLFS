@@ -3,9 +3,9 @@ __pycache__
 __pycache__/*
 
 # Heavy files
-data
 images_and_sounds
 images_and_sounds/*
+wiki_images/*
 
 # DS_Store
 .DS_Store
