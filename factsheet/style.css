@@ -52,7 +52,7 @@ h3 { font-size: 1.25rem; }
 h4 { font-size: 0.75rem; }
 
 .width-limited {
-	max-width: 55rem;
+	max-width: 60rem;
 
     margin-top: 2em;
 
@@ -97,8 +97,120 @@ h4 { font-size: 0.75rem; }
 
     align-items: center;
 }
+
 .search > div{
     display: flex;
     align-items: center;
 }
 
+
+.container {
+    width: 100%;
+    margin: 1rem 0;
+}
+
+/* image gallery */
+
+.gallery {
+    display: flex;
+    position: relative;
+    height: 500px;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    overflow: visible;
+}
+
+.gallery-item {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: none;
+    justify-content: center;
+    align-items: center;
+}
+
+.gallery-image {
+    max-width: 100%;
+    max-height: 100%;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    z-index: 1;
+}
+
+
+.gallery-button {
+    position: absolute;
+    top: 0;
+    height: 100%;
+    width: 30%;
+    margin: 0;
+    padding: 0;
+    background: transparent; /* subtle transparent black */
+    color: white; /* make the arrows visible */
+    border: none;
+    font-size: 4rem;
+    cursor: pointer;
+    opacity: 0; /* ← this is hiding them initially */
+    transition: opacity 0.3s ease;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center; /* ← centers the arrow horizontally */
+    outline: none; /* disable browser default focus ring */
+    text-shadow:
+    -1px -1px 0 black,
+     1px -1px 0 black,
+    -1px  1px 0 black,
+     1px  1px 0 black;
+}
+
+.prev {
+    left: 20px;
+}
+
+.next {
+    right: 20px;
+}
+
+.gallery:hover .gallery-button {
+    opacity: 1;
+}
+
+
+.thumbnail-container {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+    overflow-x: auto;
+    padding: 10px 0;
+}
+
+.thumbnail {
+    width: 80px;
+    height: 60px;
+    object-fit: cover;
+    cursor: pointer;
+    border-radius: 4px;
+    border: 2px solid transparent;
+    transition: border-color 0.2s ease;
+}
+
+/* floating image containing */
+.svg-container {
+    display: flex;
+    gap: 1rem; /* spacing between SVGs */
+    justify-content: center; /* center them in the container */
+    align-items: center;
+    flex-wrap: wrap; /* optional: wrap on smaller screens */
+    margin-top: 1rem;
+}
+
+.svg-container img {
+    width: 18rem;         /* Set a fixed width */
+    height: 10rem;        /* Set a fixed height */
+    object-fit: contain;  /* Scale SVG to fit while keeping aspect ratio */
+    padding: 0.5rem;      /* Optional: spacing inside each box */
+    box-sizing: border-box;
+}
