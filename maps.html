@@ -169,12 +169,26 @@
             </label>
           </div>
           
-          <div style="margin-left: 20px;">
+          <div style="margin-left: 20px; ; margin-bottom: 20px;">
             <label>
               <input type="checkbox" id="toggleVulnerableSpecies">
               Show Vulnerable Species
             </label>
           </div>
+
+          <script>
+            window.onload = () => {
+              document.activeElement.blur();  // remove focus from any input
+            };
+          </script>
+
+        <div style="margin-left: 20px;">
+          <label>
+            <input type="checkbox" id="toggleView">
+            3D Globe View
+          </label>
+        </div>
+
         
       </div>
     </div>
