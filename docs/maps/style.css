@@ -76,3 +76,12 @@
     height: 0;
     z-index: 1;
   }
+
+  .hidden-input {
+    position: absolute;
+    left: -9999px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+  }
+  

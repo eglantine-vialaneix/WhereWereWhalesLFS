@@ -21,11 +21,14 @@ const colors = [
 
 Promise.all([
     d3.json("https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/world.geojson"),
-    d3.csv("data/grouped_species.csv")
+    d3.csv("data/grouped_species.csv"),
+    d3.json("data/simplified_marine_data.geojson")
 ]).then(function (initialize) {
 
     let dataGeo = initialize[0]
     let data = initialize[1]
+    let protectedZones = initialize[2];
+
     const speciesNames = Array.from(new Set(data.map(d => d.species_name))).sort(d3.ascending);
     const assignedColors = colors.slice(0, speciesNames.length);
 
@@ -41,6 +44,42 @@ Promise.all([
 
     // Draw the map
     const zoomGroup = svg.append("g")
+
+    const pattern = svg.append("defs")
+    .append("pattern")
+    .attr("id", "hashedPattern")
+    .attr("patternUnits", "userSpaceOnUse")
+    .attr("width", 10)
+    .attr("height", 10)
+    .append("path")
+    .attr("d", "M 0 0 L 10 10 M 0 10 L 10 0") // Create a crossing line pattern
+    .attr("stroke", "#333333")
+    .attr("stroke-width", 1);
+
+    const protectedZonesLayer = zoomGroup.append("g")
+        .selectAll("path")
+        .data(protectedZones.features)
+        .join("path")
+        .attr("d", d3.geoPath().projection(projection))
+        .attr("fill", "url(#hashedPattern)") // Apply the hashed pattern
+        .attr("stroke", "white")
+        .attr("stroke-width", 0)
+        .style("opacity", 0.7);
+
+
+    // Initially hide protected zones
+    protectedZonesLayer.style("visibility", "hidden");
+
+    // Toggle visibility when checkbox is clicked
+    const checkbox = document.getElementById("toggleProtectedZones");
+
+    checkbox.addEventListener("change", function () {
+    if (checkbox.checked) {
+        protectedZonesLayer.style("visibility", "visible");
+    } else {
+        protectedZonesLayer.style("visibility", "hidden");
+    }
+    });
 
     zoomGroup.append("g")
         .selectAll("path")
@@ -502,26 +541,8 @@ Promise.all([
         });
     });
 
-    })
-
-// Add protected zones layer
-// let protectedZonesLayer;
-
-// d3.json("data/output.geojson").then(data => {
-//     console.log(data);
-//     protectedZonesLayer = d3.select("#maps")
-//     .append("g")
-//     .attr("id", "protectedZones")
-//     .selectAll("path")
-//     .data(data.features)
-//     .enter()
-//     .append("path")
-//     .attr("d", d3.geoPath().projection(projection)) // assuming you have a projection
-//     .attr("fill", "rgba(0, 128, 0, 0.4)")
-//     .attr("stroke", "#006400")
-//     .attr("stroke-width", 0.5)
-//     .style("display", "none"); // Hidden by default
-// });
+ 
+});
 
 function debounce(func, wait) {
     let timeout;
@@ -531,3 +552,39 @@ function debounce(func, wait) {
       timeout = setTimeout(() => func.apply(context, args), wait);
     };
   }
+
+// let defs = svg.select("defs");
+
+// defs.append("pattern")
+// .attr("id", "diagonalHatch")
+// .attr("patternUnits", "userSpaceOnUse")
+// .attr("width", 6)
+// .attr("height", 6)
+// .append("path")
+// .attr("d", "M0,0 l6,6")
+// .attr("stroke", "#000")
+// .attr("stroke-width", 1);
+
+// let protectedZonesLayer;
+
+// d3.json("data/simplified_marine_data2.geojson").then(data => {
+//   protectedZonesLayer = svg.append("g")
+//     .attr("id", "protectedZones")
+//     .style("display", "none"); // hidden by default
+
+//   protectedZonesLayer.selectAll("path")
+//     .data(data.features)
+//     .enter()
+//     .append("path")
+//     .attr("d", pathGenerator)  // use your projection/path
+//     .attr("fill", "url(#diagonalHatch)")
+//     .attr("stroke", "black")
+//     .attr("stroke-width", 0.5);
+// });
+
+// document.getElementById("toggleProtectedZones").addEventListener("change", function () {
+//     if (this.checked) {
+//       protectedZonesLayer.style("display", "block");
+//     } else {
+//       protectedZonesLayer.style("display", "none");
+//     }
