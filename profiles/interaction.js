@@ -102,6 +102,21 @@ function prevImage(currentIndex, imageData) {
 
 // ################################### API RESULT TO DIVS ##################################
 
+async function setPageTitle(title) {
+    // Get the h1 element by its ID
+    const titleElement = document.getElementById('whale-title');
+
+    const pageTitle = 'combination of name and latin name from table'
+    // Check if the element exists
+    if (titleElement) {
+        // Set the text content of the h1 element
+        titleElement.textContent = pageTitle;
+    } else {
+        // Log an error if the element is not found
+        console.error('Error: Main title element not found!');
+    }
+}
+
 async function load_paragraph(title){
     const paragraph_container = document.getElementById("wiki_summary_div");
     paragraph_container.innerHTML = "Loading...";
@@ -200,6 +215,7 @@ async function load_gallery(title){
 let title = 'blue whale';
 
 async function loadContent(title) {
+    setPageTitle(title)
     load_paragraph(title);
     load_gallery(title);
     load_svgs(title);
