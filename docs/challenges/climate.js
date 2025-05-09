@@ -23,7 +23,13 @@ function drawTemperatureAnomaliesPlot(containerId, csvPath) {
           .range([0, width]);
       svg.append("g")
           .attr("transform", `translate(0,${height})`)
-          .call(d3.axisBottom(x));
+          .call(d3.axisBottom(x).ticks(d3.timeYear.every(1)))
+            .selectAll("text")
+                .each(function(d, i) {
+                    if (d.getFullYear() % 2 !== 0) {
+                        d3.select(this).text("");  // Hide label for odd years
+                    }
+                });
 
       const y = d3.scaleLinear()
           .domain([ d3.min(data, d => d.value), d3.max(data, d => d.value)])

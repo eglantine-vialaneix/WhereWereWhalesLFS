@@ -26,7 +26,7 @@ Promise.all([
 
     let dataGeo = initialize[0]
     let data = initialize[1]
-    const speciesNames = Array.from(new Set(data.map(d => d.species_name)));
+    const speciesNames = Array.from(new Set(data.map(d => d.species_name))).sort(d3.ascending);
     const assignedColors = colors.slice(0, speciesNames.length);
 
     const color = d3.scaleOrdinal()
@@ -40,11 +40,13 @@ Promise.all([
         .range([ 3, 22])  // Size in pixel
 
     // Draw the map
-    svg.append("g")
+    const zoomGroup = svg.append("g")
+
+    zoomGroup.append("g")
         .selectAll("path")
         .data(dataGeo.features)
         .join("path")
-            .attr("fill", "#b8b8b8")
+        .attr("fill", "#b8b8b8")
         .attr("d", d3.geoPath()
             .projection(projection)
         )
@@ -76,17 +78,21 @@ Promise.all([
         const circleColor = color(d.species_name);
       
         Tooltip
-          .html(`${d.species_name}`)
+            .html(`
+            <strong>${d.species_name}</strong><br>
+            Date: ${d.event_month}<br>
+            Count: ${parseInt(d.individual_count, 10)}
+          `)
           .style("left", (event.pageX - bounds.left + 10) + "px")
           .style("top", (event.pageY - bounds.top - 30) + "px")
-          .style("background-color", circleColor);
+          .style("background-color", d3.color(circleColor).copy({ opacity: 0.4 }).formatRgb());
       };
     var mouseleave = function(event, d) {
       Tooltip.style("opacity", 0)
     }
 
     // Add circles:
-    svg
+    zoomGroup
     .selectAll("circle")
     .data(data.sort((a,b) => +b.individual_count - +a.individual_count))
     .join("circle")
@@ -102,22 +108,19 @@ Promise.all([
       .on("mousemove", mousemove)
       .on("mouseleave", mouseleave)
 
-    // Add title and explanation
-    svg
-        .append("text")
-        .attr("text-anchor", "end")
-        .style("fill", "black")
-        .attr("x", width - 10)
-        .attr("y", height - 30)
-        .attr("width", 90)
-        //   .html("WHERE SURFERS LIVE")
-        .style("font-size", 14)
+    const zoom = d3.zoom()
+      .scaleExtent([1, 8]) // Min and max zoom scale
+      .on("zoom", (event) => {
+          zoomGroup.attr("transform", event.transform);
+      });
+  
+    svg.call(zoom);
 
     // Add legend: circles
     const valuesToShow = [10,500,2000]
     const xCircle = 40
     const xLabel = 90
-    svg
+    zoomGroup
         .selectAll("circle.legend-circle")
         .data(valuesToShow)
         .join("circle")
@@ -129,7 +132,7 @@ Promise.all([
         .attr("stroke", "black");
 
     // Add legend: segments
-    svg
+    zoomGroup
         .selectAll("line.legend-line")
         .data(valuesToShow)
         .join("line")
@@ -142,7 +145,7 @@ Promise.all([
         .style("stroke-dasharray", "2,2");
 
     // Add legend: labels
-    svg
+    zoomGroup
         .selectAll("text.legend-label")
         .data(valuesToShow)
         .join("text")
@@ -163,7 +166,9 @@ Promise.all([
     });
 
     // Use speciesNames to preserve order
+    // const allCategories = speciesNames.map(species => speciesNameToCommonName.get(species));
     const allCategories = speciesNames.map(species => speciesNameToCommonName.get(species));
+    allCategories.sort((a, b) => a.localeCompare(b));
 
     const selectedSpecies = new Set(allCategories);
     const legendSvg = d3.select("#legend-svg");
@@ -205,16 +210,18 @@ Promise.all([
     .text(d => d)
     .style("alignment-baseline", "middle")
     .style("font-size", 12);
-
+    
     // Function to filter bubbles based on selected species
     function updateCircles() {
 
         const yearMin = parseInt(fromInput.value, 10);
         const yearMax = parseInt(toInput.value, 10);
 
+        const filtData = data.filter(speciesStatusFilter);
+
         if (selectedMonthStart > selectedMonthEnd) {
             // Wrap around from startMonth (e.g., December) to endMonth (e.g., January)
-            filteredData = data.filter(d => {
+            filteredData = filtData.filter(d => {
                 const date = new Date(d.event_month);
                 const year = date.getFullYear();
                 const month = date.getMonth(); 
@@ -222,11 +229,12 @@ Promise.all([
                 return (
                     selectedSpecies.has(d.common_name) &&
                     year >= yearMin && year <= yearMax &&
-                    ((month >= selectedMonthStart && month <= 12) || (month >= 1 && month <= selectedMonthEnd))
+                    ((month >= selectedMonthStart && month <= 12) || (month >= 1 && month <= selectedMonthEnd))  &&
+                    speciesStatusFilter(d)
                 );
             });
         } else {
-            filteredData = data.filter(d => {
+            filteredData = filtData.filter(d => {
                 const date = new Date(d.event_month);
                 const year = date.getFullYear();
                 const month = date.getMonth() + 1;
@@ -234,12 +242,13 @@ Promise.all([
                     selectedSpecies.has(d.common_name) &&
                     year >= yearMin && year <= yearMax 
                     &&
-                    (selectedMonthStart === null || selectedMonthEnd === null || (month >= selectedMonthStart && month <= selectedMonthEnd))
+                    (selectedMonthStart === null || selectedMonthEnd === null || (month >= selectedMonthStart && month <= selectedMonthEnd)) &&
+                    speciesStatusFilter(d)
                   );
             });
         }
 
-        svg.selectAll("circle.data-circle")
+        zoomGroup.selectAll("circle.data-circle")
         .data(filteredData, d => d.longitude + "_" + d.latitude)
         .join(
             enter => enter.append("circle")
@@ -258,6 +267,21 @@ Promise.all([
             exit => exit.remove() 
         );
     }
+
+    function speciesStatusFilter(d) {
+        // Check for "true" or "false" as strings in the "endangered" and "vulnerable" columns
+        const isEndangered = d.endangered === "True";  // Check if it's the string "true"
+        const isVulnerable = d.vulnerable === "True";  // Check if it's the string "true"
+      
+        // If "Show All Species" is checked, return true to show all species
+        if (toggleAllSpecies.checked) return true;
+      
+        // Filter based on "endangered" or "vulnerable" checkboxes
+        return (
+          (toggleEndangeredSpecies.checked && isEndangered) ||
+          (toggleVulnerableSpecies.checked && isVulnerable)
+        );
+      }
     
     // Function to update the opacity of the legend based on selected species
     function updateLegendOpacity() {
@@ -273,6 +297,7 @@ Promise.all([
         }
         });
     }
+    
     
     // Modify the legend click function
     legendItems.on("click", function(event, d) {
@@ -396,6 +421,56 @@ Promise.all([
     fromInput.onchange = updateCircles;
     toInput.onchange = updateCircles;
 
+    const toggleAllSpecies = document.querySelector('#toggleallSpecies');
+    const toggleEndangeredSpecies = document.querySelector('#toggleEndengeredSpecies');
+    const toggleVulnerableSpecies = document.querySelector('#toggleVulnerableSpecies');
+    
+    function updateSelectionBasedOnCheckboxes() {
+        // Clear selected species before updating based on checkboxes
+        selectedSpecies.clear();
+    
+        // Filter data based on checkboxes and add species to selectedSpecies set
+        data.forEach(d => {
+            const isEndangered = d.endangered === "True";
+            const isVulnerable = d.vulnerable === "True";
+    
+            // If "Show All Species" is checked, add all species
+            if (toggleAllSpecies.checked) {
+                selectedSpecies.add(d.species_name); // Or whatever identifier you use for species
+            }
+    
+            // If "Show Endangered Species" is checked, add endangered species
+            if (toggleEndangeredSpecies.checked && isEndangered) {
+                selectedSpecies.add(d.species_name);
+            }
+    
+            // If "Show Vulnerable Species" is checked, add vulnerable species
+            if (toggleVulnerableSpecies.checked && isVulnerable) {
+                selectedSpecies.add(d.species_name);
+            }
+        });
+    }
+    
+    // Add onchange handlers for checkboxes
+    toggleAllSpecies.onchange = () => {
+        updateSelectionBasedOnCheckboxes();  // Update selection based on checkbox states
+        updateCircles();  // Update map points
+        updateLegendOpacity();  // Update legend opacity
+    };
+    
+    toggleEndangeredSpecies.onchange = () => {
+        updateSelectionBasedOnCheckboxes();  // Update selection based on checkbox states
+        updateCircles();  // Update map points
+        updateLegendOpacity();  // Update legend opacity
+    };
+    
+    toggleVulnerableSpecies.onchange = () => {
+        updateSelectionBasedOnCheckboxes();  // Update selection based on checkbox states
+        updateCircles();  // Update map points
+        updateLegendOpacity();  // Update legend opacity
+    };
+
+
     let debounceTimeout = null;
     let selectedMonthStart = 0;
     let selectedMonthEnd = 11;
@@ -426,7 +501,6 @@ Promise.all([
             }, 300);
         });
     });
-  
 
     })
 

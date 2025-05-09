@@ -11274,3 +11274,7 @@ body {
   position: absolute !important; /* Make sure it's positioned absolutely */
   z-index: 9999 !important; /* Force it to be on top */
 }
+
+.grayscale-img {
+  filter: grayscale(100%);
+}
