@@ -106,3 +106,31 @@
     box-shadow: none;
   }
   
+  #info-button {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    cursor: pointer;
+    font-size: 18px;
+    background-color: #fff;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    text-align: center;
+    line-height: 24px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+  }
+  
+  #info-box {
+    position: absolute;
+    top: 10px;
+    right: 40px;
+    background-color: white;
+    padding: -10px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    width: 250px;
+    font-size: 14px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  }
+  

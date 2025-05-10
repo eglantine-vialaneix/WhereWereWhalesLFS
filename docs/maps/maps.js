@@ -5,12 +5,10 @@ const height = svgNode.clientHeight;
 const defs = svg.append("defs");
 
 let rotation = [0, 0];
-let isDragging = false;
 let lastX, lastY;
 let scale = Math.min(width, height) / 2.5;
 let globe, graticulePath, drag;
-const sensitivity = 75; // Rotation sensitivity
-const zoomSpeed = 0.1; // Zoom sensitivity
+const sensitivity = 5; // Rotation sensitivity
 
 // Map and projection
 
@@ -88,6 +86,26 @@ Promise.all([
     let projection = toggleView.checked ? projection3D : projection2D;
     let path = d3.geoPath().projection(projection);
 
+    function isVisible([lon, lat]) {
+
+        const [λ0, φ0] = projection3D.rotate().map(d => d * Math.PI / 180);
+
+        const [x, y, z] = sphericalToCartesian(lon * Math.PI / 180, lat * Math.PI / 180);
+        const [cx, cy, cz] = sphericalToCartesian(-λ0, -φ0);  // View direction
+
+        const dot = x * cx + y * cy + z * cz;
+        return dot > 0; // in front of the globe
+        }
+
+        function sphericalToCartesian(lonRad, latRad) {
+        return [
+            Math.cos(latRad) * Math.cos(lonRad),
+            Math.cos(latRad) * Math.sin(lonRad),
+            Math.sin(latRad)
+        ];
+
+    }
+
     let protectedZonesLayer;
 
     const zoomGroup = svg.append("g");
@@ -109,13 +127,7 @@ Promise.all([
             .style("opacity", 0.7)
             .style("visibility", checkbox.checked ? "visible" : "hidden");
     }
-
-    
-    function getProjectedPosition(d) {
-        const [x, y] = projection([+d.longitude, +d.latitude]);
-        return { x, y };
-      }
-      
+     
 
     const mouseover = function(event, d) {
         Tooltip.style("opacity", 1)
@@ -139,62 +151,6 @@ Promise.all([
     var mouseleave = function(event, d) {
       Tooltip.style("opacity", 0)
     }
-      
-
-    function renderMap() {
-        zoomGroup.selectAll("*").remove();
-
-        path = d3.geoPath().projection(projection);
-
-        if (projection === projection3D) {
-            globe = zoomGroup.append("circle")
-                .attr("fill", "#ddeeff")
-                .attr("stroke", "#000")
-                .attr("cx", width / 2)
-                .attr("cy", height / 2)
-                .attr("r", projection.scale());
-
-            const graticule = d3.geoGraticule();
-
-            graticulePath = zoomGroup.append("path")
-                .datum(graticule())
-                .attr("d", path)
-                .attr("fill", "none")
-                .attr("stroke", "#ccc");
-            
-            svg.call(drag);
-        } else {
-            svg.on(".drag", null); // Remove drag behavior in 2D
-        }
-
-        renderProtectedZones();
-
-        zoomGroup.append("g")
-            .selectAll("path")
-            .data(dataGeo.features)
-            .join("path")
-            .attr("fill", "#b8b8b8")
-            .attr("stroke", "#fff")
-            .attr("d", path)
-            .style("opacity", .7);
-
-        zoomGroup.selectAll("circle.data-circle")
-            .data(data)
-            .join("circle")
-            .attr("class", "data-circle")
-            .data(data.sort((a,b) => +b.individual_count - +a.individual_count))
-            .attr("cx", d => projection([+d.longitude, +d.latitude])[0])
-            .attr("cy", d => projection([+d.longitude, +d.latitude])[1])
-            .attr("r", d => size(+d.individual_count))
-            .style("fill", d => color(d.species_name))
-            .attr("stroke", d => +d.individual_count > 2000 ? "black" : "none")
-            .attr("stroke-width", 1)
-            .attr("fill-opacity", .4)
-            .on("mouseover", mouseover)
-            .on("mousemove", mousemove)
-            .on("mouseleave", mouseleave);
-            // // Add circles:
-    }
 
     const drag = d3.drag().on("drag", function (event) {
         const dx = event.dx;
@@ -204,6 +160,7 @@ Promise.all([
         rotation[1] = Math.max(-90, Math.min(90, rotation[1]));
         projection3D.rotate(rotation);
         updateProjection();
+        plot_circles(filteredData);
     });
 
     function updateProjection() {
@@ -212,6 +169,103 @@ Promise.all([
         zoomGroup.selectAll("circle.data-circle")
             .attr("cx", d => projection([+d.longitude, +d.latitude])[0])
             .attr("cy", d => projection([+d.longitude, +d.latitude])[1]);
+    }
+      
+    function renderMap() {
+
+        zoomGroup.selectAll("*").remove();
+
+        path = d3.geoPath().projection(projection);
+
+        if (projection === projection3D) {
+
+            const gradient = defs.append("radialGradient")
+                .attr("id", "globeGradient")
+                .attr("cx", "30%")
+                .attr("cy", "30%")
+                .attr("r", "70%");
+
+            gradient.append("stop").attr("offset", "0%").attr("stop-color", "#E6F7FF");
+            gradient.append("stop").attr("offset", "50%").attr("stop-color", "#B3E0FF");
+            gradient.append("stop").attr("offset", "100%").attr("stop-color", "#66C2FF");
+                
+            globe = zoomGroup.append("circle")
+                .attr("stroke", "#000")
+                .attr("cx", width / 2)
+                .attr("cy", height / 2)
+                .attr("r", projection.scale())
+                .attr("fill", "url(#globeGradient)");
+            
+            const graticule = d3.geoGraticule();
+
+            graticulePath = zoomGroup.append("path")
+                .datum(graticule())
+                .attr("d", path)
+                .attr("fill", "none")
+                .attr("stroke", "#ccc");
+
+            renderProtectedZones();
+
+            zoomGroup.append("g")
+                .selectAll("path")
+                .data(dataGeo.features)
+                .join("path")
+                .attr("fill", "#b8b8b8")
+                .attr("stroke", "#fff")
+                .attr("d", path)
+                .style("opacity", .7);
+    
+            zoomGroup.selectAll("circle.data-circle")
+                .data(data.filter(d => isVisible([+d.longitude, +d.latitude])))
+                .join("circle")
+                .attr("class", "data-circle")
+                .data(data.sort((a,b) => +b.individual_count - +a.individual_count))
+                .attr("cx", d => projection([+d.longitude, +d.latitude])[0])
+                .attr("cy", d => projection([+d.longitude, +d.latitude])[1])
+                .attr("r", d => size(+d.individual_count))
+                .style("fill", d => color(d.species_name))
+                .attr("stroke", d => +d.individual_count > 2000 ? "black" : "none")
+                .attr("stroke-width", 1)
+                .attr("fill-opacity", .4)
+                .on("mouseover", mouseover)
+                .on("mousemove", mousemove)
+                .on("mouseleave", mouseleave);
+            
+            svg.call(drag);
+            svg.call(zoom);
+
+            updateCircles();
+        } else {
+            svg.on(".drag", null); // Remove drag behavior in 2D
+
+            renderProtectedZones();
+
+            zoomGroup.append("g")
+                .selectAll("path")
+                .data(dataGeo.features)
+                .join("path")
+                .attr("fill", "#b8b8b8")
+                .attr("stroke", "#fff")
+                .attr("d", path)
+                .style("opacity", .7);
+
+            zoomGroup.selectAll("circle.data-circle")
+                .data(data)
+                .join("circle")
+                .attr("class", "data-circle")
+                .data(data.sort((a,b) => +b.individual_count - +a.individual_count))
+                .attr("cx", d => projection([+d.longitude, +d.latitude])[0])
+                .attr("cy", d => projection([+d.longitude, +d.latitude])[1])
+                .attr("r", d => size(+d.individual_count))
+                .style("fill", d => color(d.species_name))
+                .attr("stroke", d => +d.individual_count > 2000 ? "black" : "none")
+                .attr("stroke-width", 1)
+                .attr("fill-opacity", .4)
+                .on("mouseover", mouseover)
+                .on("mousemove", mousemove)
+                .on("mouseleave", mouseleave);
+        }
+
     }
 
     const checkbox = document.getElementById("toggleProtectedZones");
@@ -339,6 +393,48 @@ Promise.all([
     .text(d => d)
     .style("alignment-baseline", "middle")
     .style("font-size", 12);
+
+    function plot_circles(data) {
+        if (projection === projection3D) {
+            zoomGroup.selectAll("circle.data-circle")
+                .data(data.filter(d => isVisible([+d.longitude, +d.latitude])), d => d.longitude + "_" + d.latitude)  // Apply visibility check here
+                .join(
+                    enter => enter.append("circle")
+                        .attr("class", "data-circle")
+                        .attr("cx", d => projection([+d.longitude, +d.latitude])[0])  // For 3D, ensure projection is updated accordingly
+                        .attr("cy", d => projection([+d.longitude, +d.latitude])[1])  // Update based on your projection method (2D or 3D)
+                        .attr("r", d => size(+d.individual_count))
+                        .style("fill", d => color(d.species_name))
+                        .attr("stroke", d => +d.individual_count > 2000 ? "black" : "none")
+                        .attr("stroke-width", 1)
+                        .attr("fill-opacity", .4)
+                        .on("mouseover", mouseover)
+                        .on("mousemove", mousemove)
+                        .on("mouseleave", mouseleave),
+                    update => update,  // In case you want to update anything dynamically
+                    exit => exit.remove()  // Remove circles that no longer need to be shown
+                );
+        } else {
+            zoomGroup.selectAll("circle.data-circle")
+            .data(data, d => d.longitude + "_" + d.latitude)
+            .join(
+                enter => enter.append("circle")
+                .attr("class", "data-circle")
+                .attr("cx", d => projection([+d.longitude, +d.latitude])[0])
+                .attr("cy", d => projection([+d.longitude, +d.latitude])[1])
+                .attr("r", d => size(+d.individual_count))
+                .style("fill", d => color(d.species_name))
+                .attr("stroke", d => +d.individual_count > 2000 ? "black" : "none")
+                .attr("stroke-width", 1)
+                .attr("fill-opacity", .4)
+                .on("mouseover", mouseover)
+                .on("mousemove", mousemove)
+                .on("mouseleave", mouseleave),
+                update => update,
+                exit => exit.remove() 
+            );
+        }
+    }
     
     // Function to filter bubbles based on selected species
     function updateCircles() {
@@ -376,25 +472,7 @@ Promise.all([
                   );
             });
         }
-
-        zoomGroup.selectAll("circle.data-circle")
-        .data(filteredData, d => d.longitude + "_" + d.latitude)
-        .join(
-            enter => enter.append("circle")
-            .attr("class", "data-circle")
-            .attr("cx", d => projection([+d.longitude, +d.latitude])[0])
-            .attr("cy", d => projection([+d.longitude, +d.latitude])[1])
-            .attr("r", d => size(+d.individual_count))
-            .style("fill", d => color(d.species_name))
-            .attr("stroke", d => +d.individual_count > 2000 ? "black" : "none")
-            .attr("stroke-width", 1)
-            .attr("fill-opacity", .4)
-            .on("mouseover", mouseover)
-            .on("mousemove", mousemove)
-            .on("mouseleave", mouseleave),
-            update => update,
-            exit => exit.remove() 
-        );
+        plot_circles(filteredData);
     }
 
     function speciesStatusFilter(d) {
@@ -430,6 +508,26 @@ Promise.all([
     
     // Modify the legend click function
     legendItems.on("click", function(event, d) {
+
+        const isEndangered = d.endangered === "True";
+        const isVulnerable = d.vulnerable === "True";
+
+        // If not in show all mode and species doesn't match current filter, enable show all
+        if (!toggleAllSpecies.checked) {
+            const inEndangeredMode = toggleEndangeredSpecies.checked;
+            const inVulnerableMode = toggleVulnerableSpecies.checked;
+
+            const speciesAllowed =
+                (!inEndangeredMode || isEndangered) &&
+                (!inVulnerableMode || isVulnerable);
+
+            if (!speciesAllowed) {
+                toggleAllSpecies.checked = true;
+                toggleEndangeredSpecies.checked = false;
+                toggleVulnerableSpecies.checked = false;
+            }
+    }
+
         const isDoubleClick = event.detail === 2;
     
         if (isDoubleClick) {
@@ -640,3 +738,8 @@ function debounce(func, wait) {
       timeout = setTimeout(() => func.apply(context, args), wait);
     };
   }
+
+document.getElementById("info-button").addEventListener("click", () => {
+const infoBox = document.getElementById("info-box");
+infoBox.style.display = infoBox.style.display === "none" ? "block" : "none";
+});
