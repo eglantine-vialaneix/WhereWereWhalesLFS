@@ -61,6 +61,7 @@
         padding-bottom: 0 !important;
         line-height: 50px;
         font-size: 0.95rem;
+        color: white !important; 
       }
     
       .navbar-toggler {
@@ -71,10 +72,6 @@
 
     <div class="container px-4 px-lg-5">
       <a class="navbar-brand" href="index.html">Cetacea</a>
-      <button class="navbar-toggler navbar-toggler-right" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
-        Menu
-        <i class="fas fa-bars"></i>
-      </button>
       <div class="collapse navbar-collapse" id="navbarResponsive">
         <ul class="navbar-nav ms-auto">
           <li class="nav-item"><a class="nav-link" href="index.html#intro">About</a></li>
@@ -86,12 +83,12 @@
     </div>
   </nav>
 
-  <div id="map-container" style="position: relative; display: flex; align-items: flex-start;">
-    <svg id="maps" style="width: 90vw; height: 95vh;"viewBox="-10 0 1400 840" preserveAspectRatio="xMidYMid meet"></svg>
-
+<div id="map-wrapper" style="display: flex; justify-content: center; align-items: center; height: 100vh; overflow: hidden;">
+  <svg id="maps" style="max-width: 100%; max-height: 100%; width: 90vw; height: 90vh;" viewBox="-10 0 1400 840" preserveAspectRatio="xMidYMid meet"></svg>
+</div>
     <div id="right-container" style="position: absolute; top: 50px; right: 60px; width: 300px; margin-right: 20px; display: flex; flex-direction: column; align-items: flex-start;">
       
-      <div id="info-button" title="How to use the map" style=" margin-right: 300px;">ℹ️</div>
+      <div id="info-button" title="How to use the map" style=" margin-right: 300px; margin-top: 25px;">ℹ️</div>
       <div id="info-box" style="display: none;">
         <h4>How to use the map</h4>
         <ul>
@@ -102,7 +99,7 @@
         </ul>
       </div>
 
-      <div style="width: 280px; height: 400px; overflow-y: scroll; border: 1px solid #ccc; padding: -0px;">
+      <div style="width: 280px; height: 400px; overflow-y: scroll; border: 1px solid #ccc; padding-top: 10px; margin-top: 30px;">
       <svg id="legend-svg" width="240" height="1350" viewBox="0 0 200 1350" preserveAspectRatio="xMidYMid meet"></svg>
       </div>    
 

@@ -128,7 +128,6 @@ Promise.all([
             .style("visibility", checkbox.checked ? "visible" : "hidden");
     }
      
-
     const mouseover = function(event, d) {
         Tooltip.style("opacity", 1)
       }
@@ -284,6 +283,17 @@ Promise.all([
         projection = toggleView.checked ? projection3D : projection2D;
         path = d3.geoPath().projection(projection);
         renderMap();
+
+        function fixInitialHashing() {
+            const tempRotation = [...rotation];
+            rotation[0] += 0.01; // Tiny change
+            projection3D.rotate(rotation);
+            updateProjection();
+            
+            }
+
+            // Call after initial render
+        fixInitialHashing();
         // Maintain visibility state after re-render
         if (checkbox.checked) {
             zoomGroup.selectAll(".protected-zone")
