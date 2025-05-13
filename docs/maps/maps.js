@@ -169,6 +169,15 @@ Promise.all([
             .attr("cx", d => projection([+d.longitude, +d.latitude])[0])
             .attr("cy", d => projection([+d.longitude, +d.latitude])[1]);
     }
+
+    function update3DProjection() {
+        scale = Math.min(width, height) / 2.5;  // Update scale based on current width and height
+        projection3D.scale(scale).translate([width / 2, height / 2]);  // Adjust translation for centering
+        projection = projection3D;  // Update projection to 3D
+        path = d3.geoPath().projection(projection);
+        updateProjection();
+    }
+
       
     function renderMap() {
 
@@ -177,6 +186,8 @@ Promise.all([
         path = d3.geoPath().projection(projection);
 
         if (projection === projection3D) {
+
+            update3DProjection();
 
             const gradient = defs.append("radialGradient")
                 .attr("id", "globeGradient")

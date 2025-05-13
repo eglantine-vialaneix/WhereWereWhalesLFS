@@ -83,10 +83,12 @@
     </div>
   </nav>
 
-<div id="map-wrapper" style="display: flex; justify-content: center; align-items: center; height: 100vh; overflow: hidden;">
-  <svg id="maps" style="max-width: 100%; max-height: 100%; width: 90vw; height: 90vh;" viewBox="-10 0 1400 840" preserveAspectRatio="xMidYMid meet"></svg>
-</div>
-    <div id="right-container" style="position: absolute; top: 50px; right: 60px; width: 300px; margin-right: 20px; display: flex; flex-direction: column; align-items: flex-start;">
+<div id="main-container" style="display: flex; flex-direction: row; height: 100vh; width: 100vw; overflow: hidden;">
+  <div id="map-wrapper" style="display: flex; justify-content: center; align-items: center; height: 100vh; overflow: hidden;">
+    <svg id="maps" style="max-width: 100%; max-height: 100%; width: 90vw; height: 90vh;" viewBox="-10 0 1400 840" preserveAspectRatio="xMidYMid meet"></svg>
+  </div>
+
+    <div id="right-container">
       
       <div id="info-button" title="How to use the map" style=" margin-right: 300px; margin-top: 25px;">ℹ️</div>
       <div id="info-box" style="display: none;">
@@ -99,11 +101,11 @@
         </ul>
       </div>
 
-      <div style="width: 280px; height: 400px; overflow-y: scroll; border: 1px solid #ccc; padding-top: 10px; margin-top: 30px;">
+      <div id="legend-container">
       <svg id="legend-svg" width="240" height="1350" viewBox="0 0 200 1350" preserveAspectRatio="xMidYMid meet"></svg>
       </div>    
 
-      <div class="range_container" style="width: 200px; margin-top: 20px; margin-left: 40px;">
+      <div class="range_container">
         <!-- Slider Inputs -->
             <div class="sliders_control">
               <input id="fromSlider" type="range" value="1972" min="1972" max="2025"/>
@@ -187,7 +189,7 @@
             </label>
           </div>
           
-          <div style="margin-left: 20px; ; margin-bottom: 20px;">
+          <div style="margin-left: 20px; margin-bottom: 20px;">
             <label>
               <input type="checkbox" id="toggleVulnerableSpecies">
               Show Vulnerable Species
@@ -206,10 +208,10 @@
             3D Globe View
           </label>
         </div>
-
-        
+      
       </div>
     </div>
+  </div>
   
 
   <style>
