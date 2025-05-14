@@ -10,6 +10,42 @@
   </style>
 </head>
 <body>
+
+  <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
+    <style>
+      body {
+        padding-top: 0px;
+      }
+    
+      .navbar {
+        background-color: #64a19d !important;
+        z-index: 1000;
+        padding-top: 0 !important;
+        padding-bottom: 0 !important;
+        height: 50px;
+        min-height: 50px;
+      }
+    
+      .navbar-brand, .navbar-nav .nav-link {
+        padding-top: 0 !important;
+        padding-bottom: 0 !important;
+        line-height: 50px;
+        font-size: 0.95rem;
+        color: white !important; 
+      }
+    
+      .navbar-toggler {
+        padding: 0.25rem 0.5rem;
+        font-size: 0.8rem;
+      }
+    </style>
+
+    <div class="container px-4 px-lg-5">
+      <a class="navbar-brand" href="index.html">Cetacea</a>
+    </div>
+  </nav>
+
+  <!-- Interactive force directed tree of the cetacean-->
   <svg width="960" height="600"></svg>
 
   <script src="https://d3js.org/d3.v7.min.js"></script>
