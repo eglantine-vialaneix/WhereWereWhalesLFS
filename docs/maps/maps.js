@@ -760,7 +760,26 @@ function debounce(func, wait) {
     };
   }
 
-document.getElementById("info-button").addEventListener("click", () => {
+// document.getElementById("info-button").addEventListener("click", () => {
+// const infoBox = document.getElementById("info-box");
+// infoBox.style.display = infoBox.style.display === "none" ? "block" : "none";
+// });
+
+const infoButton = document.getElementById("info-button");
 const infoBox = document.getElementById("info-box");
-infoBox.style.display = infoBox.style.display === "none" ? "block" : "none";
+
+// Toggle visibility on button click
+infoButton.addEventListener("click", (event) => {
+  event.stopPropagation(); // Prevent the document click handler from firing
+  infoBox.style.display = (infoBox.style.display === "none" || infoBox.style.display === "") ? "block" : "none";
+});
+
+// Prevent click inside the box from closing it
+infoBox.addEventListener("click", (event) => {
+  event.stopPropagation();
+});
+
+// Close the box when clicking anywhere else
+document.addEventListener("click", () => {
+  infoBox.style.display = "none";
 });
