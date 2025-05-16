@@ -458,7 +458,7 @@ class BarChartRace {
           .attr("y", (d, i) => i * 30)
           .attr("width", 20)
           .attr("height", 20)
-          .style("fill", d => { console.log( this.color(d)); return this.color(d)})
+          .style("fill", d => {return this.color(d)})
           .attr("fill-opacity", 0.6);
   
       legend.selectAll("text")

@@ -76,3 +76,128 @@
     height: 0;
     z-index: 1;
   }
+
+  .hidden-input {
+    position: absolute;
+    left: -9999px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+  }
+
+  input[type="checkbox"] {
+    appearance: none;
+    -webkit-appearance: none;
+    background-color: white;
+    border: 1px solid #ccc;
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+    position: relative;
+    top: 2px;
+  }
+  
+  input[type="checkbox"]:checked {
+    background-color: #25DAA5;
+  }
+  
+  input[type="checkbox"]:focus {
+    outline: none;
+    box-shadow: none;
+  }
+  
+  #info-button {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    cursor: pointer;
+    font-size: 18px;
+    background-color: #fff;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    text-align: center;
+    line-height: 24px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+  }
+  
+  #info-box {
+    position: absolute;
+    top: 10px;
+    right: 40px;
+    background-color: white;
+    padding: -10px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    width: 250px;
+    font-size: 14px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  }
+
+  #right-container {
+  flex: 0 0 300px;
+  max-width: 90vw;
+  height: 100%;
+  overflow-y: auto;
+  padding: 10px;
+  background-color: rgba(255, 255, 255, 0.95);
+  /* box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1); */
+}
+
+#right-container {
+  position: absolute;
+  top: 50px;
+  right: 3vw; /* responsive right margin */
+  width: 300px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  overflow-y: auto;
+  padding: 10px;
+  background-color: rgba(255, 255, 255, 0.95);
+  max-height: calc(100vh - 60px); /* keep it within screen height */
+}
+
+@media (min-width: 1200px) {
+  #right-container {
+    right: 5vw;
+  }
+}
+
+@media (max-width: 768px) {
+  #main-container {
+    flex-direction: column;
+  }
+
+
+  #map-wrapper {
+    height: 70vh;
+  }
+}
+
+#legend-container {
+  width: 100%;
+  max-height: 400px;
+  overflow-y: auto;
+  min-height: 0;
+  min-height: 100px;
+  border: 1px solid #ccc; 
+  margin-top: 10px;
+}
+
+
+.range_container {
+  width: 100%;
+  max-width: 240px;
+  height: auto;
+  /* width: 200px;  */
+  margin-top: 20px; 
+  /* margin-left: 40px; */
+}
+
+.svg-holder {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
+}

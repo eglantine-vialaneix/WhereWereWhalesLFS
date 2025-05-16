@@ -2,24 +2,10 @@ const svg = d3.select("svg");
 const svgNode = d3.select("#maps").node();
 const width = svgNode.clientWidth;
 const height = svgNode.clientHeight;
-const defs = svg.append("defs");
-
-let rotation = [0, 0];
-let lastX, lastY;
-let scale = Math.min(width, height) / 2.5;
-let globe, graticulePath, drag;
-const sensitivity = 5; // Rotation sensitivity
 
 // Map and projection
-
-const projection2D = d3.geoMercator().center([-50, 58])
-
-let projection3D = d3.geoOrthographic()
-    .scale(scale)
-    .translate([width / 2, height / 2])
-    .clipAngle(90)
-    .precision(0.5)
-    .rotate(rotation);
+const projection = d3.geoMercator()
+    .center([-50,58])              
 
 const colors = [
     // Sample from several interpolators
@@ -32,30 +18,6 @@ const colors = [
     ...d3.range(0.6, 1, 0.05).map(t => d3.interpolateBrBG(1-t)),
     ...d3.range(0.1, 1, 0.1).map(t => d3.interpolateGreys(1-t)),
     ];
-
-const pattern = defs
-    .append("pattern")
-    .attr("id", "hashedPattern")
-    .attr("patternUnits", "userSpaceOnUse")
-    .attr("width", 10)
-    .attr("height", 10)
-    .append("path")
-    .attr("d", "M 0 0 L 10 10 M 0 10 L 10 0") // Create a crossing line pattern
-    .attr("stroke", "#333333")
-    .attr("stroke-width", 1);
-
-        // ToolTip
-const Tooltip = d3.select("#map-container")
-    .append("div")
-    .attr("class", "tooltip")
-    .style("position", "absolute")
-    .style("opacity", 1)
-    .style("background-color", "white")
-    .style("border", "solid")
-    .style("border-width", "2px")
-    .style("border-radius", "5px")
-    .style("padding", "5px")
-    .style("pointer-events", "none");
 
 Promise.all([
     d3.json("https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/world.geojson"),
@@ -81,57 +43,74 @@ Promise.all([
         .range([ 3, 22])  // Size in pixel
 
     // Draw the map
-    const toggleView = document.getElementById("toggleView");
+    const zoomGroup = svg.append("g")
 
-    let projection = toggleView.checked ? projection3D : projection2D;
-    let path = d3.geoPath().projection(projection);
+    const pattern = svg.append("defs")
+    .append("pattern")
+    .attr("id", "hashedPattern")
+    .attr("patternUnits", "userSpaceOnUse")
+    .attr("width", 10)
+    .attr("height", 10)
+    .append("path")
+    .attr("d", "M 0 0 L 10 10 M 0 10 L 10 0") // Create a crossing line pattern
+    .attr("stroke", "#333333")
+    .attr("stroke-width", 1);
 
-    function isVisible([lon, lat]) {
+    const protectedZonesLayer = zoomGroup.append("g")
+        .selectAll("path")
+        .data(protectedZones.features)
+        .join("path")
+        .attr("d", d3.geoPath().projection(projection))
+        .attr("fill", "url(#hashedPattern)") // Apply the hashed pattern
+        .attr("stroke", "white")
+        .attr("stroke-width", 0)
+        .style("opacity", 0.7);
 
-        const [λ0, φ0] = projection3D.rotate().map(d => d * Math.PI / 180);
 
-        const [x, y, z] = sphericalToCartesian(lon * Math.PI / 180, lat * Math.PI / 180);
-        const [cx, cy, cz] = sphericalToCartesian(-λ0, -φ0);  // View direction
+    // Initially hide protected zones
+    protectedZonesLayer.style("visibility", "hidden");
 
-        const dot = x * cx + y * cy + z * cz;
-        return dot > 0; // in front of the globe
-        }
+    // Toggle visibility when checkbox is clicked
+    const checkbox = document.getElementById("toggleProtectedZones");
 
-        function sphericalToCartesian(lonRad, latRad) {
-        return [
-            Math.cos(latRad) * Math.cos(lonRad),
-            Math.cos(latRad) * Math.sin(lonRad),
-            Math.sin(latRad)
-        ];
-
+    checkbox.addEventListener("change", function () {
+    if (checkbox.checked) {
+        protectedZonesLayer.style("visibility", "visible");
+    } else {
+        protectedZonesLayer.style("visibility", "hidden");
     }
+    });
 
-    let protectedZonesLayer;
+    zoomGroup.append("g")
+        .selectAll("path")
+        .data(dataGeo.features)
+        .join("path")
+        .attr("fill", "#b8b8b8")
+        .attr("d", d3.geoPath()
+            .projection(projection)
+        )
+      .style("stroke", "#fff")
+      .style("opacity", .4)
 
-    const zoomGroup = svg.append("g");
 
-    function renderProtectedZones() {
-        // Remove existing protected zones if they exist
-        zoomGroup.selectAll(".protected-zones-group").remove();
-        
-        protectedZonesLayer = zoomGroup.append("g")
-            .attr("class", "protected-zones-group")
-            .selectAll(".protected-zone")
-            .data(protectedZones.features)
-            .join("path")
-            .attr("class", "protected-zone")
-            .attr("d", path)
-            .attr("fill", "url(#hashedPattern)")
-            .attr("stroke", "white")
-            .attr("stroke-width", 0)
-            .style("opacity", 0.7)
-            .style("visibility", checkbox.checked ? "visible" : "hidden");
-    }
-     
+        // ToolTip
+    const Tooltip = d3.select("#map-container")
+      .append("div")
+      .attr("class", "tooltip")
+      .style("position", "absolute")
+      .style("opacity", 1)
+      .style("background-color", "white")
+      .style("border", "solid")
+      .style("border-width", "2px")
+      .style("border-radius", "5px")
+      .style("padding", "5px")
+      .style("pointer-events", "none");
+
+    // Three function that change the tooltip when user hover / move / leave a cell
     const mouseover = function(event, d) {
-        Tooltip.style("opacity", 1)
-      }
-    
+      Tooltip.style("opacity", 1)
+    }
+
     const mousemove = function(event, d) {
         const container = document.getElementById("map-container");
         const bounds = container.getBoundingClientRect();
@@ -151,166 +130,22 @@ Promise.all([
       Tooltip.style("opacity", 0)
     }
 
-    const drag = d3.drag().on("drag", function (event) {
-        const dx = event.dx;
-        const dy = event.dy;
-        rotation[0] += dx / sensitivity;
-        rotation[1] -= dy / sensitivity;
-        rotation[1] = Math.max(-90, Math.min(90, rotation[1]));
-        projection3D.rotate(rotation);
-        updateProjection();
-        plot_circles(filteredData);
-    });
-
-    function updateProjection() {
-        path = d3.geoPath().projection(projection);
-        zoomGroup.selectAll("path").attr("d", path);
-        zoomGroup.selectAll("circle.data-circle")
-            .attr("cx", d => projection([+d.longitude, +d.latitude])[0])
-            .attr("cy", d => projection([+d.longitude, +d.latitude])[1]);
-    }
-
-    function update3DProjection() {
-        scale = Math.min(width, height) / 2.5;  // Update scale based on current width and height
-        projection3D.scale(scale).translate([width / 2, height / 2]);  // Adjust translation for centering
-        projection = projection3D;  // Update projection to 3D
-        path = d3.geoPath().projection(projection);
-        updateProjection();
-    }
-
-      
-    function renderMap() {
-
-        zoomGroup.selectAll("*").remove();
-
-        path = d3.geoPath().projection(projection);
-
-        if (projection === projection3D) {
-
-            update3DProjection();
-
-            const gradient = defs.append("radialGradient")
-                .attr("id", "globeGradient")
-                .attr("cx", "30%")
-                .attr("cy", "30%")
-                .attr("r", "70%");
-
-            gradient.append("stop").attr("offset", "0%").attr("stop-color", "#E6F7FF");
-            gradient.append("stop").attr("offset", "50%").attr("stop-color", "#B3E0FF");
-            gradient.append("stop").attr("offset", "100%").attr("stop-color", "#66C2FF");
-                
-            globe = zoomGroup.append("circle")
-                .attr("stroke", "#000")
-                .attr("cx", width / 2)
-                .attr("cy", height / 2)
-                .attr("r", projection.scale())
-                .attr("fill", "url(#globeGradient)");
-            
-            const graticule = d3.geoGraticule();
-
-            graticulePath = zoomGroup.append("path")
-                .datum(graticule())
-                .attr("d", path)
-                .attr("fill", "none")
-                .attr("stroke", "#ccc");
-
-            renderProtectedZones();
-
-            zoomGroup.append("g")
-                .selectAll("path")
-                .data(dataGeo.features)
-                .join("path")
-                .attr("fill", "#b8b8b8")
-                .attr("stroke", "#fff")
-                .attr("d", path)
-                .style("opacity", .7);
-    
-            zoomGroup.selectAll("circle.data-circle")
-                .data(data.filter(d => isVisible([+d.longitude, +d.latitude])))
-                .join("circle")
-                .attr("class", "data-circle")
-                .data(data.sort((a,b) => +b.individual_count - +a.individual_count))
-                .attr("cx", d => projection([+d.longitude, +d.latitude])[0])
-                .attr("cy", d => projection([+d.longitude, +d.latitude])[1])
-                .attr("r", d => size(+d.individual_count))
-                .style("fill", d => color(d.species_name))
-                .attr("stroke", d => +d.individual_count > 2000 ? "black" : "none")
-                .attr("stroke-width", 1)
-                .attr("fill-opacity", .4)
-                .on("mouseover", mouseover)
-                .on("mousemove", mousemove)
-                .on("mouseleave", mouseleave);
-            
-            svg.call(drag);
-            svg.call(zoom);
-
-            updateCircles();
-        } else {
-            svg.on(".drag", null); // Remove drag behavior in 2D
-
-            renderProtectedZones();
-
-            zoomGroup.append("g")
-                .selectAll("path")
-                .data(dataGeo.features)
-                .join("path")
-                .attr("fill", "#b8b8b8")
-                .attr("stroke", "#fff")
-                .attr("d", path)
-                .style("opacity", .7);
-
-            zoomGroup.selectAll("circle.data-circle")
-                .data(data)
-                .join("circle")
-                .attr("class", "data-circle")
-                .data(data.sort((a,b) => +b.individual_count - +a.individual_count))
-                .attr("cx", d => projection([+d.longitude, +d.latitude])[0])
-                .attr("cy", d => projection([+d.longitude, +d.latitude])[1])
-                .attr("r", d => size(+d.individual_count))
-                .style("fill", d => color(d.species_name))
-                .attr("stroke", d => +d.individual_count > 2000 ? "black" : "none")
-                .attr("stroke-width", 1)
-                .attr("fill-opacity", .4)
-                .on("mouseover", mouseover)
-                .on("mousemove", mousemove)
-                .on("mouseleave", mouseleave);
-        }
-
-    }
-
-    const checkbox = document.getElementById("toggleProtectedZones");
-    checkbox.addEventListener("change", function() {
-        if (protectedZonesLayer) {
-            protectedZonesLayer.style("visibility", this.checked ? "visible" : "hidden");
-        } else {
-            console.warn("Protected zones layer not found");
-        }
-    });
-
-    // Initial render
-    renderMap();
-
-    toggleView.addEventListener("change", () => {
-        projection = toggleView.checked ? projection3D : projection2D;
-        path = d3.geoPath().projection(projection);
-        renderMap();
-
-        function fixInitialHashing() {
-            const tempRotation = [...rotation];
-            rotation[0] += 0.01; // Tiny change
-            projection3D.rotate(rotation);
-            updateProjection();
-            
-            }
-
-            // Call after initial render
-        fixInitialHashing();
-        // Maintain visibility state after re-render
-        if (checkbox.checked) {
-            zoomGroup.selectAll(".protected-zone")
-                .style("visibility", "visible");
-        }
-    });
+    // Add circles:
+    zoomGroup
+    .selectAll("circle")
+    .data(data.sort((a,b) => +b.individual_count - +a.individual_count))
+    .join("circle")
+        .attr("class", "data-circle") 
+      .attr("cx", d => projection([+d.longitude, +d.latitude])[0])
+      .attr("cy", d => projection([+d.longitude, +d.latitude])[1])
+      .attr("r", d => size(+d.individual_count))
+      .style("fill", d => color(d.species_name))
+      .attr("stroke", d => +d.individual_count > 2000 ? "black" : "none")
+      .attr("stroke-width", 1)
+      .attr("fill-opacity", .4)
+      .on("mouseover", mouseover)
+      .on("mousemove", mousemove)
+      .on("mouseleave", mouseleave)
 
     const zoom = d3.zoom()
       .scaleExtent([1, 8]) // Min and max zoom scale
@@ -414,48 +249,6 @@ Promise.all([
     .text(d => d)
     .style("alignment-baseline", "middle")
     .style("font-size", 12);
-
-    function plot_circles(data) {
-        if (projection === projection3D) {
-            zoomGroup.selectAll("circle.data-circle")
-                .data(data.filter(d => isVisible([+d.longitude, +d.latitude])), d => d.longitude + "_" + d.latitude)  // Apply visibility check here
-                .join(
-                    enter => enter.append("circle")
-                        .attr("class", "data-circle")
-                        .attr("cx", d => projection([+d.longitude, +d.latitude])[0])  // For 3D, ensure projection is updated accordingly
-                        .attr("cy", d => projection([+d.longitude, +d.latitude])[1])  // Update based on your projection method (2D or 3D)
-                        .attr("r", d => size(+d.individual_count))
-                        .style("fill", d => color(d.species_name))
-                        .attr("stroke", d => +d.individual_count > 2000 ? "black" : "none")
-                        .attr("stroke-width", 1)
-                        .attr("fill-opacity", .4)
-                        .on("mouseover", mouseover)
-                        .on("mousemove", mousemove)
-                        .on("mouseleave", mouseleave),
-                    update => update,  // In case you want to update anything dynamically
-                    exit => exit.remove()  // Remove circles that no longer need to be shown
-                );
-        } else {
-            zoomGroup.selectAll("circle.data-circle")
-            .data(data, d => d.longitude + "_" + d.latitude)
-            .join(
-                enter => enter.append("circle")
-                .attr("class", "data-circle")
-                .attr("cx", d => projection([+d.longitude, +d.latitude])[0])
-                .attr("cy", d => projection([+d.longitude, +d.latitude])[1])
-                .attr("r", d => size(+d.individual_count))
-                .style("fill", d => color(d.species_name))
-                .attr("stroke", d => +d.individual_count > 2000 ? "black" : "none")
-                .attr("stroke-width", 1)
-                .attr("fill-opacity", .4)
-                .on("mouseover", mouseover)
-                .on("mousemove", mousemove)
-                .on("mouseleave", mouseleave),
-                update => update,
-                exit => exit.remove() 
-            );
-        }
-    }
     
     // Function to filter bubbles based on selected species
     function updateCircles() {
@@ -493,7 +286,25 @@ Promise.all([
                   );
             });
         }
-        plot_circles(filteredData);
+
+        zoomGroup.selectAll("circle.data-circle")
+        .data(filteredData, d => d.longitude + "_" + d.latitude)
+        .join(
+            enter => enter.append("circle")
+            .attr("class", "data-circle")
+            .attr("cx", d => projection([+d.longitude, +d.latitude])[0])
+            .attr("cy", d => projection([+d.longitude, +d.latitude])[1])
+            .attr("r", d => size(+d.individual_count))
+            .style("fill", d => color(d.species_name))
+            .attr("stroke", d => +d.individual_count > 2000 ? "black" : "none")
+            .attr("stroke-width", 1)
+            .attr("fill-opacity", .4)
+            .on("mouseover", mouseover)
+            .on("mousemove", mousemove)
+            .on("mouseleave", mouseleave),
+            update => update,
+            exit => exit.remove() 
+        );
     }
 
     function speciesStatusFilter(d) {
@@ -529,26 +340,6 @@ Promise.all([
     
     // Modify the legend click function
     legendItems.on("click", function(event, d) {
-
-        const isEndangered = d.endangered === "True";
-        const isVulnerable = d.vulnerable === "True";
-
-        // If not in show all mode and species doesn't match current filter, enable show all
-        if (!toggleAllSpecies.checked) {
-            const inEndangeredMode = toggleEndangeredSpecies.checked;
-            const inVulnerableMode = toggleVulnerableSpecies.checked;
-
-            const speciesAllowed =
-                (!inEndangeredMode || isEndangered) &&
-                (!inVulnerableMode || isVulnerable);
-
-            if (!speciesAllowed) {
-                toggleAllSpecies.checked = true;
-                toggleEndangeredSpecies.checked = false;
-                toggleVulnerableSpecies.checked = false;
-            }
-    }
-
         const isDoubleClick = event.detail === 2;
     
         if (isDoubleClick) {
@@ -718,9 +509,11 @@ Promise.all([
         updateLegendOpacity();  // Update legend opacity
     };
 
+
     let debounceTimeout = null;
     let selectedMonthStart = 0;
     let selectedMonthEnd = 11;
+
     
     $(() => {
     
@@ -760,7 +553,38 @@ function debounce(func, wait) {
     };
   }
 
-document.getElementById("info-button").addEventListener("click", () => {
-const infoBox = document.getElementById("info-box");
-infoBox.style.display = infoBox.style.display === "none" ? "block" : "none";
-});
+// let defs = svg.select("defs");
+
+// defs.append("pattern")
+// .attr("id", "diagonalHatch")
+// .attr("patternUnits", "userSpaceOnUse")
+// .attr("width", 6)
+// .attr("height", 6)
+// .append("path")
+// .attr("d", "M0,0 l6,6")
+// .attr("stroke", "#000")
+// .attr("stroke-width", 1);
+
+// let protectedZonesLayer;
+
+// d3.json("data/simplified_marine_data2.geojson").then(data => {
+//   protectedZonesLayer = svg.append("g")
+//     .attr("id", "protectedZones")
+//     .style("display", "none"); // hidden by default
+
+//   protectedZonesLayer.selectAll("path")
+//     .data(data.features)
+//     .enter()
+//     .append("path")
+//     .attr("d", pathGenerator)  // use your projection/path
+//     .attr("fill", "url(#diagonalHatch)")
+//     .attr("stroke", "black")
+//     .attr("stroke-width", 0.5);
+// });
+
+// document.getElementById("toggleProtectedZones").addEventListener("change", function () {
+//     if (this.checked) {
+//       protectedZonesLayer.style("display", "block");
+//     } else {
+//       protectedZonesLayer.style("display", "none");
+//     }
