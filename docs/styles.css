@@ -11122,6 +11122,7 @@ body {
 .projects-section {
   padding: 10rem 0;
 }
+
 .projects-section .featured-text {
   padding: 2rem;
 }
@@ -11392,3 +11393,14 @@ body {
 	margin-left: auto;
 	margin-right: auto;
 }
+
+.conclusion-image {
+    height: 400px; /* Set appropriate height */
+    background-image: 
+    grayscale(100%), url("assets/img/dolphin1.png");
+
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
