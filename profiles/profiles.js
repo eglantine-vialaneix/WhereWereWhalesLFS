@@ -7,6 +7,42 @@ function whenDocumentLoaded(action) {
 	}
 }
 
+class Popup {
+  constructor() {
+    this.popup = document.createElement('div');
+    this.popup.className = 'popup-overlay';
+    this.popup.innerHTML = `
+      <div class="popup-content">
+        <button class="popup-close">&times;</button>
+        <div class="popup-body"></div>
+      </div>
+    `;
+    document.body.appendChild(this.popup);
+    
+    // Close on X button
+    this.popup.querySelector('.popup-close').addEventListener('click', () => this.close());
+    
+    // Close on outside click
+    this.popup.addEventListener('click', (e) => {
+      if (e.target === this.popup) this.close();
+    });
+  }
+
+  setContent(content) {
+    this.popup.querySelector('.popup-body').innerHTML = content;
+  }
+
+  open() {
+    this.popup.classList.add('active');
+  }
+
+  close() {
+    this.popup.classList.remove('active');
+  }
+}
+
+
+
 // ################################## API FETCHING ############################################
 
 async function get_paragraph(title) {
@@ -52,7 +88,7 @@ async function get_images(title) {
     try {
         const response = await fetch(`${endpoint}?${params}`);
         if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
+            throw new Error(`HTTP error while searching title wikipedia api with! status: ${response.status}`);
         }
         const data = await response.json();
         const image_data  = Object.values(data.query.pages)
@@ -62,7 +98,6 @@ async function get_images(title) {
                 title: page.title.replace('File:', ''),
                 descriptionUrl: page.imageinfo[0].descriptionurl
             }));
-        console.log('image_data: ', image_data)
         return image_data
         }
         catch (error) {
@@ -215,7 +250,7 @@ async function load_gallery(title){
 let title = 'blue whale';
 
 async function loadContent(title) {
-    setPageTitle(title)
+    setPageTitle(title);
     load_paragraph(title);
     load_gallery(title);
     load_svgs(title);
@@ -224,115 +259,109 @@ async function loadContent(title) {
 
 // ################################# SEARCH INPUT HANDLING #################################
 
-// // Helper function to find similar names
-// function findSimilarNames(data, searchTerm) {
-//   return data
-//     .map(item => {
-//       const sciNameScore = similarityScore(item['scientific name'].toLowerCase(), searchTerm);
-//       const latinNameScore = similarityScore(item['latin name'].toLowerCase(), searchTerm);
-//       return {
-//         ...item,
-//         score: Math.max(sciNameScore, latinNameScore) // Use the higher of the two scores
-//       };
-//     })
-//     .filter(item => item.score > 0.4) // Only include reasonably similar matches
-//     .sort((a, b) => b.score - a.score) // Sort by similarity score (best first)
-//     .slice(0, 5); // Return top 5 matches
-// }
+// Helper function to find similar names
+function findSimilarNames(data, searchTerm) {
+    console.log('in findsimilar')
+    return data
+        .map(row => {
+        const sciNameScore = similarityScore(row['Scientific name'].toLowerCase(), searchTerm);
+        const latinNameScore = similarityScore(row['Common name'].toLowerCase(), searchTerm);
+        return {
+            ...row,
+            score: Math.max(sciNameScore, latinNameScore) // Use the higher of the two scores
+        };
+        })
+        .filter(row => row.score > 0.4) // Only include reasonably similar matches
+        .sort((a, b) => b.score - a.score) // Sort by similarity score (best first)
+        .slice(0, 5) // Return top 5 matches
+        .map(row => ({ // Extract only the fields you need
+            'Scientific name': row['Scientific name'],
+            'Common name': row['Common name'],
+        }));
+}
 
-// // Simple similarity scoring function (Levenshtein distance-based)
-// function similarityScore(a, b) {
-//   if (a.includes(b) || b.includes(a)) return 0.8; // Partial match bonus
-//   if (a === b) return 1;
+// Simple similarity scoring function (Levenshtein distance-based)
+function similarityScore(a, b) {
+  if (a.includes(b) || b.includes(a)) return 0.8; // Partial match bonus
+  if (a === b) return 1;
   
-//   // Levenshtein distance implementation
-//   const distance = levenshteinDistance(a, b);
-//   const longestLength = Math.max(a.length, b.length);
-//   return 1 - distance / longestLength;
-// }
+  // Levenshtein distance implementation
+  const distance = levenshteinDistance(a, b);
+  const longestLength = Math.max(a.length, b.length);
+  return 1 - distance / longestLength;
+}
 
-// // Basic Levenshtein distance implementation
-// function levenshteinDistance(a, b) {
-//   const matrix = [];
-//   for (let i = 0; i <= b.length; i++) matrix[i] = [i];
-//   for (let j = 0; j <= a.length; j++) matrix[0][j] = j;
+// Basic Levenshtein distance implementation
+function levenshteinDistance(a, b) {
+  const matrix = [];
+  for (let i = 0; i <= b.length; i++) matrix[i] = [i];
+  for (let j = 0; j <= a.length; j++) matrix[0][j] = j;
   
-//   for (let i = 1; i <= b.length; i++) {
-//     for (let j = 1; j <= a.length; j++) {
-//       const cost = b.charAt(i - 1) === a.charAt(j - 1) ? 0 : 1;
-//       matrix[i][j] = Math.min(
-//         matrix[i - 1][j] + 1,
-//         matrix[i][j - 1] + 1,
-//         matrix[i - 1][j - 1] + cost
-//       );
-//     }
-//   }
-//   return matrix[b.length][a.length];
-// }
+  for (let i = 1; i <= b.length; i++) {
+    for (let j = 1; j <= a.length; j++) {
+      const cost = b.charAt(i - 1) === a.charAt(j - 1) ? 0 : 1;
+      matrix[i][j] = Math.min(
+        matrix[i - 1][j] + 1,
+        matrix[i][j - 1] + 1,
+        matrix[i - 1][j - 1] + cost
+      );
+    }
+  }
+  return matrix[b.length][a.length];
+}
 
-// // Function to display results in your UI
-// function displayResults(results) {
-//   const resultsContainer = document.getElementById('results');
-//   resultsContainer.innerHTML = '';
+function propose_similar_results(similarResults) {
+  const popup = new Popup();
   
-//   if (results.length === 0) {
-//     resultsContainer.innerHTML = '<p>No matches found</p>';
-//     return;
-//   }
+  // Format results as HTML
+  const content = `
+    <h3>Did you mean:</h3>
+    <ul>
+      ${similarResults.map(result =>
+        `<li>
+          <strong>${result['Common name']}</strong> (${result['Scientific name']})
+        </li>`
+      ).join('')}
+    </ul>
+  `;
   
-//   results.forEach(item => {
-//     const div = document.createElement('div');
-//     div.innerHTML = `
-//       <h3>${item['scientific name']}</h3>
-//       <p>Latin name: ${item['latin name']}</p>
-//       ${item.score ? `<p>Similarity: ${Math.round(item.score * 100)}%</p>` : ''}
-//     `;
-//     resultsContainer.appendChild(div);
-//   });
-// }
+  popup.setContent(content);
+  popup.open();
+}
 
-async function get_names_json() {
+async function get_name_json() {
     try {
-      const response = await fetch('cetacean_names.json');
-      const data = await response.json();
-      console.log(data); // Your DataFrame is now a JavaScript array of objects
-      return data; // This returns a Promise that resolves with the data
+        const response = await fetch('cetacean_names.json');
+        const data = await response.json();
+        console.log(data);
+        const searchInput = document.getElementById('search-input').value.toLowerCase();
+        
+        // 1. First try exact matches
+        const exactMatch_rows = data.filter(item => 
+        item['Scientific name'].toLowerCase() === searchInput || 
+        item['Common name'].toLowerCase() === searchInput
+        );
+        if (exactMatch_rows.length > 0) {
+            return exactMatch_rows[0]['Common name']
+        }
+        // 2. If no exact matches, find similar names
+        const similarResults = findSimilarNames(data, searchInput);
+        console.log("Similar names:", similarResults);
+        propose_similar_results(similarResults);
+        return; // This returns a Promise that resolves with the data
     } catch (error) {
-      console.error('Error loading JSON:', error);
-      throw error; // Re-throw the error for calling code to handle
+        console.error('error trying to get name from json or propose similar name:', error);
     }
   }
 
-// fetch('your_data.json')
-//   .then(response => response.json())
-//   .then(data => {
-//     const searchInput = document.getElementById('search-input').value.toLowerCase();
-    
-//     // 1. First try exact matches
-//     const exactMatches = data.filter(item => 
-//       item['scientific name'].toLowerCase() === searchInput || 
-//       item['latin name'].toLowerCase() === searchInput
-//     );
 
-//     if (exactMatches.length > 0) {
-//       console.log("Exact matches:", exactMatches);
-//       displayResults(exactMatches);
-//       return;
-//     }
+function handleSearch() {
+    const title = get_name_json();
 
-//     // 2. If no exact matches, find similar names
-//     const similarResults = findSimilarNames(data, searchInput);
-//     console.log("Similar names:", similarResults);
-//     displayResults(similarResults);
-//   })
-//   .catch(error => console.error('Error loading JSON:', error));
-
-
-function handleSearch(input) {
-    const query = input.value.trim();
-    if (query) {
+    if (title == 'not found') {
         console.log('User searched for:', query);
         loadContent(query);
+        // request user to give new input
     }
 }
 
@@ -340,7 +369,6 @@ loadContent(title);
 
 
 whenDocumentLoaded(() => {
-	data = get_names_json();
     //buttons
 	const btn_sound = document.getElementById('btn-sound');
 	btn_sound.addEventListener('click', () => {
@@ -352,7 +380,7 @@ whenDocumentLoaded(() => {
     btn_search.addEventListener('click', handleSearch);
     search_input.addEventListener('keydown', (e) => {
         if (e.key === 'Enter') {
-            handleSearch(search_input);
+            handleSearch();
         }
     });
 });
