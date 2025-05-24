@@ -1,175 +1,205 @@
 {
-    "name": "CETACEAN",
+    "scientific_name": "CETACEAN",
+    "common_name": null,
     "image": null,
     "parent_branch_name": null,
     "children":[
         {
-            "name": 1,
+            "scientific_name": 1,
+            "common_name": null, 
             "image": null,
             "parent_branch_name": "Odontoceti",
             "children":[
                 {
-                    "name": 2,
+                    "scientific_name": 2,
+                    "common_name": null, 
                     "image": null,
                     "parent_branch_name": null,
                     "children":[
                         {
-                            "name": 4,
+                            "scientific_name": 4,
+                            "common_name": null, 
                             "image": null,
                             "parent_branch_name": "Kogiidae",
                             "children":[
                                 {
-                                    "name": "Kogia sima",
-                                    "image": "kogia_sima.png",
+                                    "scientific_name": "Kogia sima",
+                                    "common_name": "Dwarf sperm whale", 
+                                    "image": "https://upload.wikimedia.org/wikipedia/commons/5/58/Dwarf_sperm_whale_%28NOAA_Pitman%29.jpg",
                                     "parent_branch_name": null,
                                     "children": null
                                 },
                                 {
-                                    "name": "Kogia breviceps",
-                                    "image": "kogia_breviceps.png",
+                                    "scientific_name": "Kogia breviceps",
+                                    "common_name": "Pygmy sperm whale", 
+                                    "image": "https://upload.wikimedia.org/wikipedia/commons/b/b6/FMIB_50832_Pygmy_Sperm_Whale.jpeg",
                                     "parent_branch_name": null,
                                     "children": null
                                 }
                             ]
                         },
                         {
-                            "name": "Physeter Macrocephalus",
-                            "image": "physeter_macrocephalus.png",
+                            "scientific_name": "Physeter Macrocephalus",
+                            "common_name": "Sperm whale", 
+                            "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b1/Mother_and_baby_sperm_whale.jpg/1200px-Mother_and_baby_sperm_whale.jpg",
                             "parent_branch_name": "Physeteroidea",
                             "children": null
                         }
                     ]
                 },
                 {
-                    "name": 3,
+                    "scientific_name": 3,
+                    "common_name": null, 
                     "image": null,
                     "parent_branch_name": null,
                     "children":[
                         {
-                            "name": 5,
+                            "scientific_name": 5,
+                            "common_name": null, 
                             "image": null,
                             "parent_branch_name": null,
                             "children":[
                                 {
-                                    "name": 7,
+                                    "scientific_name": 7,
+                                    "common_name": null, 
                                     "image": null,
                                     "parent_branch_name": null,
                                     "children":[
                                         {
-                                            "name": 9,
+                                            "scientific_name": 9,
+                                            "common_name": null, 
                                             "image": null,
                                             "parent_branch_name": null,
                                             "children":[
                                                 {
-                                                    "name": "Ziphius cavirostris",
+                                                    "scientific_name": "Ziphius cavirostris",
+                                                    "common_name": null, 
                                                     "image": null,
                                                     "parent_branch_name": "Ziphiinae",
                                                     "children": null
                                                 },
                                                 {
-                                                    "name": 10,
+                                                    "scientific_name": 10,
+                                                    "common_name": null, 
                                                     "image": null,
                                                     "parent_branch_name": null,
                                                     "children": [
                                                         {
-                                                            "name": 11,
+                                                            "scientific_name": 11,
+                                                            "common_name": null, 
                                                             "image": null,
                                                             "parent_branch_name": "Hyperoodon",
                                                             "children":[
                                                                 {
-                                                                    "name": "Hyperoodon planifrons",
-                                                                    "image": null,
+                                                                    "scientific_name": "Hyperoodon planifrons",
+                                                                    "common_name": "Southern bottlenose whale", 
+                                                                    "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b5/Hyperoodon_planifrons.jpg/1200px-Hyperoodon_planifrons.jpg",
                                                                     "parent_branch_name": null,
                                                                     "children": null
                                                                 },
                                                                 {
-                                                                    "name": "Hyperoodon ampullatus",
-                                                                    "image": null,
+                                                                    "scientific_name": "Hyperoodon ampullatus",
+                                                                    "common_name": "Northern bottlenose whale", 
+                                                                    "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/ff/Hyperoodon_ampullatus_2.jpg/1200px-Hyperoodon_ampullatus_2.jpg",
                                                                     "parent_branch_name": null,
                                                                     "children": null
                                                                 }
                                                             ]
                                                         },
                                                         {
-                                                            "name": 12,
+                                                            "scientific_name": 12,
+                                                            "common_name": null, 
                                                             "image": null,
                                                             "parent_branch_name": "Mesoplodon",
                                                             "children":[
                                                                 {
-                                                                    "name": 13,
+                                                                    "scientific_name": 13,
+                                                                    "common_name": null, 
                                                                     "image": null,
                                                                     "parent_branch_name": null,
                                                                     "children":[
                                                                         {
-                                                                            "name": 15,
+                                                                            "scientific_name": 15,
+                                                                            "common_name": null, 
                                                                             "image": null,
                                                                             "parent_branch_name": null,
                                                                             "children":[
                                                                                 {
-                                                                                    "name": 16,
+                                                                                    "scientific_name": 16,
+                                                                                    "common_name": null, 
                                                                                     "image": null,
                                                                                     "parent_branch_name": null,
                                                                                     "children":[
                                                                                         {
-                                                                                            "name": "Mesoplodon mirus",
-                                                                                            "image": null,
+                                                                                            "scientific_name": "Mesoplodon mirus",
+                                                                                            "common_name": "True's beaked whale", 
+                                                                                            "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/The_True%27s_beaked_whale_photographed_underwater.jpg/1200px-The_True%27s_beaked_whale_photographed_underwater.jpg",
                                                                                             "parent_branch_name": null,
                                                                                             "children": null
                                                                                         },
                                                                                         {
-                                                                                            "name": "Mesoplodon europaeus",
-                                                                                            "image": null,
+                                                                                            "scientific_name": "Mesoplodon europaeus",
+                                                                                            "common_name": "Gervais's beaked whale", 
+                                                                                            "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/22/Mesoplodon_europaeus_2.jpg/1200px-Mesoplodon_europaeus_2.jpg",
                                                                                             "parent_branch_name": null,
                                                                                             "children": null
                                                                                         }
                                                                                     ]
                                                                                 },
                                                                                 {
-                                                                                    "name": "Mesoplodon ginkgodens",
-                                                                                    "image": null,
+                                                                                    "scientific_name": "Mesoplodon ginkgodens",
+                                                                                    "common_name": "Ginkgo-toothed beaked whale", 
+                                                                                    "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a8/Mesoplodon_ginkgodens_2.jpg/1200px-Mesoplodon_ginkgodens_2.jpg",
                                                                                     "parent_branch_name": null,
                                                                                     "children": null
                                                                                 }
                                                                             ]
                                                                         },
                                                                         {
-                                                                            "name": "Mesoplodon bidens",
-                                                                            "image": null,
+                                                                            "scientific_name": "Mesoplodon bidens",
+                                                                            "common_name": "Sowerby's beaked whale", 
+                                                                            "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/16/Mesoplodon_bidens_2.jpg/1200px-Mesoplodon_bidens_2.jpg",
                                                                             "parent_branch_name": null,
                                                                             "children": null
                                                                         }
                                                                     ]
                                                                 },
                                                                 {
-                                                                    "name": 14,
+                                                                    "scientific_name": 14,
+                                                                    "common_name": null, 
                                                                     "image": null,
                                                                     "parent_branch_name": null,
                                                                     "children":[
                                                                         {
-                                                                            "name": 17,
+                                                                            "scientific_name": 17,
+                                                                            "common_name": null, 
                                                                             "image": null,
                                                                             "parent_branch_name": null,
                                                                             "children":[
                                                                                 {
-                                                                                    "name": "Mesoplodon layardii",
-                                                                                    "image": null,
+                                                                                    "scientific_name": "Mesoplodon layardii",
+                                                                                    "common_name": "Strap-toothed whale", 
+                                                                                    "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8a/Mesoplodon_layardii.jpg/1200px-Mesoplodon_layardii.jpg",
                                                                                     "parent_branch_name": null,
                                                                                     "children": null
                                                                                 },
                                                                                 {
-                                                                                    "name": 19,
+                                                                                    "scientific_name": 19,
+                                                                                    "common_name": null, 
                                                                                     "image": null,
                                                                                     "parent_branch_name": null,
                                                                                     "children":[
                                                                                         {
-                                                                                            "name": "Mesoplodon carlhubbsi",
-                                                                                            "image": null,
+                                                                                            "scientific_name": "Mesoplodon carlhubbsi",
+                                                                                            "common_name": "Hubbs' beaked whale", 
+                                                                                            "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/42/Mesoplodon_carlhubbsi.jpg/1200px-Mesoplodon_carlhubbsi.jpg",
                                                                                             "parent_branch_name": null,
                                                                                             "children": null
                                                                                         },
                                                                                         {
-                                                                                            "name": "Mesoplodon bowdoini",
-                                                                                            "image": null,
+                                                                                            "scientific_name": "Mesoplodon bowdoini",
+                                                                                            "common_name": "Andrews' beaked whale", 
+                                                                                            "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c4/Mesoplodon_bowdoini.jpg/1200px-Mesoplodon_bowdoini.jpg",
                                                                                             "parent_branch_name": null,
                                                                                             "children": null
                                                                                         }
@@ -178,63 +208,74 @@
                                                                             ]
                                                                         },
                                                                         {
-                                                                            "name": 18,
+                                                                            "scientific_name": 18,
+                                                                            "common_name": null, 
                                                                             "image": null,
                                                                             "parent_branch_name": null,
                                                                             "children":[
                                                                                 {
-                                                                                    "name": "Mesoplodon hectori",
-                                                                                    "image": null,
+                                                                                    "scientific_name": "Mesoplodon hectori",
+                                                                                    "common_name": "Hector's beaked whale", 
+                                                                                    "image": "https://upload.wikimedia.org/wikipedia/commons/b/b5/Mesoplodon_hectori.jpg",
                                                                                     "parent_branch_name": null,
                                                                                     "children": null
                                                                                 },
                                                                                 {
-                                                                                    "name": 20,
+                                                                                    "scientific_name": 20,
+                                                                                    "common_name": null, 
                                                                                     "image": null,
                                                                                     "parent_branch_name": null,
                                                                                     "children":[
                                                                                         {
-                                                                                            "name": "Mesoplodon grayi",
-                                                                                            "image": null,
+                                                                                            "scientific_name": "Mesoplodon grayi",
+                                                                                            "common_name": "Gray's beaked whale", 
+                                                                                            "image": "https://upload.wikimedia.org/wikipedia/commons/6/6a/Mesoplodon_grayi_2.jpg",
                                                                                             "parent_branch_name": null,
                                                                                             "children": null
                                                                                         },
                                                                                         {
-                                                                                            "name": 21,
+                                                                                            "scientific_name": 21,
+                                                                                            "common_name": null, 
                                                                                             "image": null,
                                                                                             "parent_branch_name": null,
                                                                                             "children": [
                                                                                                 {
-                                                                                                    "name": "Mesoplodon stejnegeri",
-                                                                                                    "image": null,
+                                                                                                    "scientific_name": "Mesoplodon stejnegeri",
+                                                                                                    "common_name": "Stejneger's beaked whale", 
+                                                                                                    "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/26/Mesoplodon_stejnegeri.jpg/1200px-Mesoplodon_stejnegeri.jpg",
                                                                                                     "parent_branch_name": null,
                                                                                                     "children": null
                                                                                                 },
                                                                                                 {
-                                                                                                    "name": 22,
+                                                                                                    "scientific_name": 22,
+                                                                                                    "common_name": null, 
                                                                                                     "image": null,
                                                                                                     "parent_branch_name": null,
                                                                                                     "children":[
                                                                                                         {
-                                                                                                            "name": "Mesoplodon densirostriis",
-                                                                                                            "image": null,
+                                                                                                            "scientific_name": "Mesoplodon densirostriis",
+                                                                                                            "common_name": "Blaincille's beaked whale", 
+                                                                                                            "image": "https://upload.wikimedia.org/wikipedia/commons/b/b9/Mesoplodon_densirostris.jpg",
                                                                                                             "parent_branch_name": null,
                                                                                                             "children": null
                                                                                                         },
                                                                                                         {
-                                                                                                            "name": 23,
+                                                                                                            "scientific_name": 23,
+                                                                                                            "common_name": null, 
                                                                                                             "image": null,
                                                                                                             "parent_branch_name": null,
                                                                                                             "children": [
                                                                                                                 {
-                                                                                                                    "name": "Mesoplodon perrini",
-                                                                                                                    "image": null,
+                                                                                                                    "scientific_name": "Mesoplodon perrini",
+                                                                                                                    "common_name": "Perrin's beaked whale", 
+                                                                                                                    "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ed/Mesoplodon_perrini.jpg/1200px-Mesoplodon_perrini.jpg",
                                                                                                                     "parent_branch_name": null,
                                                                                                                     "children": null
                                                                                                                 },
                                                                                                                 {
-                                                                                                                    "name": "Mesoplodon peruvianus",
-                                                                                                                    "image": null,
+                                                                                                                    "scientific_name": "Mesoplodon peruvianus",
+                                                                                                                    "common_name": "Pygmy beaked whale", 
+                                                                                                                    "image": "https://upload.wikimedia.org/wikipedia/commons/9/93/Mesoplodon_peruvianus.jpg",
                                                                                                                     "parent_branch_name": null,
                                                                                                                     "children": null
                                                                                                                 }
@@ -257,27 +298,31 @@
                                             ]
                                         },
                                         {
-                                            "name": "Tasmacetus shepherdi",
-                                            "image": null,
+                                            "scientific_name": "Tasmacetus shepherdi",
+                                            "common_name": "Shepherd's beaked whale", 
+                                            "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/84/Tasmacetus_shepherdi.jpg/1200px-Tasmacetus_shepherdi.jpg",
                                             "parent_branch_name": null,
                                             "children": null
                                         }
                                     ]
                                 },
                                 {
-                                    "name": 8,
+                                    "scientific_name": 8,
+                                    "common_name": null, 
                                     "image": null,
                                     "parent_branch_name": null,
                                     "children": [
                                         {
-                                            "name": "Berardius bairdii",
-                                            "image": null,
+                                            "scientific_name": "Berardius bairdii",
+                                            "common_name": "Baird's beaked whale",
+                                            "image": "https://upload.wikimedia.org/wikipedia/commons/e/e2/Berardius_bairdii_2.jpg",
                                             "parent_branch_name": null,
                                             "children": null
                                         },
                                         {
-                                            "name": "Berardius arnuxii",
-                                            "image": null,
+                                            "scientific_name": "Berardius arnuxii",
+                                            "common_name": "Arnoux's beaked whale", 
+                                            "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Berardius_arnuxii_2.jpg/1200px-Berardius_arnuxii_2.jpg",
                                             "parent_branch_name": null,
                                             "children": null
                                         }
@@ -286,74 +331,78 @@
                             ]
                         },
                         {
-                            "name": 6,
+                            "scientific_name": 6,
+                            "common_name": null, 
                             "image": null,
                             "parent_branch_name": null,
                             "children": [
                                 {
-                                    "name": 24,
+                                    "scientific_name": 24,
+                                    "common_name": null, 
                                     "image": null,
                                     "parent_branch_name": null,
                                     "children": [
                                         {
-                                            "name": 27,
+                                            "scientific_name": 27,
+                                            "common_name": null, 
                                             "image": null,
                                             "parent_branch_name": null,
                                             "children": [
                                                 {
-                                                    "name": 29,
+                                                    "scientific_name": 29,
+                                                    "common_name": null, 
                                                     "image": null,
                                                     "parent_branch_name": null,
                                                     "children": [
                                                         {
-                                                            "name": "Delphinapterus leucas",
-                                                            "image": null,
+                                                            "scientific_name": "Delphinapterus leucas",
+                                                            "common_name": "", "image": null,
                                                             "parent_branch_name": null,
                                                             "children": null
                                                         },
                                                         {
-                                                            "name": "Monodon monoceros",
-                                                            "image": null,
+                                                            "scientific_name": "Monodon monoceros",
+                                                            "common_name": "", "image": null,
                                                             "parent_branch_name": null,
                                                             "children": null
                                                         }
                                                     ]
                                                 },
                                                 {
-                                                    "name": 30,
-                                                    "image": null,
+                                                    "scientific_name": 30,
+                                                    "common_name": "", "image": null,
                                                     "parent_branch_name": null,
                                                     "children": [
                                                         {
-                                                            "name": 31,
-                                                            "image": null,
+                                                            "scientific_name": 31,
+                                                            "common_name": "", "image": null,
                                                             "parent_branch_name": null,
                                                             "children": [
                                                                 {
-                                                                    "name": 32,
-                                                                    "image": null,
+                                                                    "scientific_name": 32,
+                                                                    "common_name": "", "image": null,
                                                                     "parent_branch_name": null,
                                                                     "children": [
                                                                         {
-                                                                            "name": "Phocoena phocoena",
-                                                                            "image": null,
+                                                                            "scientific_name": "Phocoena phocoena",
+                                                                            "common_name": "", "image": null,
                                                                             "parent_branch_name": null,
                                                                             "children": null
                                                                         },
                                                                         {
-                                                                            "name": 33,
-                                                                            "image": null,
+                                                                            "scientific_name": 33,
+                                                                            "common_name": "", "image": null,
                                                                             "parent_branch_name": null,
                                                                             "children": [
                                                                                 {
-                                                                                    "name": "Phocoena dioptrica",
-                                                                                    "image": null,
+                                                                                    "scientific_name": "Phocoena dioptrica",
+                                                                                    "common_name": "", "image": null,
                                                                                     "parent_branch_name": null,
                                                                                     "children": null
                                                                                 },
                                                                                 {
-                                                                                    "name": "Phocoena spinipinnis",
-                                                                                    "image": null,
+                                                                                    "scientific_name": "Phocoena spinipinnis",
+                                                                                    "common_name": "", "image": null,
                                                                                     "parent_branch_name": null,
                                                                                     "children": null
                                                                                 }
@@ -362,16 +411,16 @@
                                                                     ]
                                                                 },
                                                                 {
-                                                                    "name": "Phocoenoides dalli",
-                                                                    "image": null,
+                                                                    "scientific_name": "Phocoenoides dalli",
+                                                                    "common_name": "", "image": null,
                                                                     "parent_branch_name": null,
                                                                     "children": null
                                                                 }
                                                             ]
                                                         },
                                                         {
-                                                            "name": "Neophocaena phocaenoides",
-                                                            "image": null,
+                                                            "scientific_name": "Neophocaena phocaenoides",
+                                                            "common_name": "", "image": null,
                                                             "parent_branch_name": null,
                                                             "children": null
                                                         }
@@ -380,78 +429,78 @@
                                             ]
                                         },
                                         {
-                                            "name": 28,
-                                            "image": null,
+                                            "scientific_name": 28,
+                                            "common_name": "", "image": null,
                                             "parent_branch_name": null,
                                             "children": [
                                                 {
-                                                    "name": "Leucopleurus acutus",
-                                                    "image": null,
+                                                    "scientific_name": "Leucopleurus acutus",
+                                                    "common_name": "", "image": null,
                                                     "parent_branch_name": null,
                                                     "children": null
                                                 },
                                                 {
-                                                    "name": 34,
-                                                    "image": null,
+                                                    "scientific_name": 34,
+                                                    "common_name": "", "image": null,
                                                     "parent_branch_name": null,
                                                     "children": [
                                                         {
-                                                            "name": "Orcinus orca",
-                                                            "image": null,
+                                                            "scientific_name": "Orcinus orca",
+                                                            "common_name": "", "image": null,
                                                             "parent_branch_name": null,
                                                             "children": null
                                                         },
                                                         {
-                                                            "name": 35,
-                                                            "image": null,
+                                                            "scientific_name": 35,
+                                                            "common_name": "", "image": null,
                                                             "parent_branch_name": null,
                                                             "children": [
                                                                 {
-                                                                    "name": "Lagenorhynchus albirostris",
-                                                                    "image": null,
+                                                                    "scientific_name": "Lagenorhynchus albirostris",
+                                                                    "common_name": "", "image": null,
                                                                     "parent_branch_name": null,
                                                                     "children": null
                                                                 },
                                                                 {
-                                                                    "name": 36,
-                                                                    "image": null,
+                                                                    "scientific_name": 36,
+                                                                    "common_name": "", "image": null,
                                                                     "parent_branch_name": null,
                                                                     "children": [
                                                                         {
-                                                                            "name": 37,
-                                                                            "image": null,
+                                                                            "scientific_name": 37,
+                                                                            "common_name": "", "image": null,
                                                                             "parent_branch_name": null,
                                                                             "children": [
                                                                                 {
-                                                                                    "name": 39,
-                                                                                    "image": null,
+                                                                                    "scientific_name": 39,
+                                                                                    "common_name": "", "image": null,
                                                                                     "parent_branch_name": null,
                                                                                     "children": [
                                                                                         {
-                                                                                            "name": 41,
-                                                                                            "image": null,
+                                                                                            "scientific_name": 41,
+                                                                                            "common_name": "", "image": null,
                                                                                             "parent_branch_name": null,
                                                                                             "children": [
                                                                                                 {
-                                                                                                    "name": "Cephalorhynchus commersonii",
-                                                                                                    "image": null,
+                                                                                                    "scientific_name": "Cephalorhynchus commersonii",
+                                                                                                    "common_name": "", "image": null,
                                                                                                     "parent_branch_name": null,
                                                                                                     "children": null
                                                                                                 },
                                                                                                 {
-                                                                                                    "name": 43,
-                                                                                                    "image": null,
+                                                                                                    "scientific_name": 43,
+                                                                                                    "common_name": "", "image": null,
                                                                                                     "parent_branch_name": null,
                                                                                                     "children": [
                                                                                                         {
-                                                                                                            "name": "Cephalorhynchus heavisidii",
-                                                                                                            "image": null,
+                                                                                                            "scientific_name": "Cephalorhynchus heavisidii",
+                                                                                                            "common_name": "", "image": null,
                                                                                                             "parent_branch_name": null,
                                                                                                             "children": null
                                                                                                         },
                                                                                                         {
-                                                                                                            "name": "Sagmatias australis",
-                                                                                                            "image": null,
+                                                                                                            "scientific_name": "Sagmatias australis",
+                                                                                                            "common_name": "", "image": null,
                                                                                                             "parent_branch_name": null,
                                                                                                             "children": null
                                                                                                         }
@@ -460,19 +509,19 @@
                                                                                             ]
                                                                                         },
                                                                                         {
-                                                                                            "name": 42,
-                                                                                            "image": null,
+                                                                                            "scientific_name": 42,
+                                                                                            "common_name": "", "image": null,
                                                                                             "parent_branch_name": null,
                                                                                             "children": [
                                                                                                 {
-                                                                                                    "name": "Sagmatias obliquidens",
-                                                                                                    "image": null,
+                                                                                                    "scientific_name": "Sagmatias obliquidens",
+                                                                                                    "common_name": "", "image": null,
                                                                                                     "parent_branch_name": null,
                                                                                                     "children": null
                                                                                                 },
                                                                                                 {
-                                                                                                    "name": "Sagmatias obscurus",
-                                                                                                    "image": null,
+                                                                                                    "scientific_name": "Sagmatias obscurus",
+                                                                                                    "common_name": "", "image": null,
                                                                                                     "parent_branch_name": null,
                                                                                                     "children": null
                                                                                                 }
@@ -481,19 +530,19 @@
                                                                                     ]
                                                                                 },
                                                                                 {
-                                                                                    "name": 40,
-                                                                                    "image": null,
+                                                                                    "scientific_name": 40,
+                                                                                    "common_name": "", "image": null,
                                                                                     "parent_branch_name": null,
                                                                                     "children": [
                                                                                         {
-                                                                                            "name": "Lissodelphis peroni",
-                                                                                            "image": null,
+                                                                                            "scientific_name": "Lissodelphis peroni",
+                                                                                            "common_name": "", "image": null,
                                                                                             "parent_branch_name": null,
                                                                                             "children": null
                                                                                         },
                                                                                         {
-                                                                                            "name": "Lissodelphis borealis",
-                                                                                            "image": null,
+                                                                                            "scientific_name": "Lissodelphis borealis",
+                                                                                            "common_name": "", "image": null,
                                                                                             "parent_branch_name": null,
                                                                                             "children": null
                                                                                         }
@@ -502,80 +551,80 @@
                                                                             ]
                                                                         },
                                                                         {
-                                                                            "name": 38,
-                                                                            "image": null,
+                                                                            "scientific_name": 38,
+                                                                            "common_name": "", "image": null,
                                                                             "parent_branch_name": null,
                                                                             "children": [
                                                                                 {
-                                                                                    "name": 44,
-                                                                                    "image": null,
+                                                                                    "scientific_name": 44,
+                                                                                    "common_name": "", "image": null,
                                                                                     "parent_branch_name": null,
                                                                                     "children": [
                                                                                         {
-                                                                                            "name": 46,
-                                                                                            "image": null,
+                                                                                            "scientific_name": 46,
+                                                                                            "common_name": "", "image": null,
                                                                                             "parent_branch_name": null,
                                                                                             "children": [
                                                                                                 {
-                                                                                                    "name": "Steno bredanensis",
-                                                                                                    "image": null,
+                                                                                                    "scientific_name": "Steno bredanensis",
+                                                                                                    "common_name": "", "image": null,
                                                                                                     "parent_branch_name": null,
                                                                                                     "children": null
                                                                                                 },
                                                                                                 {
-                                                                                                    "name": 48,
-                                                                                                    "image": null,
+                                                                                                    "scientific_name": 48,
+                                                                                                    "common_name": "", "image": null,
                                                                                                     "parent_branch_name": null,
                                                                                                     "children": [
                                                                                                         {
-                                                                                                            "name": "Grampus griseus",
-                                                                                                            "image": null,
+                                                                                                            "scientific_name": "Grampus griseus",
+                                                                                                            "common_name": "", "image": null,
                                                                                                             "parent_branch_name": null,
                                                                                                             "children": null
                                                                                                         },
                                                                                                         {
-                                                                                                            "name": 49,
-                                                                                                            "image": null,
+                                                                                                            "scientific_name": 49,
+                                                                                                            "common_name": "", "image": null,
                                                                                                             "parent_branch_name": null,
                                                                                                             "children": [
                                                                                                                 {
-                                                                                                                    "name": 50,
-                                                                                                                    "image": null,
+                                                                                                                    "scientific_name": 50,
+                                                                                                                    "common_name": "", "image": null,
                                                                                                                     "parent_branch_name": null,
                                                                                                                     "children": [
                                                                                                                         {
-                                                                                                                            "name": 51,
-                                                                                                                            "image": null,
+                                                                                                                            "scientific_name": 51,
+                                                                                                                            "common_name": "", "image": null,
                                                                                                                             "parent_branch_name": null,
                                                                                                                             "children": [
                                                                                                                                 {
-                                                                                                                                    "name": "Globicephala melas",
-                                                                                                                                    "image": null,
+                                                                                                                                    "scientific_name": "Globicephala melas",
+                                                                                                                                    "common_name": "", "image": null,
                                                                                                                                     "parent_branch_name": null,
                                                                                                                                     "children": null
                                                                                                                                 },
                                                                                                                                 {
-                                                                                                                                    "name": "Globicephala macrorhynchus",
-                                                                                                                                    "image": null,
+                                                                                                                                    "scientific_name": "Globicephala macrorhynchus",
+                                                                                                                                    "common_name": "", "image": null,
                                                                                                                                     "parent_branch_name": null,
                                                                                                                                     "children": null
                                                                                                                                 }
                                                                                                                             ]
                                                                                                                         },
                                                                                                                         {
-                                                                                                                            "name": 52,
-                                                                                                                            "image": null,
+                                                                                                                            "scientific_name": 52,
+                                                                                                                            "common_name": "", "image": null,
                                                                                                                             "parent_branch_name": null,
                                                                                                                             "children": [
                                                                                                                                 {
-                                                                                                                                    "name": "Feresa attenuata",
-                                                                                                                                    "image": null,
+                                                                                                                                    "scientific_name": "Feresa attenuata",
+                                                                                                                                    "common_name": "", "image": null,
                                                                                                                                     "parent_branch_name": null,
                                                                                                                                     "children": null
                                                                                                                                 },
                                                                                                                                 {
-                                                                                                                                    "name": "Peponocephala electra",
-                                                                                                                                    "image": null,
+                                                                                                                                    "scientific_name": "Peponocephala electra",
+                                                                                                                                    "common_name": "", "image": null,
                                                                                                                                     "parent_branch_name": null,
                                                                                                                                     "children": null
                                                                                                                                 }
@@ -584,8 +633,8 @@
                                                                                                                     ]
                                                                                                                 },
                                                                                                                 {
-                                                                                                                    "name": "Pseudorca crassidens",
-                                                                                                                    "image": null,
+                                                                                                                    "scientific_name": "Pseudorca crassidens",
+                                                                                                                    "common_name": "", "image": null,
                                                                                                                     "parent_branch_name": null,
                                                                                                                     "children": null
                                                                                                                 }
@@ -596,19 +645,19 @@
                                                                                             ]
                                                                                         },
                                                                                         {
-                                                                                            "name": 47,
-                                                                                            "image": null,
+                                                                                            "scientific_name": 47,
+                                                                                            "common_name": "", "image": null,
                                                                                             "parent_branch_name": null,
                                                                                             "children": [
                                                                                                 {
-                                                                                                    "name": "Orcaella brevirostris",
-                                                                                                    "image": null,
+                                                                                                    "scientific_name": "Orcaella brevirostris",
+                                                                                                    "common_name": "", "image": null,
                                                                                                     "parent_branch_name": null,
                                                                                                     "children": null
                                                                                                 },
                                                                                                 {
-                                                                                                    "name": "Orcaella heinsohni",
-                                                                                                    "image": null,
+                                                                                                    "scientific_name": "Orcaella heinsohni",
+                                                                                                    "common_name": "", "image": null,
                                                                                                     "parent_branch_name": null,
                                                                                                     "children": null
                                                                                                 }
@@ -617,70 +666,70 @@
                                                                                     ]
                                                                                 },
                                                                                 {
-                                                                                    "name": 45,
-                                                                                    "image": null,
+                                                                                    "scientific_name": 45,
+                                                                                    "common_name": "", "image": null,
                                                                                     "parent_branch_name": null,
                                                                                     "children": [
                                                                                         {
-                                                                                            "name": "Sotalia guianensis",
-                                                                                            "image": null,
+                                                                                            "scientific_name": "Sotalia guianensis",
+                                                                                            "common_name": "", "image": null,
                                                                                             "parent_branch_name": null,
                                                                                             "children": null
                                                                                         },
                                                                                         {
-                                                                                            "name": 53,
-                                                                                            "image": null,
+                                                                                            "scientific_name": 53,
+                                                                                            "common_name": "", "image": null,
                                                                                             "parent_branch_name": null,
                                                                                             "children": [
                                                                                                 {
-                                                                                                    "name": "Sousa chinensis",
-                                                                                                    "image": null,
+                                                                                                    "scientific_name": "Sousa chinensis",
+                                                                                                    "common_name": "", "image": null,
                                                                                                     "parent_branch_name": null,
                                                                                                     "children": null
                                                                                                 },
                                                                                                 {
-                                                                                                    "name": 54,
-                                                                                                    "image": null,
+                                                                                                    "scientific_name": 54,
+                                                                                                    "common_name": "", "image": null,
                                                                                                     "parent_branch_name": null,
                                                                                                     "children": [
                                                                                                         {
-                                                                                                            "name": 55,
-                                                                                                            "image": null,
+                                                                                                            "scientific_name": 55,
+                                                                                                            "common_name": "", "image": null,
                                                                                                             "parent_branch_name": null,
                                                                                                             "children": [
                                                                                                                 {
-                                                                                                                    "name": 57,
-                                                                                                                    "image": null,
+                                                                                                                    "scientific_name": 57,
+                                                                                                                    "common_name": "", "image": null,
                                                                                                                     "parent_branch_name": null,
                                                                                                                     "children": [
                                                                                                                         {
-                                                                                                                            "name": "Tursiops truncatus",
-                                                                                                                            "image": null,
+                                                                                                                            "scientific_name": "Tursiops truncatus",
+                                                                                                                            "common_name": "", "image": null,
                                                                                                                             "parent_branch_name": null,
                                                                                                                             "children": null
                                                                                                                         },
                                                                                                                         {
-                                                                                                                            "name": "Tursiops aduncus",
-                                                                                                                            "image": null,
+                                                                                                                            "scientific_name": "Tursiops aduncus",
+                                                                                                                            "common_name": "", "image": null,
                                                                                                                             "parent_branch_name": null,
                                                                                                                             "children": null
                                                                                                                         }
                                                                                                                     ]
                                                                                                                 },
                                                                                                                 {
-                                                                                                                    "name": 58,
-                                                                                                                    "image": null,
+                                                                                                                    "scientific_name": 58,
+                                                                                                                    "common_name": "", "image": null,
                                                                                                                     "parent_branch_name": null,
                                                                                                                     "children": [
                                                                                                                         {
-                                                                                                                            "name": "Stenella frontalis",
-                                                                                                                            "image": null,
+                                                                                                                            "scientific_name": "Stenella frontalis",
+                                                                                                                            "common_name": "", "image": null,
                                                                                                                             "parent_branch_name": null,
                                                                                                                             "children": null
                                                                                                                         },
                                                                                                                         {
-                                                                                                                            "name": "Stenella attenuata",
-                                                                                                                            "image": null,
+                                                                                                                            "scientific_name": "Stenella attenuata",
+                                                                                                                            "common_name": "", "image": null,
                                                                                                                             "parent_branch_name": null,
                                                                                                                             "children": null
                                                                                                                         }
@@ -689,52 +738,52 @@
                                                                                                             ]
                                                                                                         },
                                                                                                         {
-                                                                                                            "name": 56,
-                                                                                                            "image": null,
+                                                                                                            "scientific_name": 56,
+                                                                                                            "common_name": "", "image": null,
                                                                                                             "parent_branch_name": null,
                                                                                                             "children": [
                                                                                                                 {
-                                                                                                                    "name": "Stenella coeruleoalba",
-                                                                                                                    "image": null,
+                                                                                                                    "scientific_name": "Stenella coeruleoalba",
+                                                                                                                    "common_name": "", "image": null,
                                                                                                                     "parent_branch_name": null,
                                                                                                                     "children": null
                                                                                                                 },
                                                                                                                 {
-                                                                                                                    "name": 59,
-                                                                                                                    "image": null,
+                                                                                                                    "scientific_name": 59,
+                                                                                                                    "common_name": "", "image": null,
                                                                                                                     "parent_branch_name": null,
                                                                                                                     "children": [
                                                                                                                         {
-                                                                                                                            "name": "Delphinus delphis",
-                                                                                                                            "image": null,
+                                                                                                                            "scientific_name": "Delphinus delphis",
+                                                                                                                            "common_name": "", "image": null,
                                                                                                                             "parent_branch_name": null,
                                                                                                                             "children": null
                                                                                                                         },
                                                                                                                         {
-                                                                                                                            "name": 60,
-                                                                                                                            "image": null,
+                                                                                                                            "scientific_name": 60,
+                                                                                                                            "common_name": "", "image": null,
                                                                                                                             "parent_branch_name": null,
                                                                                                                             "children": [
                                                                                                                                 {
-                                                                                                                                    "name": "Lagenodelphis hosei",
-                                                                                                                                    "image": null,
+                                                                                                                                    "scientific_name": "Lagenodelphis hosei",
+                                                                                                                                    "common_name": "", "image": null,
                                                                                                                                     "parent_branch_name": null,
                                                                                                                                     "children": null
                                                                                                                                 },
                                                                                                                                 {
-                                                                                                                                    "name": 61,
-                                                                                                                                    "image": null,
+                                                                                                                                    "scientific_name": 61,
+                                                                                                                                    "common_name": "", "image": null,
                                                                                                                                     "parent_branch_name": null,
                                                                                                                                     "children": [
                                                                                                                                         {
-                                                                                                                                            "name": "Stella longirostris",
-                                                                                                                                            "image": null,
+                                                                                                                                            "scientific_name": "Stella longirostris",
+                                                                                                                                            "common_name": "", "image": null,
                                                                                                                                             "parent_branch_name": null,
                                                                                                                                             "children": null
                                                                                                                                         },
                                                                                                                                         {
-                                                                                                                                            "name": "Stella clymene",
-                                                                                                                                            "image": null,
+                                                                                                                                            "scientific_name": "Stella clymene",
+                                                                                                                                            "common_name": "", "image": null,
                                                                                                                                             "parent_branch_name": null,
                                                                                                                                             "children": null
                                                                                                                                         }
@@ -765,32 +814,32 @@
                                     ]
                                 },
                                 {
-                                    "name": 25,
-                                    "image": null,
+                                    "scientific_name": 25,
+                                    "common_name": "", "image": null,
                                     "parent_branch_name": null,
                                     "children": [
                                         {
-                                            "name": 26,
-                                            "image": null,
+                                            "scientific_name": 26,
+                                            "common_name": "", "image": null,
                                             "parent_branch_name": null,
                                             "children": [
                                                 {
-                                                    "name": "Pontoporia blainvillei",
-                                                    "image": null,
+                                                    "scientific_name": "Pontoporia blainvillei",
+                                                    "common_name": "", "image": null,
                                                     "parent_branch_name": null,
                                                     "children": null
                                                 },
                                                 {
-                                                    "name": "Inia geoffrensis",
-                                                    "image": null,
+                                                    "scientific_name": "Inia geoffrensis",
+                                                    "common_name": "", "image": null,
                                                     "parent_branch_name": null,
                                                     "children": null
                                                 }
                                             ]
                                         },
                                         {
-                                            "name": "Lipotes vexillifer",
-                                            "image": null,
+                                            "scientific_name": "Lipotes vexillifer",
+                                            "common_name": "", "image": null,
                                             "parent_branch_name": null,
                                             "children": null
                                         }
@@ -803,45 +852,45 @@
             ]
         },
         {
-            "name": 62,
-            "image": null,
+            "scientific_name": 62,
+            "common_name": "", "image": null,
             "parent_branch_name": "Mysticeti",
             "children":[
                 {
-                    "name": 64,
-                    "image": null,
+                    "scientific_name": 64,
+                    "common_name": "", "image": null,
                     "parent_branch_name": "Balaenidae",
                     "children":[
                         {
-                            "name": "Balaena mysticetus",
-                            "image": null,
+                            "scientific_name": "Balaena mysticetus",
+                            "common_name": "", "image": null,
                             "parent_branch_name": "Balaena",
                             "children": null
                         },
                         {
-                            "name": 66,
-                            "image": null,
+                            "scientific_name": 66,
+                            "common_name": "", "image": null,
                             "parent_branch_name": "Eubalaenea",
                             "children": [
                                 {
-                                    "name": 67,
-                                    "image": null,
+                                    "scientific_name": 67,
+                                    "common_name": "", "image": null,
                                     "children":[
                                         {
-                                            "name": "Eubalaena glacialis",
-                                            "image": null,
+                                            "scientific_name": "Eubalaena glacialis",
+                                            "common_name": "", "image": null,
                                             "children": null
                                         },
                                         {
-                                            "name": "Eubalaena japonica",
-                                            "image": null,
+                                            "scientific_name": "Eubalaena japonica",
+                                            "common_name": "", "image": null,
                                             "children": null
                                         }
                                     ]  
                                 },
                                 {
-                                    "name": "Eubalaena australis",
-                                    "image": "eubalaena_australis.png",
+                                    "scientific_name": "Eubalaena australis",
+                                    "common_name": "", "image": "eubalaena_australis.png",
                                     "children": null
                                 }
                             ]
@@ -850,100 +899,100 @@
                     ]
                 },
                 {
-                    "name": 63,
-                    "image": null,
+                    "scientific_name": 63,
+                    "common_name": "", "image": null,
                     "parent_branch_name": null,
                     "children":[
                         {
-                            "name": "Caperea marginata",
-                            "image": null,
+                            "scientific_name": "Caperea marginata",
+                            "common_name": "", "image": null,
                             "parent_branch_name": null,
                             "children": null
                         },
                         {
-                            "name": 65,
-                            "image": null,
+                            "scientific_name": 65,
+                            "common_name": "", "image": null,
                             "parent_branch_name": null,
                             "children": [
                                 {
-                                    "name": 69,
-                                    "image": null,
+                                    "scientific_name": 69,
+                                    "common_name": "", "image": null,
                                     "parent_branch_name": null,
                                     "children": [
                                         {
-                                            "name": "Balaenoptera bonaerensis",
-                                            "image": null,
+                                            "scientific_name": "Balaenoptera bonaerensis",
+                                            "common_name": "", "image": null,
                                             "parent_branch_name": null,
                                             "children": null
                                         },
                                         {
-                                            "name": "Balaenoptera acutorostrata",
-                                            "image": null,
+                                            "scientific_name": "Balaenoptera acutorostrata",
+                                            "common_name": "", "image": null,
                                             "parent_branch_name": null,
                                             "children": null
                                         }
                                     ]
                                 },
                                 {
-                                    "name": 68,
-                                    "image": null,
+                                    "scientific_name": 68,
+                                    "common_name": "", "image": null,
                                     "parent_branch_name": null,
                                     "children": [
                                         {
-                                            "name": "Eschrichtius robustus",
-                                            "image": null,
+                                            "scientific_name": "Eschrichtius robustus",
+                                            "common_name": "", "image": null,
                                             "parent_branch_name": null,
                                             "children": null
                                         },
                                         {
-                                            "name": 70,
-                                            "image": null,
+                                            "scientific_name": 70,
+                                            "common_name": "", "image": null,
                                             "parent_branch_name": null,
                                             "children": [
                                                 {
-                                                    "name": 71,
-                                                    "image": null,
+                                                    "scientific_name": 71,
+                                                    "common_name": "", "image": null,
                                                     "parent_branch_name": null,
                                                     "children": [
                                                         {
-                                                            "name": "Megaptera novaeangliae",
-                                                            "image": null,
+                                                            "scientific_name": "Megaptera novaeangliae",
+                                                            "common_name": "", "image": null,
                                                             "parent_branch_name": null,
                                                             "children": null
                                                         },
                                                         {
-                                                            "name": "Balaenoptera physalus",
-                                                            "image": null,
+                                                            "scientific_name": "Balaenoptera physalus",
+                                                            "common_name": "", "image": null,
                                                             "parent_branch_name": null,
                                                             "children": null
                                                         }
                                                     ]
                                                 },
                                                 {
-                                                    "name": 72,
-                                                    "image": null,
+                                                    "scientific_name": 72,
+                                                    "common_name": "", "image": null,
                                                     "parent_branch_name": null,
                                                     "children": [
                                                         {
-                                                            "name": "Balaenoptera musculus",
-                                                            "image": null,
+                                                            "scientific_name": "Balaenoptera musculus",
+                                                            "common_name": "", "image": null,
                                                             "parent_branch_name": null,
                                                             "children": null
                                                         },
                                                         {
-                                                            "name": 73,
-                                                            "image": null,
+                                                            "scientific_name": 73,
+                                                            "common_name": "", "image": null,
                                                             "parent_branch_name": null,
                                                             "children": [
                                                                 {
-                                                                    "name": "Balaenoptera borealis",
-                                                                    "image": null,
+                                                                    "scientific_name": "Balaenoptera borealis",
+                                                                    "common_name": "", "image": null,
                                                                     "parent_branch_name": null,
                                                                     "children": null
                                                                 },
                                                                 {
-                                                                    "name": "Balaenoptera edeni",
-                                                                    "image": null,
+                                                                    "scientific_name": "Balaenoptera edeni",
+                                                                    "common_name": "", "image": null,
                                                                     "parent_branch_name": null,
                                                                     "children": null
                                                                 }
