@@ -66,63 +66,82 @@
 
   <script src="https://d3js.org/d3.v7.min.js"></script>
   <script>
-    function drag(simulation) {
-      function dragstarted(event, d) {
-        if (!event.active) simulation.alphaTarget(0.3).restart();
-        d.fx = d.x;
-        d.fy = d.y;
-      }
+    // function drag(simulation) {
+    //   function dragstarted(event, d) {
+    //     if (!event.active) simulation.alphaTarget(0.3).restart();
+    //     d.fx = d.x;
+    //     d.fy = d.y;
+    //   }
 
-      function dragged(event, d) {
-        d.fx = event.x;
-        d.fy = event.y;
-      }
+    //   function dragged(event, d) {
+    //     d.fx = event.x;
+    //     d.fy = event.y;
+    //   }
 
-      function dragended(event, d) {
-        if (!event.active) simulation.alphaTarget(0);
-        d.fx = null;
-        d.fy = null;
-      }
+    //   function dragended(event, d) {
+    //     if (!event.active) simulation.alphaTarget(0);
+    //     d.fx = null;
+    //     d.fy = null;
+    //   }
 
-      return d3.drag()
-        .on("start", dragstarted)
-        .on("drag", dragged)
-        .on("end", dragended);
-    }
+    //   return d3.drag()
+    //     .on("start", dragstarted)
+    //     .on("drag", dragged)
+    //     .on("end", dragended);
+    // }
 
     // Initialize the node positions recursively
-    function setInitialPositions(node, yOffset = 0, xOffset = 0, depth = 0) {
-      node.x = xOffset;
-      node.y = yOffset;
+    function setInitialPositions(node, centerX, centerY, depth = 0, angleStart = 0, angleEnd = 2 * Math.PI) {
+  const radiusStep = 100; // Distance between depth levels
+  const radius = depth * radiusStep;
 
-      if (node.children) {
-        const childYOffset = yOffset + 100; // Vertical space between parent and children
-        const leftChildX = xOffset - 100;  // Horizontal space between nodes
-        const rightChildX = xOffset + 100;
-        
-        // Set positions for children
-        setInitialPositions(node.children[0], childYOffset, leftChildX, depth + 1);
-        setInitialPositions(node.children[1], childYOffset, rightChildX, depth + 1);
-      }
+  // Place current node
+  const angle = (angleStart + angleEnd) / 2;
+  node.x = centerX + radius * Math.cos(angle);
+  node.y = centerY + radius * Math.sin(angle);
+
+  // Position children, if any
+  if (node.children && node.children.length > 0) {
+    const childCount = node.children.length;
+    const angleIncrement = (angleEnd - angleStart) / childCount;
+
+    for (let i = 0; i < childCount; i++) {
+      const childAngleStart = angleStart + i * angleIncrement;
+      const childAngleEnd = childAngleStart + angleIncrement;
+
+      setInitialPositions(
+        node.children[i],
+        centerX,
+        centerY,
+        depth + 1,
+        childAngleStart,
+        childAngleEnd
+      );
     }
+  }
+}
+
 
     function createChart(data) {
       const width = 928;
-      const height = 600;
+      const height = 800;
+      const color = "blue";
 
       const root = d3.hierarchy(data);
       const links = root.links();
       const nodes = root.descendants();
 
-      // Set initial positions before the force simulation
-      setInitialPositions(root, -350, 0);
+      const centerX = width / 2;
+      const centerY = height / 2;
+
+      setInitialPositions(root, centerX, centerY);
 
       const simulation = d3.forceSimulation(nodes)
-          .force("link", d3.forceLink(links).id(d => d.data.name).distance(30))
-          .force("charge", d3.forceManyBody().strength(-50))
+          .force("link", d3.forceLink(links).id(d => d.data.name).distance(50))
+          .force("charge", d3.forceManyBody().strength(-75))
           .force("x", d3.forceX())
           .force("y", d3.forceY())
-          .force("collide", d3.forceCollide(30))  // Prevent overlap between nodes
+ //         .force("collide", d3.forceCollide(30))  // Prevent overlap between nodes
           .alphaTarget(0.5)
           .restart();
 
@@ -140,17 +159,38 @@
         .data(links)
         .join("line");
 
-      const node = svg.append("g")
-          .attr("fill", "#fff")
-          .attr("stroke", "#000")
-          .attr("stroke-width", 1.5)
-        .selectAll("circle")
-        .data(nodes)
-        .join("circle")
-          .attr("fill", d => d.children ? null : "#000")
-          .attr("stroke", d => d.children ? null : "#fff")
-          .attr("r", 3.5)
-          .call(drag(simulation));
+      const nodeGroup = svg.append("g")
+      .attr("fill", "#fff")
+      .attr("stroke", "#000")
+      .attr("stroke-width", 1.5)
+      .selectAll("g")
+      .data(nodes)
+      .join("g");
+
+      // Append circles only for nodes with children
+      nodeGroup.filter(d => d.children)
+        .append("circle")
+        .attr("fill", null)
+        .attr("stroke", "#fff")
+        .attr("r", 7);
+
+      // Append images for nodes without children
+      nodeGroup.filter(d => !d.children)
+        .append("image")
+        .attr("href", d => d.image)
+        .attr("x", -14)
+        .attr("y", -14)
+        .attr("width", 28)
+        .attr("height", 28)
+        .attr("clip-path", "circle(14px at center)");
+
+      // Optional: add a circle outline if you want to preserve the border
+      nodeGroup.filter(d => !d.children)
+        .append("circle")
+        .attr("r", 14)
+        .attr("fill", "none")
+        .attr("stroke", "#000");
+
 
       node.append("title")
           .text(d => d.data.name);
