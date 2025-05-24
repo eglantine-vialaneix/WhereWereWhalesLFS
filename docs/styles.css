@@ -11308,44 +11308,6 @@ body {
   z-index: 1;
 }
 
-.gallery-button {
-  position: absolute;
-  top: 0;
-  height: 100%;
-  width: 30%;
-  margin: 0;
-  padding: 0;
-  background: transparent; /* subtle transparent black */
-  color: white; /* make the arrows visible */
-  border: none;
-  font-size: 4rem;
-  cursor: pointer;
-  opacity: 0; /* ← this is hiding them initially */
-  transition: opacity 0.3s ease;
-  z-index: 2;
-  display: flex;
-  align-items: center;
-  justify-content: center; /* ← centers the arrow horizontally */
-  outline: none; /* disable browser default focus ring */
-  text-shadow:
-  -1px -1px 0 black,
-   1px -1px 0 black,
-  -1px  1px 0 black,
-   1px  1px 0 black;
-}
-
-.gallery:hover .gallery-button {
-  opacity: 1;
-}
-
-.prev {
-  left: 20px;
-}
-
-.next {
-  right: 20px;
-}
-
 .thumbnail-container {
   display: flex;
   gap: 10px;
@@ -11392,6 +11354,8 @@ body {
 
 	margin-left: auto;
 	margin-right: auto;
+  margin-top: auto;
+  margin-bottom: 5em;
 }
 
 .conclusion-image {
@@ -11438,4 +11402,39 @@ body {
   border: none;
   font-size: 1.5rem;
   cursor: pointer;
+}
+
+.similar-results-list li {
+  padding: 8px;
+  margin: 4px 0;
+  border-radius: 4px;
+  transition: background 0.2s;
+}
+
+.similar-results-list li:hover {
+  background: #f0f0f0;
+}
+
+
+.wiki-button {
+    display: inline-block;
+    padding: 8px 16px;
+    background-color: #f8f9fa;
+    color: #36c;
+    border: 1px solid #a2a9b1;
+    border-radius: 2px;
+    text-decoration: none;
+    font-family: sans-serif;
+    /* margin-top: ; */
+}
+
+.wiki-button:hover {
+    background-color: #fff;
+    color: #447ff5;
+}
+
+.scientific-name {
+    font-style: italic;
+    font-weight: normal;
+    margin-left: 8px;
 }

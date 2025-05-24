@@ -80,10 +80,6 @@
 
     <div class="container px-4 px-lg-5">
       <a class="navbar-brand" href="index.html">Cetacea</a>
-      <div class="search-container">
-        <input type="text" id="search-input" placeholder="e.g. blue whale" aria-label="Search cetaceans"/>
-        <button id="btn-search">Search</button>
-      </div>
       <div class="collapse navbar-collapse" id="navbarResponsive">
         <ul class="navbar-nav ms-auto">
           <li class="nav-item"><a class="nav-link" href="philogenetic_tree.html">Tree of life</a></li>
@@ -94,23 +90,57 @@
   </nav>
 
   <main class="width-limited">
-
-    <h1 id="whale-title"></h1>
-
-    <div class="container">
-        <div class="gallery" id="gallery"></div>
-        <div class="thumbnail-container" id="thumbnails"></div>
+    <div class="hero-search-container">
+      <form id="main-search-form" class="search-wrapper">
+        <input type="text" id="main-search-input" placeholder="e.g. blue whale" aria-label="Search cetaceans" required/>
+        <button type="submit" id="main-btn-search">Search</button>
+      </form>
     </div>
-
-    <div id="wiki_summary_div"></div>
-
-    <div class='svg-container' id="svgContainer"></div>
-
-    <!-- <button id="btn-sound" class="soundbutton">Make sound</button> -->
-
-    <button id="wikiButton">Go to Wikipedia article</button>
-
   </main>
+
+  <style>
+    /* Your existing navbar styles remain the same */
+    
+    /* New styles for the hero search */
+    .hero-search-container {
+      display: flex;
+      justify-content: center;
+      align-items: top;
+      height: calc(100vh - 100px); /* Full viewport minus navbar */
+      padding-top: 100px; /* Offset for fixed navbar */
+    }
+    
+    .search-wrapper {
+      display: flex;
+      width: 100%;
+      max-width: 600px; /* Wider than the navbar version */
+    }
+    
+    #main-search-input {
+      height: 50px; /* Taller than navbar version */
+      width: 100%;
+      border-radius: 4px 0 0 4px;
+      border: 1px solid #64a19d;
+      padding: 0 20px;
+      font-size: 1.1rem;
+    }
+    
+    #main-btn-search {
+      height: 50px; /* Matches input height */
+      border-radius: 0 4px 4px 0;
+      border: none;
+      background: #64a19d;
+      color: white;
+      padding: 0 30px;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    
+    #main-btn-search:hover {
+      background: #4e8a87;
+    }
+  </style>
 
   <script src="profiles/profiles.js"></script>
 

@@ -19,10 +19,10 @@ class Popup {
     `;
     document.body.appendChild(this.popup);
     
-    // Close on X button
-    this.popup.querySelector('.popup-close').addEventListener('click', () => this.close());
+    this.resolvePromise = null;
     
-    // Close on outside click
+    // Close handlers
+    this.popup.querySelector('.popup-close').addEventListener('click', () => this.close());
     this.popup.addEventListener('click', (e) => {
       if (e.target === this.popup) this.close();
     });
@@ -34,14 +34,75 @@ class Popup {
 
   open() {
     this.popup.classList.add('active');
+    return new Promise((resolve) => {
+      this.resolvePromise = resolve;
+    });
   }
 
-  close() {
+  close(selectedValue = null) {
     this.popup.classList.remove('active');
+    if (this.resolvePromise) {
+      this.resolvePromise(selectedValue);
+    }
+    setTimeout(() => this.popup.remove(), 300); // Optional: Remove after animation
   }
 }
 
 
+// ################################## TITLE CREATION ############################################
+
+async function setPageTitle(title) {
+    // Get the h1 element by its ID
+    const response = await fetch('cetacean_names.json');
+    const data = await response.json();
+    const searchInput = title.toLowerCase();
+    console.log('searchInput: ', searchInput)
+
+    
+    // 1. First try exact matches
+    const exactMatch_rows = data.filter(item => 
+        item['Scientific name'].toLowerCase() === searchInput || 
+        item['Common name'].toLowerCase() === searchInput
+        );
+    sci_name = exactMatch_rows[0]['Scientific name']
+    common_name = exactMatch_rows[0]['Common name']
+    console.log('sciname: ', sci_name)
+    console.log('common_name: ', common_name)
+    const pageTitle = common_name + ' ' + sci_name
+    // Check if the element exists
+    title_element = document.getElementById('whale-title')
+    title_element.setContent(pageTitle)
+}
+
+async function setPageTitle(title) {
+    try {
+        const response = await fetch('cetacean_names.json');
+        const data = await response.json();
+        const searchInput = title.toLowerCase();
+        
+        // Find matching entry
+        const exactMatch = data.find(item => 
+            item['Scientific name'].toLowerCase() === searchInput || 
+            item['Common name'].toLowerCase() === searchInput
+        );
+        
+        if (exactMatch) {
+            const titleElement = document.getElementById('whale-title');
+            
+            // Create HTML content with formatting
+            titleElement.innerHTML = `
+                <strong>${exactMatch['Common name']}</strong>
+                <span class="scientific-name">${exactMatch['Scientific name']}</span>
+            `;
+        } else {
+            console.warn('No matching cetacean found');
+            document.getElementById('whale-title').textContent = title;
+        }
+    } catch (error) {
+        console.error('Error setting page title:', error);
+        document.getElementById('whale-title').textContent = title;
+    }
+}
 
 // ################################## API FETCHING ############################################
 
@@ -100,13 +161,13 @@ async function get_images(title) {
             }));
         return image_data
         }
-        catch (error) {
-            console.error("Error while getting Wikipedia images:", error);
-            return null;
-        }
+    catch (error) {
+        console.error("Error while getting Wikipedia images:", error);
+        return null;
+    }
 }
 
-// ################################### IMAGE HANDLING FUNCTIONS ##################################
+// ################################### IMAGE HANDLING FOR GALERY ##################################
 // Show specific image
 function showImage(index) {
     const items = document.querySelectorAll('.gallery-item');
@@ -137,21 +198,6 @@ function prevImage(currentIndex, imageData) {
 
 // ################################### API RESULT TO DIVS ##################################
 
-async function setPageTitle(title) {
-    // Get the h1 element by its ID
-    const titleElement = document.getElementById('whale-title');
-
-    const pageTitle = 'combination of name and latin name from table'
-    // Check if the element exists
-    if (titleElement) {
-        // Set the text content of the h1 element
-        titleElement.textContent = pageTitle;
-    } else {
-        // Log an error if the element is not found
-        console.error('Error: Main title element not found!');
-    }
-}
-
 async function load_paragraph(title){
     const paragraph_container = document.getElementById("wiki_summary_div");
     paragraph_container.innerHTML = "Loading...";
@@ -159,7 +205,6 @@ async function load_paragraph(title){
     const content = await get_paragraph(title);
     paragraph_container.innerHTML = '';
     const paragraphs = content.split(/\n/);
-    console.log('text fetched: \n', content)
     paragraphs.forEach(paragraphText  => {
         if (paragraphText.trim()) {
             const p = document.createElement('p');
@@ -172,21 +217,28 @@ async function load_paragraph(title){
 async function load_svgs(title){
     let svgData = await get_images(title);
 
-    svgData = svgData.filter(image => 
-        image.url.toLowerCase().includes('.svg')
-    );
     const sizeSvg = svgData.find(image => image.url.toLowerCase().includes('size'));
-    const rangeSvg = svgData.find(image => image.url.toLowerCase().includes('range'));
+    const rangeSvgs = svgData.filter(image => {
+                                        const url = image.url.toLowerCase();
+                                        return url.includes('range') || url.includes('map');
+                                    });
     const enSvg = svgData.find(image => image.url.toLowerCase().includes('status'));
 
     const svgContainer = document.getElementById('svgContainer');
     svgContainer.innerHTML = '';
 
-    [sizeSvg, rangeSvg, enSvg].forEach(svg => {
+
+    const allSvgs = [...rangeSvgs];
+    if (sizeSvg) allSvgs.push(sizeSvg);
+    if (enSvg) allSvgs.push(enSvg);
+
+    allSvgs.forEach(svg => {
+        if (svg) {  // Only proceed if SVG exists
             const img = document.createElement('img');
             img.src = svg.url;
             img.alt = svg.title || 'SVG image';
             svgContainer.appendChild(img);
+        }
     });
 }
 
@@ -195,11 +247,23 @@ async function load_gallery(title){
     const gallery = document.getElementById('gallery');
     const thumbnailsContainer = document.getElementById('thumbnails');
 
+    // Clear previous content
+    gallery.innerHTML = '';
+    thumbnailsContainer.innerHTML = '';
+
+    // filter for jpeg and jpg
     imageData = imageData.filter(image => 
         image.url.toLowerCase().endsWith('.jpg') || 
         image.url.toLowerCase().endsWith('.jpeg')
     );
-    imageData = imageData.slice(0, 8);
+
+    // filter out unrelated images
+    imageData = imageData.filter(image => 
+        !image.url.toLowerCase().includes('yellow.tang') &&
+        !image.url.toLowerCase().includes('okapi2.jpg') &&
+        !image.url.toLowerCase().includes('perm_whale_fluke')
+    );
+
 
     thumbnailsContainer.innerHTML = '';
 
@@ -232,11 +296,6 @@ async function load_gallery(title){
         thumbnailsContainer.appendChild(thumbnail);
         });
     
-    // gallery navigation
-    const galery_nextBtn = document.getElementById('nextBtn');
-    const galery_prevBtn = document.getElementById('prevBtn');    
-    galery_nextBtn.addEventListener('click', () => {currentIndex = nextImage(currentIndex, imageData)});
-    galery_prevBtn.addEventListener('click', () => {currentIndex = prevImage(currentIndex, imageData)});
     
     document.addEventListener('keydown', (e) => {
         if (e.key === 'ArrowRight') currentIndex = nextImage(currentIndex, imageData);
@@ -246,22 +305,10 @@ async function load_gallery(title){
 }
 
 
-// ############################### FUNCTION CALLS #########################################
-let title = 'blue whale';
-
-async function loadContent(title) {
-    setPageTitle(title);
-    load_paragraph(title);
-    load_gallery(title);
-    load_svgs(title);
-}
-
-
 // ################################# SEARCH INPUT HANDLING #################################
 
 // Helper function to find similar names
 function findSimilarNames(data, searchTerm) {
-    console.log('in findsimilar')
     return data
         .map(row => {
         const sciNameScore = similarityScore(row['Scientific name'].toLowerCase(), searchTerm);
@@ -310,31 +357,45 @@ function levenshteinDistance(a, b) {
   return matrix[b.length][a.length];
 }
 
-function propose_similar_results(similarResults) {
+async function propose_similar_results(similarResults) {
   const popup = new Popup();
   
-  // Format results as HTML
   const content = `
     <h3>Did you mean:</h3>
-    <ul>
-      ${similarResults.map(result =>
-        `<li>
+    <ul class="similar-results-list">
+      ${similarResults.map(result => `
+        <li data-scientific="${result['Scientific name']}" data-common="${result['Common name']}">
           <strong>${result['Common name']}</strong> (${result['Scientific name']})
-        </li>`
-      ).join('')}
+        </li>
+      `).join('')}
     </ul>
   `;
   
   popup.setContent(content);
-  popup.open();
+  
+  // Add click handlers to each list item
+  const listItems = popup.popup.querySelectorAll('.similar-results-list li');
+  listItems.forEach(item => {
+    item.style.cursor = 'pointer';
+    item.addEventListener('click', () => {
+      popup.close({
+        scientific: item.dataset.scientific,
+        common: item.dataset.common
+      });
+    });
+  });
+
+  // Wait for user selection or popup close
+  const selected = await popup.open();
+  console.log('selected value: ', selected)
+  return selected; // Returns null if closed without selection
 }
 
-async function get_name_json() {
+async function get_name_json(input) {
     try {
         const response = await fetch('cetacean_names.json');
         const data = await response.json();
-        console.log(data);
-        const searchInput = document.getElementById('search-input').value.toLowerCase();
+        const searchInput = input.toLowerCase();
         
         // 1. First try exact matches
         const exactMatch_rows = data.filter(item => 
@@ -346,23 +407,103 @@ async function get_name_json() {
         }
         // 2. If no exact matches, find similar names
         const similarResults = findSimilarNames(data, searchInput);
+        if (similarResults.length === 0){
+            console.log('input does not match any cetaceans');
+            return 'not found';
+        }
         console.log("Similar names:", similarResults);
-        propose_similar_results(similarResults);
-        return; // This returns a Promise that resolves with the data
+        selected_similar_result = await propose_similar_results(similarResults);
+        if (selected_similar_result == null){
+            return 'popup closed'
+        }
+        return selected_similar_result.common;
+
     } catch (error) {
         console.error('error trying to get name from json or propose similar name:', error);
     }
   }
 
 
-function handleSearch() {
-    const title = get_name_json();
-
-    if (title == 'not found') {
-        console.log('User searched for:', query);
-        loadContent(query);
-        // request user to give new input
+async function handleSearch() {
+    const input = document.getElementById('search-input').value;
+    const title = await get_name_json(input);
+    console.log('title from get name json: ', title)
+    if (title == 'popup closed') {return;}
+    if (title != 'not found'){
+        loadContent(title); 
+        return;
     }
+    if (title == 'not found') {
+        console.log('User searched for:', input);
+
+        const popup = new Popup();
+        const content = `
+                <h3>No matches found</h3>
+                <div class="no-results-message">
+                    Your search for "<strong>${input}</strong>" did not match any cetaceans.
+                    <br><br>
+                    Please try a different name (e.g., "Killer Whale" or "Orcinus orca").
+                </div>
+        `;
+        
+        popup.setContent(content);
+        popup.open(); // Don't forget to call open()!
+        return;
+    }
+}
+
+// ############################### Wikipedia link button ##################################
+
+async function getWikiLink(title) {
+    const endpoint = 'https://en.wikipedia.org/w/api.php';
+    const params = new URLSearchParams({
+        action: 'query',
+        titles: title,
+        format: 'json',
+        origin: '*'
+    });
+
+    try {
+        const response = await fetch(`${endpoint}?${params}`);
+        const data = await response.json();
+        const pages = data.query.pages;
+        const pageId = Object.keys(pages)[0];
+        
+        if (pageId !== '-1') {
+            return `https://en.wikipedia.org/wiki/${encodeURIComponent(title.replace(/ /g, '_'))}`;
+        } else {
+            console.warn('Wikipedia article not found');
+            return null;
+        }
+    } catch (error) {
+        console.error('Error checking Wikipedia:', error);
+        return null;
+    }
+}
+
+async function wikibutton(title) {
+    const wikiButton = document.getElementById('wikiButton');
+    const wikiUrl = await getWikiLink(title);
+    
+    if (wikiUrl) {
+        wikiButton.style.display = 'inline-block';
+        wikiButton.onclick = () => window.open(wikiUrl, '_blank');
+    } else {
+        wikiButton.style.display = 'none';
+    }
+}
+
+// ############################### FUNCTION CALLS #########################################
+
+
+let title = 'blue whale';
+
+async function loadContent(title) {
+    setPageTitle(title);
+    load_paragraph(title);
+    load_gallery(title);
+    load_svgs(title);
+    wikibutton(title);
 }
 
 loadContent(title);
@@ -370,10 +511,10 @@ loadContent(title);
 
 whenDocumentLoaded(() => {
     //buttons
-	const btn_sound = document.getElementById('btn-sound');
-	btn_sound.addEventListener('click', () => {
-		console.log('The sound button was clicked');
-	});
+	// const btn_sound = document.getElementById('btn-sound');
+	// btn_sound.addEventListener('click', () => {
+	// 	console.log('The sound button was clicked');
+	// });
 
 	const btn_search = document.getElementById('btn-search');
     const search_input = document.getElementById('search-input');
@@ -386,3 +527,17 @@ whenDocumentLoaded(() => {
 });
 
 // ###################################################################################
+// ############################### SEARCH PAGE #######################################
+// ###################################################################################
+
+document.getElementById('main-search-form').addEventListener('submit', function(e) {
+  e.preventDefault(); // Prevent default form submission
+  const searchTerm = document.getElementById('main-search-input').value.trim();
+  
+  if (searchTerm) {
+    // Encode the search term for URL
+    const encodedTerm = encodeURIComponent(searchTerm);
+    // Redirect to profiles.html with search parameter
+    window.location.href = `profiles.html?search=${encodedTerm}`;
+  }
+});
