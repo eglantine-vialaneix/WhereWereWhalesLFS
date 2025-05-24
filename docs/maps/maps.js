@@ -240,6 +240,7 @@ Promise.all([
                 .on("mouseover", mouseover)
                 .on("mousemove", mousemove)
                 .on("mouseleave", mouseleave);
+
             
             svg.call(drag);
             svg.call(zoom);
@@ -497,19 +498,14 @@ Promise.all([
     }
 
     function speciesStatusFilter(d) {
-        // Check for "true" or "false" as strings in the "endangered" and "vulnerable" columns
-        const isEndangered = d.endangered === "True";  // Check if it's the string "true"
-        const isVulnerable = d.vulnerable === "True";  // Check if it's the string "true"
-      
-        // If "Show All Species" is checked, return true to show all species
+        const status = d.IUCN_Red_List_status;
+
+        // If "Show All Species" is checked, show everything
         if (toggleAllSpecies.checked) return true;
-      
-        // Filter based on "endangered" or "vulnerable" checkboxes
-        return (
-          (toggleEndangeredSpecies.checked && isEndangered) ||
-          (toggleVulnerableSpecies.checked && isVulnerable)
-        );
-      }
+
+        // Show if this status is currently active
+        return activeStatuses.has(status);
+    }
     
     // Function to update the opacity of the legend based on selected species
     function updateLegendOpacity() {
@@ -527,52 +523,49 @@ Promise.all([
     }
     
     
-    // Modify the legend click function
     legendItems.on("click", function(event, d) {
+        const status = d.IUCN_Red_List_status;
 
-        const isEndangered = d.endangered === "True";
-        const isVulnerable = d.vulnerable === "True";
+        const inCRMode = activeStatuses.has("CR");
+        const inENMode = activeStatuses.has("EN");
+        const inVUMode = activeStatuses.has("VU");
+        const inNTMode = activeStatuses.has("NT");
+
+        const speciesAllowed =
+            (!inCRMode || status === "CR") &&
+            (!inENMode || status === "EN") &&
+            (!inVUMode || status === "VU") &&
+            (!inNTMode || status === "NT");
 
         // If not in show all mode and species doesn't match current filter, enable show all
-        if (!toggleAllSpecies.checked) {
-            const inEndangeredMode = toggleEndangeredSpecies.checked;
-            const inVulnerableMode = toggleVulnerableSpecies.checked;
-
-            const speciesAllowed =
-                (!inEndangeredMode || isEndangered) &&
-                (!inVulnerableMode || isVulnerable);
-
-            if (!speciesAllowed) {
-                toggleAllSpecies.checked = true;
-                toggleEndangeredSpecies.checked = false;
-                toggleVulnerableSpecies.checked = false;
-            }
-    }
+        if (!toggleAllSpecies.checked && !speciesAllowed) {
+            toggleAllSpecies.checked = true;
+            activeStatuses.clear(); // Clear all status filters
+            document.querySelectorAll(".status-button").forEach(btn =>
+                btn.classList.remove("active")
+            );
+        }
 
         const isDoubleClick = event.detail === 2;
-    
+
         if (isDoubleClick) {
-        // Clear all selections and only keep the clicked species
-        selectedSpecies.clear();
-        selectedSpecies.add(d);
-        } else {
-        // Toggle the selection
-        if (selectedSpecies.has(d)) {
-            selectedSpecies.delete(d);
-        } else {
+            selectedSpecies.clear();
             selectedSpecies.add(d);
+        } else {
+            if (selectedSpecies.has(d)) {
+                selectedSpecies.delete(d);
+            } else {
+                selectedSpecies.add(d);
+            }
         }
-        }
-    
-        // Update map points
+
         updateCircles();
         updateLegendOpacity();
-    
-        // Update legend visuals for clicked item
+
         d3.select(this).select("circle")
-        .style("opacity", selectedSpecies.has(d) ? 0.7 : 0.2);
+            .style("opacity", selectedSpecies.has(d) ? 0.7 : 0.2);
         d3.select(this).select("text")
-        .style("opacity", selectedSpecies.has(d) ? 1 : 0.3);
+            .style("opacity", selectedSpecies.has(d) ? 1 : 0.3);
     });
 
     // Slider
@@ -669,53 +662,91 @@ Promise.all([
     fromInput.onchange = updateCircles;
     toInput.onchange = updateCircles;
 
-    const toggleAllSpecies = document.querySelector('#toggleallSpecies');
-    const toggleEndangeredSpecies = document.querySelector('#toggleEndengeredSpecies');
-    const toggleVulnerableSpecies = document.querySelector('#toggleVulnerableSpecies');
-    
-    function updateSelectionBasedOnCheckboxes() {
-        // Clear selected species before updating based on checkboxes
+    const toggleAllSpecies = document.querySelector('#toggleAllSpecies');
+    const toggleRedList = document.querySelector('#toggleRedList');
+    const toggleCR = document.querySelector('#btnCR');
+    const toggleEN = document.querySelector('#btnEN');
+    const toggleVU = document.querySelector('#btnVU');
+    const toggleNT = document.querySelector('#btnNT');
+
+    const activeStatuses = new Set();
+
+    function updateSelectionBasedOnStatuses() {
         selectedSpecies.clear();
-    
-        // Filter data based on checkboxes and add species to selectedSpecies set
+
         data.forEach(d => {
-            const isEndangered = d.endangered === "True";
-            const isVulnerable = d.vulnerable === "True";
-    
-            // If "Show All Species" is checked, add all species
-            if (toggleAllSpecies.checked) {
-                selectedSpecies.add(d.species_name); // Or whatever identifier you use for species
-            }
-    
-            // If "Show Endangered Species" is checked, add endangered species
-            if (toggleEndangeredSpecies.checked && isEndangered) {
-                selectedSpecies.add(d.species_name);
-            }
-    
-            // If "Show Vulnerable Species" is checked, add vulnerable species
-            if (toggleVulnerableSpecies.checked && isVulnerable) {
+            const status = d.IUCN_Red_List_status;
+
+            if (toggleAllSpecies.checked || activeStatuses.has(status)) {
                 selectedSpecies.add(d.species_name);
             }
         });
     }
+
+    function setupStatusButton(button, statusCode) {
+        button.addEventListener("click", () => {
+            const isActive = button.classList.toggle("active");
+            if (isActive) {
+                activeStatuses.add(statusCode);
+            } else {
+                activeStatuses.delete(statusCode);
+            }
+
+            // Turn off "Show All" checkbox if filtering by individual status
+            if (activeStatuses.size > 0) {
+                toggleAllSpecies.checked = false;
+            toggleRedList.checked = true;
+        } else {
+            toggleRedList.checked = false; 
+        }
+            updateSelectionBasedOnStatuses();
+            updateCircles();
+            updateLegendOpacity();
+        });
+    }
+
+    // Attach handlers to each status button
+    setupStatusButton(toggleCR, "CR");
+    setupStatusButton(toggleEN, "EN");
+    setupStatusButton(toggleVU, "VU");
+    setupStatusButton(toggleNT, "NT");
+
+    toggleRedList.onchange = () => {
+        const buttons = [
+            { btn: toggleCR, code: "CR" },
+            { btn: toggleEN, code: "EN" },
+            { btn: toggleVU, code: "VU" },
+            { btn: toggleNT, code: "NT" },
+        ];
+
+        if (toggleRedList.checked) {
+            // Activate all buttons and add their statuses
+            buttons.forEach(({ btn, code }) => {
+                btn.classList.add("active");
+                activeStatuses.add(code);
+            });
+            toggleAllSpecies.checked = false;
+        } else {
+            // Deactivate all buttons and clear statuses
+            buttons.forEach(({ btn }) => btn.classList.remove("active"));
+            activeStatuses.clear();
+        }
+
+        updateSelectionBasedOnStatuses();
+        updateCircles();
+        updateLegendOpacity();
+    };
     
-    // Add onchange handlers for checkboxes
     toggleAllSpecies.onchange = () => {
-        updateSelectionBasedOnCheckboxes();  // Update selection based on checkbox states
-        updateCircles();  // Update map points
-        updateLegendOpacity();  // Update legend opacity
-    };
-    
-    toggleEndangeredSpecies.onchange = () => {
-        updateSelectionBasedOnCheckboxes();  // Update selection based on checkbox states
-        updateCircles();  // Update map points
-        updateLegendOpacity();  // Update legend opacity
-    };
-    
-    toggleVulnerableSpecies.onchange = () => {
-        updateSelectionBasedOnCheckboxes();  // Update selection based on checkbox states
-        updateCircles();  // Update map points
-        updateLegendOpacity();  // Update legend opacity
+        if (toggleAllSpecies.checked) {
+            activeStatuses.clear();
+            document.querySelectorAll(".status-button").forEach(btn => 
+                btn.classList.remove("active")
+            );
+        }
+        updateSelectionBasedOnStatuses();
+        updateCircles();
+        updateLegendOpacity();
     };
 
     let debounceTimeout = null;
@@ -748,6 +779,24 @@ Promise.all([
         });
     });
 
+    svg.on("click", (event) => {
+    if (projection !== projection3D) return;
+
+    const [mx, my] = d3.pointer(event);
+    const dx = mx - width / 2;
+    const dy = my - height / 2;
+    const distFromCenter = Math.sqrt(dx * dx + dy * dy);
+    const globeRadius = projection.scale();
+
+    if (distFromCenter > globeRadius) {
+        // Just re-center on screen, keep rotation
+        zoomGroup.transition()
+        .duration(500)
+        .attr("transform", null); // Resets pan/zoom to original position
+    }
+    });
+
+
  
 });
 
@@ -759,11 +808,6 @@ function debounce(func, wait) {
       timeout = setTimeout(() => func.apply(context, args), wait);
     };
   }
-
-// document.getElementById("info-button").addEventListener("click", () => {
-// const infoBox = document.getElementById("info-box");
-// infoBox.style.display = infoBox.style.display === "none" ? "block" : "none";
-// });
 
 const infoButton = document.getElementById("info-button");
 const infoBox = document.getElementById("info-box");

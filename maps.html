@@ -87,12 +87,12 @@
   <div id="map-wrapper" style="display: flex; justify-content: center; align-items: center; height: 100vh; overflow: hidden;">
     <div id="info-button" style="margin-right: 390px; margin-top: 68px;"><span class="material-icons">info</span></div>
       <div id="info-box" style="display: none;">
-        <h4>How to use the map</h4>
+       <h4>How to Use the Map</h4>
         <ul>
-          <li>Click a species in the legend to toggle visibility.</li>
-          <li>Double-click to focus on a single species.</li>
-          <li>Use the checkboxes to filter by endangered or vulnerable species.</li>
-          <li>Clicking a species while in filter mode will enable 'Show All'.</li>
+          <li>Click a species in the legend to toggle its visibility.</li>
+          <li>Double-click a species to focus exclusively on it.</li>
+          <li>Use the checkboxes and IUCN Red List buttons to filter species.</li>
+          <li>In 3D mode, clicking outside the globe recenters it on the page.</li>
         </ul>
       </div>
       <div id="map-container">
@@ -103,7 +103,7 @@
     <div id="right-container">
 
       <div id="legend-container">
-      <svg id="legend-svg" width="240" height="1350" viewBox="0 0 200 1350" preserveAspectRatio="xMidYMid meet"></svg>
+      <svg id="legend-svg" width="260" height="1350" viewBox="0 0 200 1350" preserveAspectRatio="xMidYMid meet"></svg>
       </div>    
 
       <div class="range_container">
@@ -141,9 +141,6 @@
               <circle class="circle-datepicker__end" cx="90" cy="90" r="7" fill="#25DAA5" />
           
               <g id="lines">
-                <!-- 12 tick marks at each 30° interval -->
-                <!-- Adjusted from original 150,40 to 90,24 for outer point, and 90,30 for inner point -->
-                <!-- Rotation center updated to 90,90 -->
                 <line x1="90" y1="24" x2="90" y2="30" transform="rotate(30 90 90)" style="stroke: #000;stroke-width:1.5px;stroke-linecap: round;"></line>
                 <line x1="90" y1="24" x2="90" y2="30" transform="rotate(60 90 90)" style="stroke: #000;stroke-width:1.5px;stroke-linecap: round;"></line>
                 <line x1="90" y1="24" x2="90" y2="30" transform="rotate(90 90 90)" style="stroke: #000;stroke-width:1.5px;stroke-linecap: round;"></line>
@@ -182,19 +179,29 @@
               Show All Species
             </label>
           </div>
-          
-          <div style="margin-left: 20px;">
-            <label>
-              <input type="checkbox" id="toggleEndengeredSpecies">
-              Show Endangered Species
+
+          <!-- IUCN status label -->
+          <div style="margin-left: 20px">
+             <label>
+              <input type="checkbox" id="toggleRedList">
+              Show IUCN Red List Species:
             </label>
           </div>
-          
-          <div style="margin-left: 20px; margin-bottom: 20px;">
-            <label>
-              <input type="checkbox" id="toggleVulnerableSpecies">
-              Show Vulnerable Species
-            </label>
+
+          <!-- IUCN category buttons -->
+          <div style="margin-left: 50px; margin-bottom: 20px;">
+            <button id="btnCR" class="status-button" title="Critically Endangered">
+              <img src="docs/maps/CE.png" alt="CR" width="40" height="55">
+            </button>
+            <button id="btnEN" class="status-button" title="Endangered">
+              <img src="docs/maps/EN.png" alt="EN" width="40" height="55">
+            </button>
+            <button id="btnVU" class="status-button" title="Vulnerable">
+              <img src="docs/maps/VU.png" alt="VU" width="37" height="55">
+            </button>
+            <button id="btnNT" class="status-button" title="Near Threatened">
+              <img src="docs/maps/NT.png" alt="NT" width="40" height="55">
+            </button>
           </div>
 
           <script>

@@ -119,6 +119,7 @@
     text-align: center;
     line-height: 24px;
     box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+    z-index: 1000;
   }
   
   #info-box {
@@ -186,6 +187,11 @@
   margin-top: 10px;
 }
 
+#map-container {
+  overflow: hidden;
+  position: relative;
+}
+
 
 .range_container {
   width: 100%;
@@ -202,3 +208,28 @@
   align-items: center;
   margin-bottom: 20px;
 }
+
+.status-button {
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  outline: none;
+  box-shadow: none;
+  cursor: pointer;
+}
+
+.status-button:focus {
+  outline: none;
+  box-shadow: none;
+}
+.status-button img {
+  opacity: 0.3; 
+  transition: opacity 0.2s;
+}
+
+.status-button.active img {
+  opacity: 1; 
+}
+
+
