@@ -11122,6 +11122,7 @@ body {
 .projects-section {
   padding: 10rem 0;
 }
+
 .projects-section .featured-text {
   padding: 2rem;
 }
@@ -11277,4 +11278,164 @@ body {
 
 .grayscale-img {
   filter: grayscale(100%);
+}
+
+.gallery {
+  display: flex;
+  position: relative;
+  height: 500px;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  overflow: visible;
+}
+
+.gallery-item {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  display: none;
+  justify-content: center;
+  align-items: center;
+}
+
+.gallery-image {
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  z-index: 1;
+}
+
+.gallery-button {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  width: 30%;
+  margin: 0;
+  padding: 0;
+  background: transparent; /* subtle transparent black */
+  color: white; /* make the arrows visible */
+  border: none;
+  font-size: 4rem;
+  cursor: pointer;
+  opacity: 0; /* ← this is hiding them initially */
+  transition: opacity 0.3s ease;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center; /* ← centers the arrow horizontally */
+  outline: none; /* disable browser default focus ring */
+  text-shadow:
+  -1px -1px 0 black,
+   1px -1px 0 black,
+  -1px  1px 0 black,
+   1px  1px 0 black;
+}
+
+.gallery:hover .gallery-button {
+  opacity: 1;
+}
+
+.prev {
+  left: 20px;
+}
+
+.next {
+  right: 20px;
+}
+
+.thumbnail-container {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+  overflow-x: auto;
+  padding: 10px 0;
+  justify-content: center;
+  align-items: center;
+}
+
+.thumbnail {
+  width: 80px;
+  height: 60px;
+  object-fit: cover;
+  cursor: pointer;
+  border-radius: 4px;
+  border: 2px solid transparent;
+  transition: border-color 0.2s ease;
+}
+
+.svg-container {
+  display: flex;
+  gap: 1rem; 
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-top: 1rem;
+}
+
+.svg-container img {
+  width: 18rem;        
+  height: 10rem;        
+  object-fit: contain;  
+  padding: 0.5rem;      
+  box-sizing: border-box;
+}
+
+.width-limited {
+  padding-top: 70px;
+	max-width: 60rem;
+
+    padding-left: 1em;
+    padding-right: 1em;
+
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.conclusion-image {
+    height: 400px; /* Set appropriate height */
+    background-image: 
+    grayscale(100%), url("assets/img/dolphin1.png");
+
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.popup-overlay.active {
+  display: flex;
+}
+
+.popup-content {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  max-width: 500px;
+  width: 80%;
+  position: relative;
+}
+
+.popup-close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
 }

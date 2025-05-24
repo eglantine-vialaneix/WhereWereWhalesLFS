@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <title>Cetacean profile</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="docs/assets/logo_whale_remake_circle.png" />
+  
+    <!-- Stylesheets -->
+    <link href="docs/styles.css" rel="stylesheet" />
+    <link rel="stylesheet" href="docs/maps/style.css" />
+    
+    <!-- jQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    
+    <!-- D3.js -->
+    <script src="https://d3js.org/d3.v6.js"></script>
+</head>
+
+<body style="margin:0;">
+  <!-- Back to Home Button -->
+  <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
+    <style>
+      body {
+        padding-top: 0px;
+      }
+    
+      .navbar {
+        background-color: #64a19d !important;
+        z-index: 1000;
+        padding-top: 0 !important;
+        padding-bottom: 0 !important;
+        height: 50px;
+        min-height: 50px;
+      }
+    
+      .navbar-brand, .navbar-nav .nav-link {
+        padding-top: 0 !important;
+        padding-bottom: 0 !important;
+        line-height: 50px;
+        font-size: 0.95rem;
+        color: white !important; 
+      }
+    
+      .navbar-toggler {
+        padding: 0.25rem 0.5rem;
+        font-size: 0.8rem;
+      }
+    </style>
+
+    <div class="container px-4 px-lg-5">
+      <a class="navbar-brand" href="index.html">Cetacea</a>
+      <div>
+        <input type="text" id="search-input" placeholder="e.g. blue whale" aria-label="Search cetaceans"/>
+        <button id="btn-search">Search</button>
+      </div>
+      <div class="collapse navbar-collapse" id="navbarResponsive">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link" href="philogenetic_tree.html">Tree of life</a></li>
+          <li class="nav-item"><a class="nav-link" href="maps.html">Map</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <main class="width-limited">
+
+    <h1 id="whale-title"></h1>
+
+    <div class="container">
+        <div class="gallery" id="gallery">
+            <button class="gallery-button prev" id="prevBtn">❮</button>
+            <button class="gallery-button next" id="nextBtn">❯</button>
+        </div>
+        <div class="thumbnail-container" id="thumbnails"></div>
+    </div>
+
+    <div id="wiki_summary_div"></div>
+
+    <div class='svg-container' id="svgContainer"></div>
+
+    <button id="btn-sound" class="soundbutton">Make sound</button>
+
+  </main>
+
+  <script src="profiles/profiles.js"></script>
+
+</body>
