@@ -120,6 +120,8 @@
       const centerX = width / 2;
       const centerY = height / 2;
 
+      const r_image = 30;
+
       countDescendants(root); 
       setInitialPositions(root, 0, 0);
 
@@ -127,11 +129,11 @@
         .alpha(0.01)
         .force("link", d3.forceLink(links).id(d => d.data.name).distance(50))
         .force("charge", d3.forceManyBody().strength(-100))
-        .force("x", d3.forceX())
-        .force("y", d3.forceY())
+        .force("x", d3.forceX().strength(0.06))
+        .force("y", d3.forceY().strength(0.1))
         //.force("x", d3.forceX().strength(d => 3 / (d.depth + 20)))
         //.force("y", d3.forceY().strength(d => 3 / (d.depth + 20)))
-        .alphaTarget(0.08)
+        .alphaTarget(0.1)
         .restart();
 
       const svg = d3.select("#tree")
@@ -167,7 +169,7 @@
       svg.append("defs").append("clipPath")
         .attr("id", "circleClip")
         .append("circle")
-        .attr("r", 14)
+        .attr("r", r_image)
         .attr("cx", 0)
         .attr("cy", 0);
 
@@ -175,19 +177,19 @@
       const leafNodes = nodeGroup.filter(d => !d.children);
 
       leafNodes.append("circle")
-        .attr("r", 14)
+        .attr("r", r_image)
         .attr("fill", "#fff");
 
       leafNodes.append("image")
         .attr("href", d => d.data.image)
-        .attr("x", -14)
-        .attr("y", -14)
-        .attr("width", 28)
-        .attr("height", 28)
+        .attr("x", -r_image)
+        .attr("y", -r_image)
+        .attr("width", 2 * r_image)
+        .attr("height", 2 * r_image)
         .attr("clip-path", "url(#circleClip)");
       
       leafNodes.append("circle")
-        .attr("r", 14)
+        .attr("r", r_image)
         .attr("stroke", "#000")
         .attr("fill", "none");
 
