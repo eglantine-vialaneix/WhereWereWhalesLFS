@@ -54,7 +54,7 @@
       <a class="navbar-brand" href="index.html">Cetacea</a>
       <div class="collapse navbar-collapse" id="navbarResponsive">
         <ul class="navbar-nav ms-auto">
-          <li class="nav-item"><a class="nav-link" href="maps.html">Tree of life</a></li>
+          <li class="nav-item"><a class="nav-link" href="maps.html">Map</a></li>
           <li class="nav-item"><a class="nav-link" href="profiles.html">Cetacean Profiles</a></li>
         </ul>
       </div>
@@ -66,105 +66,145 @@
 
   <script src="https://d3js.org/d3.v7.min.js"></script>
   <script>
-    function drag(simulation) {
-      function dragstarted(event, d) {
-        if (!event.active) simulation.alphaTarget(0.3).restart();
-        d.fx = d.x;
-        d.fy = d.y;
-      }
 
-      function dragged(event, d) {
-        d.fx = event.x;
-        d.fy = event.y;
-      }
 
-      function dragended(event, d) {
-        if (!event.active) simulation.alphaTarget(0);
-        d.fx = null;
-        d.fy = null;
+    function countDescendants(node) {
+      if (!node.children || node.children.length === 0) {
+        node.size = 1;
+      } else {
+        node.size = node.children.reduce((sum, child) => {
+          return sum + countDescendants(child);
+        }, 0);
       }
-
-      return d3.drag()
-        .on("start", dragstarted)
-        .on("drag", dragged)
-        .on("end", dragended);
+      return node.size;
     }
+
 
     // Initialize the node positions recursively
-    function setInitialPositions(node, yOffset = 0, xOffset = 0, depth = 0) {
-      node.x = xOffset;
-      node.y = yOffset;
+    function setInitialPositions(node, centerX, centerY, radiusStep = 100, angleStart = 0, angleEnd = 2 * Math.PI) {
+      const radius = node.depth * radiusStep;
+      const angle = (angleStart + angleEnd) / 2;
 
-      if (node.children) {
-        const childYOffset = yOffset + 100; // Vertical space between parent and children
-        const leftChildX = xOffset - 100;  // Horizontal space between nodes
-        const rightChildX = xOffset + 100;
-        
-        // Set positions for children
-        setInitialPositions(node.children[0], childYOffset, leftChildX, depth + 1);
-        setInitialPositions(node.children[1], childYOffset, rightChildX, depth + 1);
+      node.x = centerX + radius * Math.cos(angle);
+      node.y = centerY + radius * Math.sin(angle);
+
+      if (node.children && node.children.length > 0) {
+        let total = node.children.reduce((sum, c) => sum + c.size, 0);
+        let currentAngle = angleStart;
+
+        for (const child of node.children) {
+          const angleSpan = (angleEnd - angleStart) * (child.size / total);
+          const childAngleStart = currentAngle;
+          const childAngleEnd = currentAngle + angleSpan;
+
+          setInitialPositions(child, centerX, centerY, radiusStep, childAngleStart, childAngleEnd);
+
+          currentAngle += angleSpan;
+        }
       }
     }
+
+
+
+
 
     function createChart(data) {
       const width = 928;
-      const height = 600;
+      const height = 800;
+      const color = "blue";
 
       const root = d3.hierarchy(data);
       const links = root.links();
       const nodes = root.descendants();
 
-      // Set initial positions before the force simulation
-      setInitialPositions(root, -350, 0);
+      const centerX = width / 2;
+      const centerY = height / 2;
+
+      countDescendants(root); 
+      setInitialPositions(root, 0, 0);
 
       const simulation = d3.forceSimulation(nodes)
-          .force("link", d3.forceLink(links).id(d => d.data.name).distance(30))
-          .force("charge", d3.forceManyBody().strength(-50))
-          .force("x", d3.forceX())
-          .force("y", d3.forceY())
-          .force("collide", d3.forceCollide(30))  // Prevent overlap between nodes
-          .alphaTarget(0.5)
-          .restart();
+        .alpha(0.01)
+        .force("link", d3.forceLink(links).id(d => d.data.name).distance(50))
+        .force("charge", d3.forceManyBody().strength(-100))
+        .force("x", d3.forceX())
+        .force("y", d3.forceY())
+        //.force("x", d3.forceX().strength(d => 3 / (d.depth + 20)))
+        //.force("y", d3.forceY().strength(d => 3 / (d.depth + 20)))
+        .alphaTarget(0.08)
+        .restart();
 
       const svg = d3.select("#tree")
-          .attr("width", "100%")
-          .attr("height", height)
-          .attr("viewBox", [-width / 2, -height / 2, width, height])
-          .attr("preserveAspectRatio", "xMidYMid meet");
+        .attr("width", "100%")
+        .attr("height", height)
+        .attr("viewBox", [-width / 2, -height / 2, width, height])
+        .attr("preserveAspectRatio", "xMidYMid meet");
 
       const link = svg.append("g")
-          .attr("stroke", "#999")
-          .attr("stroke-opacity", 0.6)
-          .attr("stroke-width", 2.5)
+        .attr("stroke", "#999")
+        .attr("stroke-opacity", 0.6)
+        .attr("stroke-width", 2.5)
         .selectAll("line")
         .data(links)
         .join("line");
 
-      const node = svg.append("g")
-          .attr("fill", "#fff")
-          .attr("stroke", "#000")
-          .attr("stroke-width", 1.5)
-        .selectAll("circle")
+      const nodeGroup = svg.append("g")
+        .attr("fill", "#fff")
+        .attr("stroke", "#000")
+        .attr("stroke-width", 1.5)
+        .selectAll("g")
         .data(nodes)
-        .join("circle")
-          .attr("fill", d => d.children ? null : "#000")
-          .attr("stroke", d => d.children ? null : "#fff")
-          .attr("r", 3.5)
-          .call(drag(simulation));
+        .join("g");
 
-      node.append("title")
-          .text(d => d.data.name);
+      // Append circles only for nodes with children
+      nodeGroup.filter(d => d.children)
+        .append("circle")
+        .attr("fill", d => d.depth === 0 ? "red" : "#fff")
+        .attr("stroke", "#000")
+        .attr("r", 4.5);
+
+      // Define a circular clipPath once for reuse
+      svg.append("defs").append("clipPath")
+        .attr("id", "circleClip")
+        .append("circle")
+        .attr("r", 14)
+        .attr("cx", 0)
+        .attr("cy", 0);
+
+      // Leaf nodes (no children): circular image with border
+      const leafNodes = nodeGroup.filter(d => !d.children);
+
+      leafNodes.append("circle")
+        .attr("r", 14)
+        .attr("fill", "#fff");
+
+      leafNodes.append("image")
+        .attr("href", d => d.data.image)
+        .attr("x", -14)
+        .attr("y", -14)
+        .attr("width", 28)
+        .attr("height", 28)
+        .attr("clip-path", "url(#circleClip)");
+      
+      leafNodes.append("circle")
+        .attr("r", 14)
+        .attr("stroke", "#000")
+        .attr("fill", "none");
+
+
 
       simulation.on("tick", () => {
         link
-            .attr("x1", d => d.source.x)
-            .attr("y1", d => d.source.y)
-            .attr("x2", d => d.target.x)
-            .attr("y2", d => d.target.y);
+          .attr("x1", d => d.source.x)
+          .attr("y1", d => d.source.y)
+          .attr("x2", d => d.target.x)
+          .attr("y2", d => d.target.y);
 
-        node
-            .attr("cx", d => d.x)
-            .attr("cy", d => d.y);
+        // nodeGroup
+        //   .attr("cx", d => d.x)
+        //   .attr("cy", d => d.y);
+
+        nodeGroup.attr("transform", d => `translate(${d.x},${d.y})`);
       });
     }
 
