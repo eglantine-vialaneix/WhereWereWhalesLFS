@@ -59,6 +59,11 @@
         left: 50%;
         transform: translateX(-50%);
       }
+
+      #nav-search-form {
+        display: flex;
+        width: 100%;
+      }
       
       #search-input {
         height: 30px;
@@ -74,15 +79,18 @@
         border: none;
         background: #d1e7e7;
         padding: 0 15px;
-        margin-left: -6px; /* Remove gap between input and button */
+        margin-left: -20px; /* Remove gap between input and button */
       }
     </style>
 
     <div class="container px-4 px-lg-5">
       <a class="navbar-brand" href="index.html">Cetacea</a>
       <div class="search-container">
-        <input type="text" id="search-input" placeholder="e.g. blue whale" aria-label="Search cetaceans"/>
-        <button id="btn-search">Search</button>
+        <form id="nav-search-form" class="d-flex"> <!-- Added d-flex for Bootstrap -->
+          <input type="text" id="search-input" placeholder="e.g. blue whale" 
+                aria-label="Search cetaceans" class="form-control"> <!-- Added form-control -->
+          <button type="submit" id="btn-search" class="btn-search">Search</button>
+        </form>
       </div>
       <div class="collapse navbar-collapse" id="navbarResponsive">
         <ul class="navbar-nav ms-auto">
@@ -91,6 +99,7 @@
         </ul>
       </div>
     </div>
+
   </nav>
 
   <main class="width-limited">

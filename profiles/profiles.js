@@ -220,7 +220,7 @@ async function load_svgs(title){
     const sizeSvg = svgData.find(image => image.url.toLowerCase().includes('size'));
     const rangeSvgs = svgData.filter(image => {
                                         const url = image.url.toLowerCase();
-                                        return url.includes('range') || url.includes('map');
+                                        return url.includes('range') || url.includes('map') || url.includes('distribution');
                                     });
     const enSvg = svgData.find(image => image.url.toLowerCase().includes('status'));
 
@@ -424,32 +424,32 @@ async function get_name_json(input) {
   }
 
 
-async function handleSearch() {
-    const input = document.getElementById('search-input').value;
+async function handleSearch(input, isInitialSearch = false) {
     const title = await get_name_json(input);
-    console.log('title from get name json: ', title)
-    if (title == 'popup closed') {return;}
-    if (title != 'not found'){
-        loadContent(title); 
+    console.log('title from get name json: ', title);
+    
+    if (title === 'popup closed') return;
+    if (title !== 'not found') {
+        if (isInitialSearch) {
+            navigateToProfiles(title);
+        } else {
+            loadProfilePage(title);
+        }
         return;
     }
-    if (title == 'not found') {
-        console.log('User searched for:', input);
-
-        const popup = new Popup();
-        const content = `
-                <h3>No matches found</h3>
-                <div class="no-results-message">
-                    Your search for "<strong>${input}</strong>" did not match any cetaceans.
-                    <br><br>
-                    Please try a different name (e.g., "Killer Whale" or "Orcinus orca").
-                </div>
-        `;
-        
-        popup.setContent(content);
-        popup.open(); // Don't forget to call open()!
-        return;
-    }
+    
+    // Show "not found" popup
+    const popup = new Popup();
+    const content = `
+        <h3>No matches found</h3>
+        <div class="no-results-message">
+            Your search for "<strong>${input}</strong>" did not match any cetaceans.
+            <br><br>
+            Please try a different name (e.g., "Killer Whale" or "Orcinus orca").
+        </div>
+    `;
+    popup.setContent(content);
+    popup.open();
 }
 
 // ############################### Wikipedia link button ##################################
@@ -495,10 +495,7 @@ async function wikibutton(title) {
 
 // ############################### FUNCTION CALLS #########################################
 
-
-let title = 'blue whale';
-
-async function loadContent(title) {
+async function loadProfilePage(title) {
     setPageTitle(title);
     load_paragraph(title);
     load_gallery(title);
@@ -506,38 +503,58 @@ async function loadContent(title) {
     wikibutton(title);
 }
 
-loadContent(title);
-
-
-whenDocumentLoaded(() => {
-    //buttons
-	// const btn_sound = document.getElementById('btn-sound');
-	// btn_sound.addEventListener('click', () => {
-	// 	console.log('The sound button was clicked');
-	// });
-
-	const btn_search = document.getElementById('btn-search');
-    const search_input = document.getElementById('search-input');
-    btn_search.addEventListener('click', handleSearch);
-    search_input.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter') {
-            handleSearch();
-        }
-    });
-});
-
 // ###################################################################################
 // ############################### SEARCH PAGE #######################################
 // ###################################################################################
 
-document.getElementById('main-search-form').addEventListener('submit', function(e) {
-  e.preventDefault(); // Prevent default form submission
-  const searchTerm = document.getElementById('main-search-input').value.trim();
-  
-  if (searchTerm) {
-    // Encode the search term for URL
-    const encodedTerm = encodeURIComponent(searchTerm);
-    // Redirect to profiles.html with search parameter
+function navigateToProfiles(searchTerm) {
+    // Encode special characters for URL
+    const encodedTerm = encodeURIComponent(searchTerm); 
     window.location.href = `profiles.html?search=${encodedTerm}`;
-  }
+}
+
+function handleProfilesPageLoad() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const searchTerm = urlParams.get('search');
+    
+    if (searchTerm) {
+        console.log('received search term in if cond of handleProfilesPageload')
+        const decodedTerm = decodeURIComponent(searchTerm);
+        // Load content for the searched term
+        handleSearch(decodedTerm);
+    } else {
+        // Load default content
+        loadProfilePage('blue whale');
+    }
+}
+
+// Initialize based on current page
+
+document.addEventListener('DOMContentLoaded', () => {
+    if (window.location.pathname.includes('profiles_search.html')) {
+        document.getElementById('main-search-form')?.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const input = document.getElementById('main-search-input');
+            if (input.value) {
+                handleSearch(input.value, true); // true for initial search
+            }
+        });
+    } 
+    if (window.location.pathname.includes('profiles.html')) {
+        handleProfilesPageLoad();
+        const btn_search = document.getElementById('btn-search');
+        const search_input = document.getElementById('search-input');
+        
+        btn_search.addEventListener('click', (e) => {
+            e.preventDefault();
+            handleSearch(search_input.value);
+        });
+        
+        search_input.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                handleSearch(search_input.value);
+            }
+        });
+    }
 });
