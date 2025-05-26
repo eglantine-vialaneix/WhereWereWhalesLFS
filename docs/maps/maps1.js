@@ -1,25 +1,14 @@
-document.addEventListener("DOMContentLoaded", function () {
-
-const toggleAllSpecies = document.querySelector('#toggleAllSpecies');
-const toggleRedList = document.querySelector('#toggleRedList');
-const toggleCR = document.querySelector('#btnCR');
-const toggleEN = document.querySelector('#btnEN');
-const toggleVU = document.querySelector('#btnVU');
-const toggleNT = document.querySelector('#btnNT');
-
-const activeStatuses = new Set();
-
-console.log(toggleAllSpecies, toggleRedList, toggleCR, toggleEN, toggleVU, toggleNT);
-
+document.addEventListener('DOMContentLoaded', function() {
 const svg = d3.select("svg");
-const zoomGroup = svg.append("g");
 const svgNode = d3.select("#maps").node();
 const width = svgNode.clientWidth;
 const height = svgNode.clientHeight;
 const defs = svg.append("defs");
 
 let rotation = [0, 0];
+let lastX, lastY;
 let scale = Math.min(width, height) / 2.5;
+let globe, graticulePath, drag;
 const sensitivity = 5; // Rotation sensitivity
 
 // Map and projection
@@ -69,6 +58,25 @@ const Tooltip = d3.select("#map-container")
     .style("padding", "5px")
     .style("pointer-events", "none");
 
+// Helper function to safely get elements
+function safeGetElement(id) {
+    const element = document.getElementById(id);
+    if (!element) {
+        console.warn(`Element with ID '${id}' not found`);
+    }
+    return element;
+}
+
+// Helper function to safely add event listeners
+function safeAddEventListener(elementId, event, handler) {
+    const element = safeGetElement(elementId);
+    if (element) {
+        element.addEventListener(event, handler);
+        return true;
+    }
+    return false;
+}
+
 Promise.all([
     d3.json("https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/world.geojson"),
     d3.csv("data/grouped_species.csv"),
@@ -93,9 +101,9 @@ Promise.all([
         .range([ 3, 22])  // Size in pixel
 
     // Draw the map
-    const toggleView = document.getElementById("toggleView");
+    const toggleView = safeGetElement("toggleView");
 
-    let projection = toggleView.checked ? projection3D : projection2D;
+    let projection = (toggleView && toggleView.checked) ? projection3D : projection2D;
     let path = d3.geoPath().projection(projection);
 
     function isVisible([lon, lat]) {
@@ -120,6 +128,8 @@ Promise.all([
 
     let protectedZonesLayer;
 
+    const zoomGroup = svg.append("g");
+
     function renderProtectedZones() {
         // Remove existing protected zones if they exist
         zoomGroup.selectAll(".protected-zones-group").remove();
@@ -134,8 +144,13 @@ Promise.all([
             .attr("fill", "url(#hashedPattern)")
             .attr("stroke", "white")
             .attr("stroke-width", 0)
-            .style("opacity", 0.7)
-            .style("visibility", checkbox.checked ? "visible" : "hidden");
+            .style("opacity", 0.7);
+            
+        // Safely check checkbox state
+        const checkbox = safeGetElement("toggleProtectedZones");
+        if (checkbox) {
+            protectedZonesLayer.style("visibility", checkbox.checked ? "visible" : "hidden");
+        }
     }
      
     const mouseover = function(event, d) {
@@ -144,6 +159,8 @@ Promise.all([
     
     const mousemove = function(event, d) {
         const container = document.getElementById("map-container");
+        if (!container) return;
+        
         const bounds = container.getBoundingClientRect();
         const circleColor = color(d.species_name);
       
@@ -297,39 +314,45 @@ Promise.all([
 
     }
 
-    const checkbox = document.getElementById("toggleProtectedZones");
-    checkbox.addEventListener("change", function() {
-        if (protectedZonesLayer) {
-            protectedZonesLayer.style("visibility", this.checked ? "visible" : "hidden");
-        } else {
-            console.warn("Protected zones layer not found");
-        }
-    });
+    // Safely handle protected zones checkbox
+    const checkbox = safeGetElement("toggleProtectedZones");
+    if (checkbox) {
+        checkbox.addEventListener("change", function() {
+            if (protectedZonesLayer) {
+                protectedZonesLayer.style("visibility", this.checked ? "visible" : "hidden");
+            } else {
+                console.warn("Protected zones layer not found");
+            }
+        });
+    }
 
     // Initial render
     renderMap();
 
-    toggleView.addEventListener("change", () => {
-        projection = toggleView.checked ? projection3D : projection2D;
-        path = d3.geoPath().projection(projection);
-        renderMap();
+    // Safely handle toggle view
+    if (toggleView) {
+        toggleView.addEventListener("change", () => {
+            projection = toggleView.checked ? projection3D : projection2D;
+            path = d3.geoPath().projection(projection);
+            renderMap();
 
-        function fixInitialHashing() {
-            const tempRotation = [...rotation];
-            rotation[0] += 0.01; // Tiny change
-            projection3D.rotate(rotation);
-            updateProjection();
-            
+            function fixInitialHashing() {
+                const tempRotation = [...rotation];
+                rotation[0] += 0.01; // Tiny change
+                projection3D.rotate(rotation);
+                updateProjection();
+                
+                }
+
+                // Call after initial render
+            fixInitialHashing();
+            // Maintain visibility state after re-render
+            if (checkbox && checkbox.checked) {
+                zoomGroup.selectAll(".protected-zone")
+                    .style("visibility", "visible");
             }
-
-            // Call after initial render
-        fixInitialHashing();
-        // Maintain visibility state after re-render
-        if (checkbox.checked) {
-            zoomGroup.selectAll(".protected-zone")
-                .style("visibility", "visible");
-        }
-    });
+        });
+    }
 
     const zoom = d3.zoom()
       .scaleExtent([1, 8]) // Min and max zoom scale
@@ -484,8 +507,23 @@ Promise.all([
         }
     }
     
+    // Initialize variables with safe defaults
+    let filteredData = data;
+    let selectedMonthStart = 0;
+    let selectedMonthEnd = 11;
+    const activeStatuses = new Set();
+    
     // Function to filter bubbles based on selected species
     function updateCircles() {
+        // Safely get slider elements
+        const fromInput = safeGetElement('fromInput');
+        const toInput = safeGetElement('toInput');
+        
+        if (!fromInput || !toInput) {
+            console.warn('Slider elements not found, using default date range');
+            plot_circles(filteredData);
+            return;
+        }
 
         const yearMin = parseInt(fromInput.value, 10);
         const yearMax = parseInt(toInput.value, 10);
@@ -526,8 +564,9 @@ Promise.all([
     function speciesStatusFilter(d) {
         const status = d.IUCN_Red_List_status;
 
-        // If "Show All Species" is checked, show everything
-        if (toggleAllSpecies.checked) return true;
+        // Safely check toggleAllSpecies
+        const toggleAllSpecies = safeGetElement('toggleAllSpecies');
+        if (toggleAllSpecies && toggleAllSpecies.checked) return true;
 
         // Show if this status is currently active
         return activeStatuses.has(status);
@@ -563,13 +602,19 @@ Promise.all([
             (!inVUMode || status === "VU") &&
             (!inNTMode || status === "NT");
 
-        // If not in show all mode and species doesn't match current filter, enable show all
-        if (!toggleAllSpecies.checked && !speciesAllowed) {
-            toggleAllSpecies.checked = true;
-            activeStatuses.clear(); // Clear all status filters
-            document.querySelectorAll(".status-button").forEach(btn =>
-                btn.classList.remove("active")
-            );
+        // Safely handle toggleAllSpecies
+        const toggleAllSpecies = safeGetElement('toggleAllSpecies');
+        if (!toggleAllSpecies) {
+            console.warn('toggleAllSpecies element not found');
+        } else {
+            // If not in show all mode and species doesn't match current filter, enable show all
+            if (!toggleAllSpecies.checked && !speciesAllowed) {
+                toggleAllSpecies.checked = true;
+                activeStatuses.clear(); // Clear all status filters
+                document.querySelectorAll(".status-button").forEach(btn =>
+                    btn.classList.remove("active")
+                );
+            }
         }
 
         const isDoubleClick = event.detail === 2;
@@ -594,7 +639,7 @@ Promise.all([
             .style("opacity", selectedSpecies.has(d) ? 1 : 0.3);
     });
 
-    // Slider
+    // Slider functions
     function controlFromInput(fromSlider, fromInput, toInput, controlSlider) {
         const [from, to] = getParsed(fromInput, toInput);
         fillSlider(fromInput, toInput, '#C6C6C6', '#25daa5', controlSlider);
@@ -664,29 +709,40 @@ Promise.all([
 
     function setToggleAccessible(currentTarget) {
     const toSlider = document.querySelector('#toSlider');
-    if (Number(currentTarget.value) <= 0 ) {
+    if (toSlider && Number(currentTarget.value) <= 0 ) {
         toSlider.style.zIndex = 2;
-    } else {
+    } else if (toSlider) {
         toSlider.style.zIndex = 0;
     }
     }
 
-    const fromSlider = document.querySelector('#fromSlider');
-    const toSlider = document.querySelector('#toSlider');
-    const fromInput = document.querySelector('#fromInput');
-    const toInput = document.querySelector('#toInput');
-    fillSlider(fromSlider, toSlider, '#C6C6C6', '#25daa5', toSlider);
-    setToggleAccessible(toSlider);
+    // Safely setup slider elements
+    const fromSlider = safeGetElement('fromSlider');
+    const toSlider = safeGetElement('toSlider');
+    const fromInput = safeGetElement('fromInput');
+    const toInput = safeGetElement('toInput');
+    
+    if (fromSlider && toSlider && fromInput && toInput) {
+        fillSlider(fromSlider, toSlider, '#C6C6C6', '#25daa5', toSlider);
+        setToggleAccessible(toSlider);
 
-    fromSlider.oninput = () => controlFromSlider(fromSlider, toSlider, fromInput);
-    toSlider.oninput = () => controlToSlider(fromSlider, toSlider, toInput);
-    fromInput.oninput = () => controlFromInput(fromSlider, fromInput, toInput, toSlider);
-    toInput.oninput = () => controlToInput(toSlider, fromInput, toInput, toSlider);
+        fromSlider.oninput = () => controlFromSlider(fromSlider, toSlider, fromInput);
+        toSlider.oninput = () => controlToSlider(fromSlider, toSlider, toInput);
+        fromInput.oninput = () => controlFromInput(fromSlider, fromInput, toInput, toSlider);
+        toInput.oninput = () => controlToInput(toSlider, fromInput, toInput, toSlider);
+        
+        fromSlider.onchange = updateCircles;
+        toSlider.onchange = updateCircles;
+        fromInput.onchange = updateCircles;
+        toInput.onchange = updateCircles;
+    }
 
-    fromSlider.onchange = updateCircles;
-    toSlider.onchange = updateCircles;
-    fromInput.onchange = updateCircles;
-    toInput.onchange = updateCircles;
+    const toggleAllSpecies = safeGetElement('toggleAllSpecies');
+    const toggleRedList = safeGetElement('toggleRedList');
+    const toggleCR = safeGetElement('btnCR');
+    const toggleEN = safeGetElement('btnEN');
+    const toggleVU = safeGetElement('btnVU');
+    const toggleNT = safeGetElement('btnNT');
 
     function updateSelectionBasedOnStatuses() {
         selectedSpecies.clear();
@@ -694,13 +750,18 @@ Promise.all([
         data.forEach(d => {
             const status = d.IUCN_Red_List_status;
 
-            if (toggleAllSpecies.checked || activeStatuses.has(status)) {
+            if ((toggleAllSpecies && toggleAllSpecies.checked) || activeStatuses.has(status)) {
                 selectedSpecies.add(d.species_name);
             }
         });
     }
 
     function setupStatusButton(button, statusCode) {
+        if (!button) {
+            console.warn(`Status button for ${statusCode} not found`);
+            return;
+        }
+        
         button.addEventListener("click", () => {
             const isActive = button.classList.toggle("active");
             if (isActive) {
@@ -711,11 +772,11 @@ Promise.all([
 
             // Turn off "Show All" checkbox if filtering by individual status
             if (activeStatuses.size > 0) {
-                toggleAllSpecies.checked = false;
-            toggleRedList.checked = true;
-        } else {
-            toggleRedList.checked = false; 
-        }
+                if (toggleAllSpecies) toggleAllSpecies.checked = false;
+                if (toggleRedList) toggleRedList.checked = true;
+            } else {
+                if (toggleRedList) toggleRedList.checked = false; 
+            }
             updateSelectionBasedOnStatuses();
             updateCircles();
             updateLegendOpacity();
@@ -728,47 +789,55 @@ Promise.all([
     setupStatusButton(toggleVU, "VU");
     setupStatusButton(toggleNT, "NT");
 
-    toggleRedList.onchange = () => {
-        const buttons = [
-            { btn: toggleCR, code: "CR" },
-            { btn: toggleEN, code: "EN" },
-            { btn: toggleVU, code: "VU" },
-            { btn: toggleNT, code: "NT" },
-        ];
+    // FIXED: Added null check before setting onchange
+    if (toggleRedList) {
+        toggleRedList.onchange = () => {
+            const buttons = [
+                { btn: toggleCR, code: "CR" },
+                { btn: toggleEN, code: "EN" },
+                { btn: toggleVU, code: "VU" },
+                { btn: toggleNT, code: "NT" },
+            ];
 
-        if (toggleRedList.checked) {
-            // Activate all buttons and add their statuses
-            buttons.forEach(({ btn, code }) => {
-                btn.classList.add("active");
-                activeStatuses.add(code);
-            });
-            toggleAllSpecies.checked = false;
-        } else {
-            // Deactivate all buttons and clear statuses
-            buttons.forEach(({ btn }) => btn.classList.remove("active"));
-            activeStatuses.clear();
-        }
+            if (toggleRedList.checked) {
+                // Activate all buttons and add their statuses
+                buttons.forEach(({ btn, code }) => {
+                    if (btn) {
+                        btn.classList.add("active");
+                        activeStatuses.add(code);
+                    }
+                });
+                if (toggleAllSpecies) toggleAllSpecies.checked = false;
+            } else {
+                // Deactivate all buttons and clear statuses
+                buttons.forEach(({ btn }) => {
+                    if (btn) btn.classList.remove("active");
+                });
+                activeStatuses.clear();
+            }
 
-        updateSelectionBasedOnStatuses();
-        updateCircles();
-        updateLegendOpacity();
-    };
+            updateSelectionBasedOnStatuses();
+            updateCircles();
+            updateLegendOpacity();
+        };
+    }
     
-    toggleAllSpecies.onchange = () => {
-        if (toggleAllSpecies.checked) {
-            activeStatuses.clear();
-            document.querySelectorAll(".status-button").forEach(btn => 
-                btn.classList.remove("active")
-            );
-        }
-        updateSelectionBasedOnStatuses();
-        updateCircles();
-        updateLegendOpacity();
-    };
+    // FIXED: Added null check before setting onchange
+    if (toggleAllSpecies) {
+        toggleAllSpecies.onchange = () => {
+            if (toggleAllSpecies.checked) {
+                activeStatuses.clear();
+                document.querySelectorAll(".status-button").forEach(btn => 
+                    btn.classList.remove("active")
+                );
+            }
+            updateSelectionBasedOnStatuses();
+            updateCircles();
+            updateLegendOpacity();
+        };
+    }
 
     let debounceTimeout = null;
-    let selectedMonthStart = 0;
-    let selectedMonthEnd = 11;
     
     $(() => {
     
@@ -813,8 +882,6 @@ Promise.all([
     }
     });
 
-
- 
 });
 
 function debounce(func, wait) {
