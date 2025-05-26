@@ -1,7 +1,7 @@
 document.addEventListener("DOMContentLoaded", function () {
 
-const toggleAllSpecies = document.querySelector('#toggleAllSpecies');
 const toggleRedList = document.querySelector('#toggleRedList');
+const toggleAllSpecies = document.querySelector('#toggleallSpecies');
 const toggleCR = document.querySelector('#btnCR');
 const toggleEN = document.querySelector('#btnEN');
 const toggleVU = document.querySelector('#btnVU');
