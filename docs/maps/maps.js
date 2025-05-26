@@ -854,3 +854,4 @@ infoBox.addEventListener("click", (event) => {
 document.addEventListener("click", () => {
   infoBox.style.display = "none";
 });
+});
