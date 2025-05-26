@@ -276,7 +276,12 @@
           .style("background-color", d3.color(circleColor).copy({ opacity: 0.6 }).formatRgb());
       })
       .on("mouseleave", function(event, d) {
-        Tooltip.style("opacity", 0);
+        Tooltip.style("opacity", 0)
+      .on("click", function(event, d) {
+        const encodedSpeciesName = encodeURIComponent(d.data.scientific_name);
+        console.log(encodedSpeciesName);
+        window.open(`profiles.html?search=${encodedSpeciesName}`, '_blank');
+        });
       });
 
 

@@ -21,6 +21,7 @@
                             "common_name": null,
                             "image": null,
                             "parent_branch_name": "Kogiidae",
+                            "family": "Kogiidae",
                             "children": [
                                 {
                                     "scientific_name": "Kogia sima",
@@ -64,18 +65,21 @@
                             "common_name": null,
                             "image": null,
                             "parent_branch_name": null,
+                            "family": "Ziphiidae",
                             "children": [
                                 {
                                     "scientific_name": 7,
                                     "common_name": null,
                                     "image": null,
                                     "parent_branch_name": null,
+                                    "family": "Ziphiidae",
                                     "children": [
                                         {
                                             "scientific_name": 9,
                                             "common_name": null,
                                             "image": null,
                                             "parent_branch_name": null,
+                                            "family": "Ziphiidae",
                                             "children": [
                                                 {
                                                     "scientific_name": "Ziphius cavirostris",
@@ -91,12 +95,14 @@
                                                     "common_name": null,
                                                     "image": null,
                                                     "parent_branch_name": null,
+                                                    "family": "Ziphiidae",
                                                     "children": [
                                                         {
                                                             "scientific_name": 11,
                                                             "common_name": null,
                                                             "image": null,
                                                             "parent_branch_name": "Hyperoodon",
+                                                            "family": "Ziphiidae",
                                                             "children": [
                                                                 {
                                                                     "scientific_name": "Hyperoodon planifrons",
@@ -123,24 +129,28 @@
                                                             "common_name": null,
                                                             "image": null,
                                                             "parent_branch_name": "Mesoplodon",
+                                                            "family": "Ziphiidae",
                                                             "children": [
                                                                 {
                                                                     "scientific_name": 13,
                                                                     "common_name": null,
                                                                     "image": null,
                                                                     "parent_branch_name": null,
+                                                                    "family": "Ziphiidae",
                                                                     "children": [
                                                                         {
                                                                             "scientific_name": 15,
                                                                             "common_name": null,
                                                                             "image": null,
                                                                             "parent_branch_name": null,
+                                                                            "family": "Ziphiidae",
                                                                             "children": [
                                                                                 {
                                                                                     "scientific_name": 16,
                                                                                     "common_name": null,
                                                                                     "image": null,
                                                                                     "parent_branch_name": null,
+                                                                                    "family": "Ziphiidae",
                                                                                     "children": [
                                                                                         {
                                                                                             "scientific_name": "Mesoplodon mirus",
@@ -189,12 +199,14 @@
                                                                     "common_name": null,
                                                                     "image": null,
                                                                     "parent_branch_name": null,
+                                                                    "family": "Ziphiidae",
                                                                     "children": [
                                                                         {
                                                                             "scientific_name": 17,
                                                                             "common_name": null,
                                                                             "image": null,
                                                                             "parent_branch_name": null,
+                                                                            "family": "Ziphiidae",
                                                                             "children": [
                                                                                 {
                                                                                     "scientific_name": "Mesoplodon layardii",
@@ -210,6 +222,7 @@
                                                                                     "common_name": null,
                                                                                     "image": null,
                                                                                     "parent_branch_name": null,
+                                                                                    "family": "Ziphiidae",
                                                                                     "children": [
                                                                                         {
                                                                                             "scientific_name": "Mesoplodon carlhubbsi",
@@ -238,6 +251,7 @@
                                                                             "common_name": null,
                                                                             "image": null,
                                                                             "parent_branch_name": null,
+                                                                            "family": "Ziphiidae",
                                                                             "children": [
                                                                                 {
                                                                                     "scientific_name": "Mesoplodon hectori",
@@ -253,6 +267,7 @@
                                                                                     "common_name": null,
                                                                                     "image": null,
                                                                                     "parent_branch_name": null,
+                                                                                    "family": "Ziphiidae",
                                                                                     "children": [
                                                                                         {
                                                                                             "scientific_name": "Mesoplodon grayi",
@@ -268,6 +283,7 @@
                                                                                             "common_name": null,
                                                                                             "image": null,
                                                                                             "parent_branch_name": null,
+                                                                                            "family": "Ziphiidae",
                                                                                             "children": [
                                                                                                 {
                                                                                                     "scientific_name": "Mesoplodon stejnegeri",
@@ -283,6 +299,7 @@
                                                                                                     "common_name": null,
                                                                                                     "image": null,
                                                                                                     "parent_branch_name": null,
+                                                                                                    "family": "Ziphiidae",
                                                                                                     "children": [
                                                                                                         {
                                                                                                             "scientific_name": "Mesoplodon densirostris",
@@ -298,6 +315,7 @@
                                                                                                             "common_name": null,
                                                                                                             "image": null,
                                                                                                             "parent_branch_name": null,
+                                                                                                            "family": "Ziphiidae",
                                                                                                             "children": [
                                                                                                                 {
                                                                                                                     "scientific_name": "Mesoplodon perrini",
@@ -351,6 +369,7 @@
                                     "common_name": null,
                                     "image": null,
                                     "parent_branch_name": null,
+                                    "family": "Ziphiidae",
                                     "children": [
                                         {
                                             "scientific_name": "Berardius bairdii",
@@ -397,6 +416,7 @@
                                                     "common_name": null,
                                                     "image": null,
                                                     "parent_branch_name": null,
+                                                    "family": "Monodontidae",
                                                     "children": [
                                                         {
                                                             "scientific_name": "Delphinapterus leucas",
@@ -423,18 +443,21 @@
                                                     "common_name": "",
                                                     "image": null,
                                                     "parent_branch_name": null,
+                                                    "family": "Phocoenidae",
                                                     "children": [
                                                         {
                                                             "scientific_name": 31,
                                                             "common_name": "",
                                                             "image": null,
                                                             "parent_branch_name": null,
+                                                            "family": "Phocoenidae",
                                                             "children": [
                                                                 {
                                                                     "scientific_name": 32,
                                                                     "common_name": "",
                                                                     "image": null,
                                                                     "parent_branch_name": null,
+                                                                    "family": "Phocoenidae",
                                                                     "children": [
                                                                         {
                                                                             "scientific_name": "Phocoena phocoena",
@@ -450,6 +473,7 @@
                                                                             "common_name": "",
                                                                             "image": null,
                                                                             "parent_branch_name": null,
+                                                                            "family": "Phocoenidae",
                                                                             "children": [
                                                                                 {
                                                                                     "scientific_name": "Phocoena dioptrica",
@@ -502,6 +526,7 @@
                                             "common_name": "",
                                             "image": null,
                                             "parent_branch_name": null,
+                                            "family": "Delphinidae",
                                             "children": [
                                                 {
                                                     "scientific_name": "Leucopleurus acutus",
@@ -517,6 +542,7 @@
                                                     "common_name": "",
                                                     "image": null,
                                                     "parent_branch_name": null,
+                                                    "family": "Delphinidae",
                                                     "children": [
                                                         {
                                                             "scientific_name": "Orcinus orca",
@@ -532,6 +558,7 @@
                                                             "common_name": "",
                                                             "image": null,
                                                             "parent_branch_name": null,
+                                                            "family": "Delphinidae",
                                                             "children": [
                                                                 {
                                                                     "scientific_name": "Lagenorhynchus albirostris",
@@ -547,24 +574,28 @@
                                                                     "common_name": "",
                                                                     "image": null,
                                                                     "parent_branch_name": null,
+                                                                    "family": "Delphinidae",
                                                                     "children": [
                                                                         {
                                                                             "scientific_name": 37,
                                                                             "common_name": "",
                                                                             "image": null,
                                                                             "parent_branch_name": null,
+                                                                            "family": "Delphinidae",
                                                                             "children": [
                                                                                 {
                                                                                     "scientific_name": 39,
                                                                                     "common_name": "",
                                                                                     "image": null,
                                                                                     "parent_branch_name": null,
+                                                                                    "family": "Delphinidae",
                                                                                     "children": [
                                                                                         {
                                                                                             "scientific_name": 41,
                                                                                             "common_name": "",
                                                                                             "image": null,
                                                                                             "parent_branch_name": null,
+                                                                                            "family": "Delphinidae",
                                                                                             "children": [
                                                                                                 {
                                                                                                     "scientific_name": "Cephalorhynchus commersonii",
@@ -580,6 +611,7 @@
                                                                                                     "common_name": "",
                                                                                                     "image": null,
                                                                                                     "parent_branch_name": null,
+                                                                                                    "family": "Delphinidae",
                                                                                                     "children": [
                                                                                                         {
                                                                                                             "scientific_name": "Cephalorhynchus heavisidii",
@@ -608,6 +640,7 @@
                                                                                             "common_name": "",
                                                                                             "image": null,
                                                                                             "parent_branch_name": null,
+                                                                                            "family": "Delphinidae",
                                                                                             "children": [
                                                                                                 {
                                                                                                     "scientific_name": "Sagmatias obliquidens",
@@ -636,6 +669,7 @@
                                                                                     "common_name": "",
                                                                                     "image": null,
                                                                                     "parent_branch_name": null,
+                                                                                    "family": "Delphinidae",
                                                                                     "children": [
                                                                                         {
                                                                                             "scientific_name": "Lissodelphis peronii",
@@ -664,18 +698,21 @@
                                                                             "common_name": "",
                                                                             "image": null,
                                                                             "parent_branch_name": null,
+                                                                            "family": "Delphinidae",
                                                                             "children": [
                                                                                 {
                                                                                     "scientific_name": 44,
                                                                                     "common_name": "",
                                                                                     "image": null,
                                                                                     "parent_branch_name": null,
+                                                                                    "family": "Delphinidae",
                                                                                     "children": [
                                                                                         {
                                                                                             "scientific_name": 46,
                                                                                             "common_name": "",
                                                                                             "image": null,
                                                                                             "parent_branch_name": null,
+                                                                                            "family": "Delphinidae",
                                                                                             "children": [
                                                                                                 {
                                                                                                     "scientific_name": "Steno bredanensis",
@@ -691,6 +728,7 @@
                                                                                                     "common_name": "",
                                                                                                     "image": null,
                                                                                                     "parent_branch_name": null,
+                                                                                                    "family": "Delphinidae",
                                                                                                     "children": [
                                                                                                         {
                                                                                                             "scientific_name": "Grampus griseus",
@@ -706,18 +744,21 @@
                                                                                                             "common_name": "",
                                                                                                             "image": null,
                                                                                                             "parent_branch_name": null,
+                                                                                                            "family": "Delphinidae",
                                                                                                             "children": [
                                                                                                                 {
                                                                                                                     "scientific_name": 50,
                                                                                                                     "common_name": "",
                                                                                                                     "image": null,
                                                                                                                     "parent_branch_name": null,
+                                                                                                                    "family": "Delphinidae",
                                                                                                                     "children": [
                                                                                                                         {
                                                                                                                             "scientific_name": 51,
                                                                                                                             "common_name": "",
                                                                                                                             "image": null,
                                                                                                                             "parent_branch_name": null,
+                                                                                                                            "family": "Delphinidae",
                                                                                                                             "children": [
                                                                                                                                 {
                                                                                                                                     "scientific_name": "Globicephala melas",
@@ -744,6 +785,7 @@
                                                                                                                             "common_name": "",
                                                                                                                             "image": null,
                                                                                                                             "parent_branch_name": null,
+                                                                                                                            "family": "Delphinidae",
                                                                                                                             "children": [
                                                                                                                                 {
                                                                                                                                     "scientific_name": "Feresa attenuata",
@@ -787,6 +829,7 @@
                                                                                             "common_name": "",
                                                                                             "image": null,
                                                                                             "parent_branch_name": null,
+                                                                                            "family": "Delphinidae",
                                                                                             "children": [
                                                                                                 {
                                                                                                     "scientific_name": "Orcaella brevirostris",
@@ -815,6 +858,7 @@
                                                                                     "common_name": "",
                                                                                     "image": null,
                                                                                     "parent_branch_name": null,
+                                                                                    "family": "Delphinidae",
                                                                                     "children": [
                                                                                         {
                                                                                             "scientific_name": "Sotalia guianensis",
@@ -830,6 +874,7 @@
                                                                                             "common_name": "",
                                                                                             "image": null,
                                                                                             "parent_branch_name": null,
+                                                                                            "family": "Delphinidae",
                                                                                             "children": [
                                                                                                 {
                                                                                                     "scientific_name": "Sousa chinensis",
@@ -845,18 +890,21 @@
                                                                                                     "common_name": "",
                                                                                                     "image": null,
                                                                                                     "parent_branch_name": null,
+                                                                                                    "family": "Delphinidae",
                                                                                                     "children": [
                                                                                                         {
                                                                                                             "scientific_name": 55,
                                                                                                             "common_name": "",
                                                                                                             "image": null,
                                                                                                             "parent_branch_name": null,
+                                                                                                            "family": "Delphinidae",
                                                                                                             "children": [
                                                                                                                 {
                                                                                                                     "scientific_name": 57,
                                                                                                                     "common_name": "",
                                                                                                                     "image": null,
                                                                                                                     "parent_branch_name": null,
+                                                                                                                    "family": "Delphinidae",
                                                                                                                     "children": [
                                                                                                                         {
                                                                                                                             "scientific_name": "Tursiops truncatus",
@@ -883,6 +931,7 @@
                                                                                                                     "common_name": "",
                                                                                                                     "image": null,
                                                                                                                     "parent_branch_name": null,
+                                                                                                                    "family": "Delphinidae",
                                                                                                                     "children": [
                                                                                                                         {
                                                                                                                             "scientific_name": "Stenella frontalis",
@@ -911,6 +960,7 @@
                                                                                                             "common_name": "",
                                                                                                             "image": null,
                                                                                                             "parent_branch_name": null,
+                                                                                                            "family": "Delphinidae",
                                                                                                             "children": [
                                                                                                                 {
                                                                                                                     "scientific_name": "Stenella coeruleoalba",
@@ -926,6 +976,7 @@
                                                                                                                     "common_name": "",
                                                                                                                     "image": null,
                                                                                                                     "parent_branch_name": null,
+                                                                                                                    "family": "Delphinidae",
                                                                                                                     "children": [
                                                                                                                         {
                                                                                                                             "scientific_name": "Delphinus delphis",
@@ -941,6 +992,7 @@
                                                                                                                             "common_name": "",
                                                                                                                             "image": null,
                                                                                                                             "parent_branch_name": null,
+                                                                                                                            "family": "Delphinidae",
                                                                                                                             "children": [
                                                                                                                                 {
                                                                                                                                     "scientific_name": "Lagenodelphis hosei",
@@ -956,6 +1008,7 @@
                                                                                                                                     "common_name": "",
                                                                                                                                     "image": null,
                                                                                                                                     "parent_branch_name": null,
+                                                                                                                                    "family": "Delphinidae",
                                                                                                                                     "children": [
                                                                                                                                         {
                                                                                                                                             "scientific_name": "Stenella longirostris",
@@ -1061,6 +1114,7 @@
                     "common_name": "",
                     "image": null,
                     "parent_branch_name": "Balaenidae",
+                    "family": "Balaenidae",
                     "children": [
                         {
                             "scientific_name": "Balaena mysticetus",
@@ -1076,11 +1130,13 @@
                             "common_name": "",
                             "image": null,
                             "parent_branch_name": "Eubalaenea",
+                            "family": "Balaenidae",
                             "children": [
                                 {
                                     "scientific_name": 67,
                                     "common_name": "",
                                     "image": null,
+                                    "family": "Balaenidae",
                                     "children": [
                                         {
                                             "scientific_name": "Eubalaena glacialis",
@@ -1138,6 +1194,7 @@
                                     "common_name": "",
                                     "image": null,
                                     "parent_branch_name": null,
+                                    "family": "Balaenopteridae",
                                     "children": [
                                         {
                                             "scientific_name": "Balaenoptera bonaerensis",
@@ -1179,12 +1236,14 @@
                                             "common_name": "",
                                             "image": null,
                                             "parent_branch_name": null,
+                                            "family": "Balaenopteridae",
                                             "children": [
                                                 {
                                                     "scientific_name": 71,
                                                     "common_name": "",
                                                     "image": null,
                                                     "parent_branch_name": null,
+                                                    "family": "Balaenopteridae",
                                                     "children": [
                                                         {
                                                             "scientific_name": "Megaptera novaeangliae",
@@ -1211,6 +1270,7 @@
                                                     "common_name": "",
                                                     "image": null,
                                                     "parent_branch_name": null,
+                                                    "family": "Balaenopteridae",
                                                     "children": [
                                                         {
                                                             "scientific_name": "Balaenoptera musculus",
@@ -1226,6 +1286,7 @@
                                                             "common_name": "",
                                                             "image": null,
                                                             "parent_branch_name": null,
+                                                            "family": "Balaenopteridae",
                                                             "children": [
                                                                 {
                                                                     "scientific_name": "Balaenoptera borealis",
