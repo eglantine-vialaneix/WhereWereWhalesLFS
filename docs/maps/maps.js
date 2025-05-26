@@ -239,7 +239,11 @@ Promise.all([
                 .attr("fill-opacity", .4)
                 .on("mouseover", mouseover)
                 .on("mousemove", mousemove)
-                .on("mouseleave", mouseleave);
+                .on("mouseleave", mouseleave)
+                .on("click", function(event, d) {
+                    const encodedSpeciesName = encodeURIComponent(d.species_name);
+                    window.open(`profiles.html?search=${encodedSpeciesName}`, '_blank');
+                    });
 
             
             svg.call(drag);
@@ -274,7 +278,11 @@ Promise.all([
                 .attr("fill-opacity", .4)
                 .on("mouseover", mouseover)
                 .on("mousemove", mousemove)
-                .on("mouseleave", mouseleave);
+                .on("mouseleave", mouseleave)
+                .on("click", function(event, d) {
+                    const encodedSpeciesName = encodeURIComponent(d.species_name);
+                    window.open(`profiles.html?search=${encodedSpeciesName}`, '_blank');
+                    });
         }
 
     }
@@ -451,7 +459,11 @@ Promise.all([
                 .attr("fill-opacity", .4)
                 .on("mouseover", mouseover)
                 .on("mousemove", mousemove)
-                .on("mouseleave", mouseleave),
+                .on("mouseleave", mouseleave)
+                .on("click", function(event, d) {
+                    const encodedSpeciesName = encodeURIComponent(d.species_name);
+                    window.open(`profiles.html?search=${encodedSpeciesName}`, '_blank');
+                    }),
                 update => update,
                 exit => exit.remove() 
             );
