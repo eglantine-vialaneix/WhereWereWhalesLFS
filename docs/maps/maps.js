@@ -10,15 +10,14 @@ const toggleNT = document.querySelector('#btnNT');
 const activeStatuses = new Set();
 
 const svg = d3.select("svg");
+const zoomGroup = svg.append("g");
 const svgNode = d3.select("#maps").node();
 const width = svgNode.clientWidth;
 const height = svgNode.clientHeight;
 const defs = svg.append("defs");
 
 let rotation = [0, 0];
-let lastX, lastY;
 let scale = Math.min(width, height) / 2.5;
-let globe, graticulePath, drag;
 const sensitivity = 5; // Rotation sensitivity
 
 // Map and projection
@@ -118,8 +117,6 @@ Promise.all([
     }
 
     let protectedZonesLayer;
-
-    const zoomGroup = svg.append("g");
 
     function renderProtectedZones() {
         // Remove existing protected zones if they exist
@@ -688,15 +685,6 @@ Promise.all([
     toSlider.onchange = updateCircles;
     fromInput.onchange = updateCircles;
     toInput.onchange = updateCircles;
-
-    const toggleAllSpecies = document.querySelector('#toggleAllSpecies');
-    const toggleRedList = document.querySelector('#toggleRedList');
-    const toggleCR = document.querySelector('#btnCR');
-    const toggleEN = document.querySelector('#btnEN');
-    const toggleVU = document.querySelector('#btnVU');
-    const toggleNT = document.querySelector('#btnNT');
-
-    const activeStatuses = new Set();
 
     function updateSelectionBasedOnStatuses() {
         selectedSpecies.clear();
