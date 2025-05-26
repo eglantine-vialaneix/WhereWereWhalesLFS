@@ -122,6 +122,7 @@
 
       const r_image = 30;
 
+
       countDescendants(root); 
       setInitialPositions(root, 0, 0);
 
@@ -142,13 +143,38 @@
         .attr("viewBox", [-width / 2, -height / 2, width, height])
         .attr("preserveAspectRatio", "xMidYMid meet");
 
+
+      
+      const families = Array.from(new Set(
+        nodes.map(d => d.data.family).filter(f => f)
+        ));
+
+      const geni = Array.from(new Set(
+        nodes.map(d => d.data.genus).filter(f => f)
+        ));
+
+      //console.log(families)
+      const familyColor = d3.scaleOrdinal()
+        .domain(families)
+        .range(d3.schemeCategory10.concat(d3.schemeSet3));
+
+      //console.log(families)
+      const genusColor = d3.scaleOrdinal()
+        .domain(geni)
+        .range(d3.schemeCategory10.concat(d3.schemeSet3));
+
       const link = svg.append("g")
-        .attr("stroke", "#999")
         .attr("stroke-opacity", 0.6)
         .attr("stroke-width", 2.5)
         .selectAll("line")
         .data(links)
-        .join("line");
+        .join("line")
+        .attr("stroke", d => {
+          const family = d.target.data.family;
+          return family ? familyColor(family) : "#999"; // default gray
+        });
+
+
 
       const nodeGroup = svg.append("g")
         .attr("fill", "#fff")
@@ -162,7 +188,7 @@
       nodeGroup.filter(d => d.children)
         .append("circle")
         .attr("fill", d => d.depth === 0 ? "red" : "#fff")
-        .attr("stroke", "#000")
+        .attr("stroke", d => d.depth === 0 ? "red" : "#000")
         .attr("r", 4.5);
 
       // Define a circular clipPath once for reuse
@@ -194,6 +220,68 @@
         .attr("fill", "none");
 
 
+      
+      // Displaying infos on hover
+      // ToolTip
+      const Tooltip = d3.select("body")
+        .append("div")
+        .attr("class", "tooltip")
+        .style("position", "absolute")
+        .style("opacity", 1)
+        .style("background-color", "white")
+        .style("border", "solid")
+        .style("border-width", "2px")
+        .style("border-radius", "5px")
+        .style("padding", "5px")
+        .style("pointer-events", "none");
+
+          const mouseover = function(event, d) {
+        Tooltip.style("opacity", 1)
+      }
+    
+    const mousemove = function(event, d) {
+      //const container = document.getElementById("map-container");
+      //const bounds = container.getBoundingClientRect();
+      const circleColor = familyColor(d.target.data.family);
+    
+      Tooltip
+          .html(`
+          <strong>${d.data.common_name}</strong><br>
+          ${d.data.scientific_name}<br>
+          Family: ${d.data.family}
+          Genus: ${d.data.genus}
+        `)
+        .style("left", (event.pageX + 3 * r_image) + "px")
+        .style("top", (event.pageY + 3 * r_image) + "px")
+        .style("background-color", d3.color(circleColor).copy({ opacity: 0.4 }).formatRgb());
+    };
+    var mouseleave = function(event, d) {
+      Tooltip.style("opacity", 0)
+    }
+
+
+    leafNodes
+      .on("mouseover", function(event, d) {
+        Tooltip.style("opacity", 1);
+      })
+      .on("mousemove", function(event, d) {
+        const circleColor = familyColor(d.data.family);  // d.data because d is the node
+        Tooltip
+          .html(
+            `<strong>${d.data.common_name || "Unknown"}</strong><br>
+            <em>${d.data.scientific_name || ""}</em><br>
+            <strong>Family:</strong> ${d.data.family || "N/A"}<br>
+            <strong>Genus:</strong> ${d.data.genus || "N/A"}`
+          )
+          .style("left", (event.pageX + r_image) + "px")
+          .style("top", (event.pageY  - 2 * r_image) + "px")
+          .style("background-color", d3.color(circleColor).copy({ opacity: 0.6 }).formatRgb());
+      })
+      .on("mouseleave", function(event, d) {
+        Tooltip.style("opacity", 0);
+      });
+
+
 
       simulation.on("tick", () => {
         link
@@ -202,9 +290,6 @@
           .attr("x2", d => d.target.x)
           .attr("y2", d => d.target.y);
 
-        // nodeGroup
-        //   .attr("cx", d => d.x)
-        //   .attr("cy", d => d.y);
 
         nodeGroup.attr("transform", d => `translate(${d.x},${d.y})`);
       });
@@ -215,5 +300,7 @@
       createChart(data);
     });
   </script>
+
+
 </body>
 </html>

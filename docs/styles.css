@@ -11438,3 +11438,33 @@ body {
     font-weight: normal;
     margin-left: 8px;
 }
+
+
+
+
+
+
+/* Display infos on tree of life */
+
+.infobox {
+  position: absolute;
+  background: rgba(255, 255, 255, 0.95);
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 8px;
+  font-size: 0.85rem;
+  pointer-events: none;
+  visibility: hidden;
+  opacity: 0;
+  color: #333;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+  max-width: 200px;
+  z-index: 10;
+  transition: opacity 0.2s ease;
+}
+
+.infobox.visible {
+  visibility: visible;
+  opacity: 1;
+}
+
