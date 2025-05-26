@@ -1,3 +1,14 @@
+document.addEventListener("DOMContentLoaded", function () {
+
+const toggleRedList = document.querySelector('#toggleRedList');
+const toggleAllSpecies = document.querySelector('#toggleallSpecies');
+const toggleCR = document.querySelector('#btnCR');
+const toggleEN = document.querySelector('#btnEN');
+const toggleVU = document.querySelector('#btnVU');
+const toggleNT = document.querySelector('#btnNT');
+
+const activeStatuses = new Set();
+
 const svg = d3.select("svg");
 const svgNode = d3.select("#maps").node();
 const width = svgNode.clientWidth;
