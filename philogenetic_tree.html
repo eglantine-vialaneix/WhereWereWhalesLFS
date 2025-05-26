@@ -204,7 +204,8 @@
 
       leafNodes.append("circle")
         .attr("r", r_image)
-        .attr("fill", "#fff");
+        .attr("fill", "#fff") // d => familyColor(d.data.family)
+        .attr("stroke", "none");
 
       leafNodes.append("image")
         .attr("href", d => d.data.image)
@@ -216,13 +217,12 @@
       
       leafNodes.append("circle")
         .attr("r", r_image)
-        .attr("stroke", "#000")
-        .attr("fill", "none");
-
+        .attr("stroke", d => familyColor(d.data.family))
+        .attr("fill", "none")
+        .attr("stroke-width", 2.5);
 
       
       // Displaying infos on hover
-      // ToolTip
       const Tooltip = d3.select("body")
         .append("div")
         .attr("class", "tooltip")
@@ -240,8 +240,6 @@
       }
     
     const mousemove = function(event, d) {
-      //const container = document.getElementById("map-container");
-      //const bounds = container.getBoundingClientRect();
       const circleColor = familyColor(d.target.data.family);
     
       Tooltip
@@ -265,7 +263,7 @@
         Tooltip.style("opacity", 1);
       })
       .on("mousemove", function(event, d) {
-        const circleColor = familyColor(d.data.family);  // d.data because d is the node
+        const circleColor = familyColor(d.data.family);  
         Tooltip
           .html(
             `<strong>${d.data.common_name || "Unknown"}</strong><br>
