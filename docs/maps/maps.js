@@ -9,8 +9,6 @@ const toggleNT = document.querySelector('#btnNT');
 
 const activeStatuses = new Set();
 
-console.log(toggleAllSpecies, toggleRedList, toggleCR, toggleEN, toggleVU, toggleNT);
-
 const svg = d3.select("svg");
 const zoomGroup = svg.append("g");
 const svgNode = d3.select("#maps").node();
