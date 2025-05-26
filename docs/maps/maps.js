@@ -241,7 +241,7 @@ Promise.all([
                 .on("mousemove", mousemove)
                 .on("mouseleave", mouseleave)
                 .on("click", function(event, d) {
-                    const encodedSpeciesName = encodeURIComponent(d.species_name);
+                    const encodedSpeciesName = encodeURIComponent(d.scientific_name);
                     window.open(`profiles.html?search=${encodedSpeciesName}`, '_blank');
                     });
 
@@ -280,7 +280,7 @@ Promise.all([
                 .on("mousemove", mousemove)
                 .on("mouseleave", mouseleave)
                 .on("click", function(event, d) {
-                    const encodedSpeciesName = encodeURIComponent(d.species_name);
+                    const encodedSpeciesName = encodeURIComponent(d.scientific_name);
                     window.open(`profiles.html?search=${encodedSpeciesName}`, '_blank');
                     });
         }
@@ -333,7 +333,7 @@ Promise.all([
     const valuesToShow = [10,500,2000]
     const xCircle = 40
     const xLabel = 90
-    zoomGroup
+    svg
         .selectAll("circle.legend-circle")
         .data(valuesToShow)
         .join("circle")
@@ -345,7 +345,7 @@ Promise.all([
         .attr("stroke", "black");
 
     // Add legend: segments
-    zoomGroup
+    svg
         .selectAll("line.legend-line")
         .data(valuesToShow)
         .join("line")
@@ -358,7 +358,7 @@ Promise.all([
         .style("stroke-dasharray", "2,2");
 
     // Add legend: labels
-    zoomGroup
+    svg
         .selectAll("text.legend-label")
         .data(valuesToShow)
         .join("text")
@@ -440,7 +440,11 @@ Promise.all([
                         .attr("fill-opacity", .4)
                         .on("mouseover", mouseover)
                         .on("mousemove", mousemove)
-                        .on("mouseleave", mouseleave),
+                        .on("mouseleave", mouseleave)
+                        .on("click", function(event, d) {
+                    const encodedSpeciesName = encodeURIComponent(d.scientific_name);
+                    window.open(`profiles.html?search=${encodedSpeciesName}`, '_blank');
+                    }),
                     update => update,  // In case you want to update anything dynamically
                     exit => exit.remove()  // Remove circles that no longer need to be shown
                 );
@@ -461,7 +465,7 @@ Promise.all([
                 .on("mousemove", mousemove)
                 .on("mouseleave", mouseleave)
                 .on("click", function(event, d) {
-                    const encodedSpeciesName = encodeURIComponent(d.species_name);
+                    const encodedSpeciesName = encodeURIComponent(d.scientific_name);
                     window.open(`profiles.html?search=${encodedSpeciesName}`, '_blank');
                     }),
                 update => update,
