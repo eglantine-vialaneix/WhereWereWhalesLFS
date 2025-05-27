@@ -11,6 +11,8 @@
   <!-- Stylesheets -->
   <link href="docs/styles.css" rel="stylesheet" />
 
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
   <style>
   html, body {
     height: 100%;
@@ -27,7 +29,31 @@
   body { font-family: sans-serif; }
   .node circle { fill: #999; }
   .link { stroke: #2b294e; stroke-opacity: 0.4; stroke-width: 2.5px; }
-</style>
+
+  /* info button  */
+
+  #info-button {
+    position: fixed;
+    top: 70px;
+    right: 30px;
+    color: black;
+    cursor: pointer;
+  }
+
+  #info-box {
+    position: fixed;
+    top: 120px;
+    right: 30px;
+    background-color: white;
+    padding: 15px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    width: 280px;
+    font-size: 0.9rem;
+  }
+
+  </style>
 
 </head>
 
@@ -76,10 +102,26 @@
 
   <!-- Interactive force directed tree of the cetacean-->
   <svg id="tree" height="100%"></svg>
+  
+  
+  <div id="info-button">
+    <span class="material-icons">info</span>
+  </div>
+
+  <div id="info-box" style="display: none;">
+    <h4>How to read a phylogenetic tree</h4>
+    <ul>
+      <li>Each bubble represents a cetacean species.</li>
+      <li>Hover and click on a species to learn more about them.</li>
+      <li>The longer the line between two species, the more genetically different they are.</li>
+      <li>Find the red node: this is the oldest common ancestor of all cetaceans.</li>
+      <li>Images with the same color border belong to the same family.</li>
+    </ul>
+  </div>
 
   <script src="https://d3js.org/d3.v7.min.js"></script>
-  <script>
 
+  <script>
 
     function countDescendants(node) {
       if (!node.children || node.children.length === 0) {
@@ -157,12 +199,12 @@
       const g = svg.append("g"); 
 
       const zoom = d3.zoom()
-        .scaleExtent([0.3, 5])  // Zoom out to 0.3x, in to 5x
+        .scaleExtent([0.3, 6])  // Zoom out to 0.3x, in to 6x
         .on("zoom", (event) => {
           g.attr("transform", event.transform);
         });
 
-      svg.call(zoom);  // Enable zoom on the SVG
+      svg.call(zoom);  
 
 
       const families = Array.from(new Set(
@@ -173,12 +215,12 @@
         nodes.map(d => d.data.genus).filter(f => f)
         ));
 
-      //console.log(families)
+
       const familyColor = d3.scaleOrdinal()
         .domain(families)
         .range(d3.schemeCategory10.concat(d3.schemeSet3));
 
-      //console.log(families)
+ 
       const genusColor = d3.scaleOrdinal()
         .domain(geni)
         .range(d3.schemeCategory10.concat(d3.schemeSet3));
@@ -206,10 +248,41 @@
       // Append circles only for nodes with children
       nodeGroup.filter(d => d.children)
         .append("circle")
-        .attr("fill", d => d.depth === 0 ? "red" : "#fff") //TODO:make center all red
+        .attr("fill", "#fff") 
         .attr("stroke", d => d.depth === 0 ? "red" : "none")
         .attr("stroke", d => d.data.family ? familyColor(d.data.family) : "#999") 
         .attr("r", 4.5);
+      
+      //root node bigger and all red
+      nodeGroup.filter(d => d.depth === 0)
+        .append("circle")
+        .attr("fill", "red")
+        .attr("stroke", "red")
+        .attr("r", 6);
+      
+      // root node info display on hover
+      nodeGroup.filter(d=> d.depth === 0)
+        .on("mouseover", function(event, d) {
+          Tooltip.style("opacity", 1);
+        })
+        .on("mousemove", function(event, d) {
+          //const circleColor = familyColor(d.data.family);  
+          Tooltip
+            .html(
+              `<strong>${"Crown Cetacea"}</strong><br>
+              Oldest common ancester of all Cetaceans`
+            )
+            .style("left", (event.pageX - 130) + "px")
+            .style("top", (event.pageY + 20) + "px")
+            .style("background-color", d3.color("red").copy({ opacity: 0.6 }).formatRgb());
+        })
+        .on("mouseleave", function(event, d) {
+          Tooltip.style("opacity", 0)
+        
+        })
+        .on("click", function(event, d) {
+          window.open(`profiles.html?search=${"https://en.wikipedia.org/wiki/Cetacea"}`, '_blank'); // https://en.wikipedia.org/wiki/Cetacea
+        });
 
       // Define a circular clipPath once for reuse
       svg.append("defs").append("clipPath")
@@ -323,6 +396,19 @@
       createChart(data);
     });
   </script>
+
+  <script>
+  const infoButton = document.getElementById("info-button");
+  const infoBox = document.getElementById("info-box");
+
+  infoButton.addEventListener("click", () => {
+    if (infoBox.style.display === "none" || infoBox.style.display === "") {
+      infoBox.style.display = "block";
+    } else {
+      infoBox.style.display = "none";
+    }
+  });
+</script>
 
 
 </body>
