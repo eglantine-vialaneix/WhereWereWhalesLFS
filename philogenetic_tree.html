@@ -127,12 +127,12 @@
       setInitialPositions(root, 0, 0);
 
       const simulation = d3.forceSimulation(nodes)
-        .alpha(0.02)
+        .alpha(0.01)
         .force("link", d3.forceLink(links).id(d => d.data.name).distance(50))
         .force("charge", d3.forceManyBody().strength(-100))
         .force("x", d3.forceX().strength(0.06))
         .force("y", d3.forceY().strength(0.1))
-        .alphaTarget(0.4)
+        .alphaTarget(0.2)
         .restart();
 
       const svg = d3.select("#tree")
@@ -141,8 +141,17 @@
         .attr("viewBox", [-width / 2, -height / 2, width, height])
         .attr("preserveAspectRatio", "xMidYMid meet");
 
+      const g = svg.append("g"); 
 
-      
+      const zoom = d3.zoom()
+        .scaleExtent([0.3, 5])  // Zoom out to 0.3x, in to 5x
+        .on("zoom", (event) => {
+          g.attr("transform", event.transform);
+        });
+
+      svg.call(zoom);  // Enable zoom on the SVG
+
+
       const families = Array.from(new Set(
         nodes.map(d => d.data.family).filter(f => f)
         ));
@@ -161,7 +170,7 @@
         .domain(geni)
         .range(d3.schemeCategory10.concat(d3.schemeSet3));
 
-      const link = svg.append("g")
+      const link = g.append("g")
         .attr("stroke-opacity", 0.6)
         .attr("stroke-width", 5)
         .selectAll("line")
@@ -172,7 +181,7 @@
           return family ? familyColor(family) : "#999"; // default gray
         });
 
-      const nodeGroup = svg.append("g")
+      const nodeGroup = g.append("g")
         .attr("fill", "#fff")
         .attr("stroke", "#000")
         .attr("stroke-width", 1.5)
