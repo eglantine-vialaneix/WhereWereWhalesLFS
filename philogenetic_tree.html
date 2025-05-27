@@ -127,14 +127,12 @@
       setInitialPositions(root, 0, 0);
 
       const simulation = d3.forceSimulation(nodes)
-        .alpha(0.01)
+        .alpha(0.02)
         .force("link", d3.forceLink(links).id(d => d.data.name).distance(50))
         .force("charge", d3.forceManyBody().strength(-100))
         .force("x", d3.forceX().strength(0.06))
         .force("y", d3.forceY().strength(0.1))
-        //.force("x", d3.forceX().strength(d => 3 / (d.depth + 20)))
-        //.force("y", d3.forceY().strength(d => 3 / (d.depth + 20)))
-        .alphaTarget(0.1)
+        .alphaTarget(0.4)
         .restart();
 
       const svg = d3.select("#tree")
@@ -277,11 +275,11 @@
       })
       .on("mouseleave", function(event, d) {
         Tooltip.style("opacity", 0)
+      
+      })
       .on("click", function(event, d) {
         const encodedSpeciesName = encodeURIComponent(d.data.scientific_name);
-        console.log(encodedSpeciesName);
         window.open(`profiles.html?search=${encodedSpeciesName}`, '_blank');
-        });
       });
 
 
