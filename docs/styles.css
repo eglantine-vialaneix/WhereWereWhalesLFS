@@ -11468,3 +11468,40 @@ body {
   opacity: 1;
 }
 
+.card-primary {
+  background-color: #64a19d;
+  border-color: #64a19d;
+  transition: background-color 0.3s, border-color 0.3s;
+  transition: all 0.3s ease;
+}
+
+.card-primary:hover {
+  background-color: #fff;
+  color: #212529;
+  border-color: #50817e;
+  text-decoration: none;
+  transform: translateY(-3px);
+}
+
+.card-primary:hover .card-title {
+  color: #64a19d;
+}
+
+.card-primary:hover .card-text {
+  color: #343a40;
+}
+
+.card-text.text-muted-alpha {
+  color: rgba(255, 255, 255, 0.85);
+  font-weight: 300;
+}
+
+.card-primary:active {
+  background-color: #50817e;
+  border-color: #4b7976;
+}
+
+.shadow-frame {
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+  border-radius: 1rem;
+}
