@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+  <title>Phylogenetic Tree of Cetacean</title>
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/x-icon" href="docs/assets/logo_whale_remake_circle.png" />
+
+  <!-- Stylesheets -->
+  <link href="docs/styles.css" rel="stylesheet" />
+
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+  <style>
+  html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+  }
+
+  #tree {
+    display: block;
+    height: 100%;
+    width: 100%;
+  }
+
+  body { font-family: sans-serif; }
+  .node circle { fill: #999; }
+  .link { stroke: #2b294e; stroke-opacity: 0.4; stroke-width: 2.5px; }
+
+  /* info button  */
+
+  #info-button {
+    position: fixed;
+    top: 70px;
+    right: 30px;
+    color: black;
+    cursor: pointer;
+  }
+
+  #info-box {
+    position: fixed;
+    top: 120px;
+    right: 30px;
+    background-color: white;
+    padding: 15px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    width: 280px;
+    font-size: 0.9rem;
+  }
+
+  </style>
+
+</head>
+
+<body style="margin: 0; padding-top: 50px; font-family: sans-serif;">
+
+  <!-- Navigation bar, can go back to maiin page or explore the two others -->
+  <nav class="navbar navbar-expand-lg blue-navbar fixed-top" id="mainNav">
+
+    <div class="container px-4 px-lg-5">
+      <a class="navbar-brand" href="index.html">Cetacea</a>
+      <button class="navbar-toggler navbar-toggler-right" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+          Menu
+          <i class="fas fa-bars"></i>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarResponsive">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link" href="maps.html">Map</a></li>
+          <li class="nav-item"><a class="nav-link" href="profiles_search.html">Cetacean Profiles</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Initiate the svg in which we will display the tree -->
+  <svg id="tree" height="100%"></svg>
+  
+  <!-- Info button explaining how to use the tree of life -->
+  <div id="info-button">
+    <span class="material-icons">info</span>
+  </div>
+
+  <div id="info-box" style="display: none;">
+    <h4>How to read a phylogenetic tree</h4>
+    <ul>
+      <li>Each bubble represents a cetacean species.</li>
+      <li>Hover and click on a species to learn more about them!</li>
+      <li>A node between two species represents a genetic divergence between them. </li>
+      <li>The longer the line between two species, the more genetically different they are.</li>
+      <li>Find the red node: this is the Crown Cetacea, the oldest common ancestor of all cetaceans.</li>
+      <li>Biologically similar species may belong to the same Genus (small group of species) or to the same Family (bigger group of species).</li>
+      <li>Images with the same color outline belong to the same family.</li>
+      <li>QUIZZ! Find the name of the biggest and the smallest(s) families of this tree!</li>
+    </ul>
+  </div>
+
+  <script>
+    const infoButton = document.getElementById("info-button");
+    const infoBox = document.getElementById("info-box");
+
+    infoButton.addEventListener("click", () => {
+      if (infoBox.style.display === "none" || infoBox.style.display === "") {
+        infoBox.style.display = "block";
+      } else {
+        infoBox.style.display = "none";
+      }
+    });
+  </script>
+
+  <!-- Interactive force directed tree of the cetacean -->
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <script src="docs/tree/phylo_tree.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>
