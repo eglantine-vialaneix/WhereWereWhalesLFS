@@ -558,3 +558,21 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 });
+
+const infoBtn = document.getElementById('info-button');
+const disclaimerModal = document.getElementById('disclaimerModal');
+const closeBtn = document.getElementById('closeDisclaimer');
+
+infoBtn.addEventListener('click', () => {
+  disclaimerModal.style.display = 'block';
+});
+
+closeBtn.addEventListener('click', () => {
+  disclaimerModal.style.display = 'none';
+});
+
+window.addEventListener('click', (event) => {
+  if (event.target === disclaimerModal) {
+    disclaimerModal.style.display = 'none';
+  }
+});
