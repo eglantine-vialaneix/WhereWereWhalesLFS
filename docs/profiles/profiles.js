@@ -531,7 +531,7 @@ function handleProfilesPageLoad() {
 // Initialize based on current page
 
 document.addEventListener('DOMContentLoaded', () => {
-    if (window.location.pathname.includes('../../profiles_search.html')) {
+    if (window.location.pathname.includes('profiles_search.html')) {
         document.getElementById('main-search-form')?.addEventListener('submit', (e) => {
             e.preventDefault();
             const input = document.getElementById('main-search-input');
@@ -540,7 +540,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     } 
-    if (window.location.pathname.includes('../../profiles.html')) {
+    if (window.location.pathname.includes('profiles.html')) {
         handleProfilesPageLoad();
         const btn_search = document.getElementById('btn-search');
         const search_input = document.getElementById('search-input');
