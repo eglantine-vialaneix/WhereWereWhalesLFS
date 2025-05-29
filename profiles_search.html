@@ -54,7 +54,7 @@
 
     <section class="gallery-section bg-light py-5">
       <div class="container px-4 px-lg-5 text-center">
-        <h2 class="text-black mb-4">Cetacean Gallery</h2>
+        <h2 class="text-black mb-4">Cetacean Profiles</h2>
         <div class="row" id="gallery-container"></div>
       </div>
     </section>
@@ -104,14 +104,17 @@
       background: #4e8a87;
     }
 
-
     
     .gallery-card {
+      display: flex;
+      flex-direction: row;
+      height: 200px;
       transition: transform 0.2s ease, box-shadow 0.2s ease;
       border: none;
       overflow: hidden;
       cursor: pointer;
     }
+
 
     .gallery-card:hover {
       transform: scale(1.03);
@@ -120,14 +123,20 @@
 
     .gallery-image {
       object-fit: cover;
-      width: 100%;
-      width: 500px;
+      width: 50%; /* takes left half */
+      /* height: 100%; */
     }
+
 
     .card-body {
       background-color: white;
       padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      width: 50%;
     }
+
 
     .cetacean-names {
       font-size: 1rem;
@@ -145,30 +154,33 @@
 
   <script>
     fetch('cetacean_names.json')
-      .then(response => response.json())
-      .then(data => {
-        const container = document.getElementById('gallery-container');
+    .then(response => response.json())
+    .then(data => {
+      const container = document.getElementById('gallery-container');
 
-        data.forEach(cetacean => {
-          const card = document.createElement('div');
-          card.className = 'col-sm-6 col-md-4 col-lg-3 mb-4';
-          //console.log(cetacean["Image URL"])
-          card.innerHTML = `
-            <div class="card gallery-card h-100">
-              <img src="${cetacean["Image URL"]}" class="gallery-image" alt="${cetacean["Common name"]}">
-              
-              <div class="card-body">
-                <h5 class="cetacean-names">${cetacean["Common name"]}</h5>
-                <p class="text-muted"><em>${cetacean["Scientific name"]}</em></p>
-              </div>
+      data.forEach(cetacean => {
+        const card = document.createElement('div');
+        card.className = 'col-12 col-md-6 mb-4'; // Makes each card span more width
+        card.innerHTML = `
+          <div class="card gallery-card h-100">
+            <img src="${cetacean["Image URL"]}" class="gallery-image" alt="${cetacean["Common name"]}">
+            <div class="card-body">
+              <h5 class="cetacean-names">${cetacean["Common name"]}</h5>
+              <p class="text-muted"><em>${cetacean["Scientific name"]}</em></p>
             </div>
-          `;
+          </div>
+        `;
 
+        container.appendChild(card);
 
-          container.appendChild(card);
+        card.addEventListener("click", function(event) {
+          const encodedSpeciesName = encodeURIComponent(cetacean["Scientific name"]);
+          window.open(`profiles.html?search=${encodedSpeciesName}`, '_blank');
         });
-      })
-      .catch(error => console.error('Error loading cetacean profiles:', error));
+      });
+
+    })
+    .catch(error => console.error('Error loading cetacean profiles:', error));
   </script>
 
 
