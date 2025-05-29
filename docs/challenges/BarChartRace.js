@@ -7,7 +7,7 @@ class BarChartRace {
         this.k = 10;
         this.barSize = 65;
         this.dateFontSize = 100;
-        this.margin = { top: 60, right: 80, bottom: 6, left: 223 };
+        this.margin = { top: 60, right: 80, bottom: 6, left: 243 };
         this.width = 800*2;
         this.height = this.margin.top + this.barSize * this.n + this.margin.bottom;
   
@@ -171,7 +171,7 @@ class BarChartRace {
         const self = this;
         
         let bar = svg.append("g")
-            .attr("fill-opacity", 0.6)
+            .attr("fill-opacity",1)
             .selectAll("g");
     
         const stack = d3.stack()
@@ -272,41 +272,15 @@ class BarChartRace {
                         .attr("transform", d => `translate(${this.x(0) - 10},${this.y((this.next.get(d) || d).rank)})`)
                         .call(g => g.select("tspan").tween("text", d => this.textTween(d.value, (this.next.get(d) || d).value)))
                 );
-            // Update value labels (on the right of the bar)
-            // valueLabel = valueLabel
-            //     .data(data.slice(0, this.n), d => d.name)
-            //     .join(
-            //         enter => enter.append("text")
-            //             .attr("transform", d => `translate(${this.x((this.prev.get(d) || d).value)},${this.y((this.prev.get(d) || d).rank)})`)
-            //             .attr("y", this.y.bandwidth() / 2)
-            //             .attr("x", 6) // Move the value to the right of the bar
-            //             .attr("dy", "-0.25em")
-            //             .text(d => d.value) // Display the value
-            //             .on("mouseover", (event, d) => this.showTooltip(event, d))
-            //             .on("mouseout", () => this.hideTooltip())
-            //             .call(text => text.append("tspan")
-            //                 .attr("fill-opacity", 0.7)
-            //                 .attr("font-weight", "normal")
-            //                 .attr("x", 6)
-            //                 .attr("dy", "1.15em")),
-            //         update => update,
-            //         exit => exit.transition(transition).remove()
-            //             .attr("transform", d => `translate(${this.x((this.next.get(d) || d).value)},${this.y((this.next.get(d) || d).rank)})`)
-            //             .call(g => g.select("tspan").tween("text", d => this.textTween(d.value, (this.next.get(d) || d).value)))
-            //     );
     
             // Transition both labels together
             nationLabel.transition(transition)
-                .attr("transform", d => `translate(${220},${this.y(d.rank)})`);
-    
-            // valueLabel.transition(transition)
-            //     .attr("transform", d => `translate(${this.x(d.value)},${this.y(d.rank)})`);
+                .attr("transform", d => `translate(${this.margin.left - 3},${this.y(d.rank)})`);
     
             return label;
         };
     }
     
-
     textTween(a, b) {
     const i = d3.interpolateNumber(a, b);
     return function (t) {
@@ -352,34 +326,34 @@ class BarChartRace {
     }
 
     async runChart() {
+    if (this.currentKeyframe === 0) {
         const firstKeyframe = this.keyframes[0];
-        const transition = this.svg.transition()
-            .duration(0)  // No transition initially
-            .ease(d3.easeLinear);
+        const transition = this.svg.transition().duration(0).ease(d3.easeLinear);
 
         this.x.domain([0, firstKeyframe[1][0].value]);
-
         this.updateAxis(firstKeyframe, transition);
         this.updateBars(firstKeyframe, transition);
         this.updateLabels(firstKeyframe, transition);
         this.updateTicker(firstKeyframe, transition);
+        this.addAnnotation(firstKeyframe[0].getFullYear());
 
-    // Begin the animation after displaying the first keyframe
-    this.currentKeyframe = 1;
+        this.currentKeyframe = 1;
+    }
+
     while (this.isPlaying && this.currentKeyframe < this.keyframes.length) {
         const keyframe = this.keyframes[this.currentKeyframe];
-        const transitionDuration = this.getTransitionDuration(keyframe[0].getFullYear()); // Get duration based on the year
+        const transitionDuration = this.getTransitionDuration(keyframe[0].getFullYear());
 
         const transition = this.svg.transition()
             .duration(transitionDuration)
             .ease(d3.easeLinear);
+
         this.x.domain([0, keyframe[1][0].value]);
 
         this.updateAxis(keyframe, transition);
         this.updateBars(keyframe, transition);
         this.updateLabels(keyframe, transition);
         this.updateTicker(keyframe, transition);
-
         this.addAnnotation(keyframe[0].getFullYear());
 
         await transition.end();
@@ -387,22 +361,26 @@ class BarChartRace {
         this.currentKeyframe++;
     }
     }
+
     start() {
-    this.isPlaying = true;
-    this.runChart();
+    if (!this.isPlaying && this.currentKeyframe < this.keyframes.length) {
+        this.isPlaying = true;
+        this.runChart(); // Resume from currentKeyframe
     }
+    }
+
 
     stop() {
     this.isPlaying = false;
     }
 
     toggle() {
+    this.isPlaying = !this.isPlaying;
     if (this.isPlaying) {
-        this.stop();
-    } else {
-        this.start();
+        this.runChart();  // Continue from paused frame
     }
     }
+
     
     showTooltip(event, d, whaleType = null) {
         let tooltipContent;
