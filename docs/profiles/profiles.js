@@ -53,7 +53,7 @@ class Popup {
 
 async function setPageTitle(title) {
     // Get the h1 element by its ID
-    const response = await fetch('cetacean_names.json');
+    const response = await fetch('../../data/cetacean_names.json');
     const data = await response.json();
     const searchInput = title.toLowerCase();
     console.log('searchInput: ', searchInput)
@@ -393,7 +393,7 @@ async function propose_similar_results(similarResults) {
 
 async function get_name_json(input) {
     try {
-        const response = await fetch('cetacean_names.json');
+        const response = await fetch('../../data/cetacean_names.json');
         const data = await response.json();
         const searchInput = input.toLowerCase();
         
