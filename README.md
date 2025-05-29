@@ -7,10 +7,9 @@
 | Eglantine Vialaneix | 324293 |
 
 ```
-
 .
 ├── README.md
-│   
+│
 ├── data
 │   ├── Copernicus_temperature_plot.csv
 │   ├── PhylogeneticTree
@@ -20,8 +19,7 @@
 │   │   ├── Figure_S3_Cetacea_screenshot.png
 │   │   ├── hierarchical_tree.json
 │   │   ├── paper_phylogenomic_cetacean_tree.pdf
-│   │   ├── species_tree_of_life.csv
-│   │   └── test.json
+│   │   └── species_tree_of_life.csv
 │   ├── WikipediaImages
 │   │   └── image_urls.csv
 │   ├── cetacean_names.json
@@ -47,7 +45,6 @@
 │   ├── profiles
 │   │   ├── profiles.js
 │   │   └── style.css
-│   ├── scripts.js
 │   ├── styles.css
 │   └── tree
 │       └── phylo_tree.js
