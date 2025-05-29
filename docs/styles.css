@@ -4220,6 +4220,65 @@ textarea.form-control-lg {
   --bs-navbar-toggler-icon-bg: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28255, 255, 255, 0.55%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
 }
 
+.blue-navbar {
+  background-color: #64a19d !important;
+  z-index: 1000;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+  height: 50px;
+  min-height: 50px;
+}
+
+.blue-navbar .navbar-brand,
+.blue-navbar .navbar-nav .nav-link {
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+  line-height: 50px;
+  font-size: 1.25rem;
+  color: white !important;
+}
+
+.blue-navbar .navbar-toggler {
+  padding: 0.25rem 0.5rem;
+  font-size: 0.8rem;
+  line-height: 1;
+  color: white !important;
+  background-color: transparent;
+}
+
+.search-container {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+#search-input {
+  height: 30px;
+  width: 200px;
+  border-radius: 4px 0 0 4px;
+  border: none;
+  padding: 0 10px;
+}
+
+#btn-search {
+  height: 30px;
+  border-radius: 0 4px 4px 0;
+  border: none;
+  background: #d1e7e7;
+  padding: 0 15px;
+  margin-left: -6px; /* Remove gap between input and button */
+}
+
+.blue-navbar .navbar-collapse {
+  background-color: #64a19d !important;
+}
+
+.blue-navbar .nav-link:hover,
+.blue-navbar .nav-link:focus {
+  color: #e0f7f5 !important;
+}
+
+
 .card {
   --bs-card-spacer-y: 1rem;
   --bs-card-spacer-x: 1rem;
@@ -10973,6 +11032,7 @@ textarea.form-control-lg {
 }
 html {
   scroll-padding-top: calc(4.5rem - 1px);
+  overflow-x: hidden;
 }
 
 body {
