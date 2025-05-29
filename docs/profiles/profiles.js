@@ -53,7 +53,7 @@ class Popup {
 
 async function setPageTitle(title) {
     // Get the h1 element by its ID
-    const response = await fetch('../../data/cetacean_names.json');
+    const response = await fetch('data/cetacean_names.json');
     const data = await response.json();
     const searchInput = title.toLowerCase();
     console.log('searchInput: ', searchInput)
@@ -76,7 +76,7 @@ async function setPageTitle(title) {
 
 async function setPageTitle(title) {
     try {
-        const response = await fetch('cetacean_names.json');
+        const response = await fetch('data/cetacean_names.json');
         const data = await response.json();
         const searchInput = title.toLowerCase();
         
@@ -393,7 +393,7 @@ async function propose_similar_results(similarResults) {
 
 async function get_name_json(input) {
     try {
-        const response = await fetch('../../data/cetacean_names.json');
+        const response = await fetch('data/cetacean_names.json');
         const data = await response.json();
         const searchInput = input.toLowerCase();
         
@@ -531,7 +531,7 @@ function handleProfilesPageLoad() {
 // Initialize based on current page
 
 document.addEventListener('DOMContentLoaded', () => {
-    if (window.location.pathname.includes('profiles_search.html')) {
+    if (window.location.pathname.includes('../../profiles_search.html')) {
         document.getElementById('main-search-form')?.addEventListener('submit', (e) => {
             e.preventDefault();
             const input = document.getElementById('main-search-input');
@@ -540,7 +540,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     } 
-    if (window.location.pathname.includes('profiles.html')) {
+    if (window.location.pathname.includes('../../profiles.html')) {
         handleProfilesPageLoad();
         const btn_search = document.getElementById('btn-search');
         const search_input = document.getElementById('search-input');
