@@ -352,7 +352,7 @@
       
       })
       .on("click", function(event, d) {
-        const encodedSpeciesName = encodeURIComponent(d.data.scientific_name);
+        const encodedSpeciesName = encodeURIComponent(d.data.common_name);
         window.open(`profiles.html?search=${encodedSpeciesName}`, '_blank');
       });
 
