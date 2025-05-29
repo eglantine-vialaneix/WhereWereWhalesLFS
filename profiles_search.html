@@ -51,6 +51,14 @@
         <button type="submit" id="main-btn-search">Search</button>
       </form>
     </div>
+
+    <section class="gallery-section bg-light py-5">
+      <div class="container px-4 px-lg-5 text-center">
+        <h2 class="text-black mb-4">Cetacean Gallery</h2>
+        <div class="row" id="gallery-container"></div>
+      </div>
+    </section>
+
   </main>
 
   <style>
@@ -60,10 +68,10 @@
     .hero-search-container {
       display: flex;
       justify-content: center;
-      align-items: top;
-      height: calc(100vh - 100px); /* Full viewport minus navbar */
-      padding-top: 100px; /* Offset for fixed navbar */
+      margin-top: 120px; /* Space below navbar */
+      margin-bottom: 40px; /* Less space before gallery */
     }
+
     
     .search-wrapper {
       display: flex;
@@ -95,9 +103,74 @@
     #main-btn-search:hover {
       background: #4e8a87;
     }
+
+
+    
+    .gallery-card {
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      border: none;
+      overflow: hidden;
+      cursor: pointer;
+    }
+
+    .gallery-card:hover {
+      transform: scale(1.03);
+      box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+    }
+
+    .gallery-image {
+      object-fit: cover;
+      width: 100%;
+      width: 500px;
+    }
+
+    .card-body {
+      background-color: white;
+      padding: 1rem;
+    }
+
+    .cetacean-names {
+      font-size: 1rem;
+      color: #333;
+    }
+
+
+
+
+
   </style>
 
   <script src="profiles/profiles.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+    fetch('cetacean_names.json')
+      .then(response => response.json())
+      .then(data => {
+        const container = document.getElementById('gallery-container');
+
+        data.forEach(cetacean => {
+          const card = document.createElement('div');
+          card.className = 'col-sm-6 col-md-4 col-lg-3 mb-4';
+          //console.log(cetacean["Image URL"])
+          card.innerHTML = `
+            <div class="card gallery-card h-100">
+              <img src="${cetacean["Image URL"]}" class="gallery-image" alt="${cetacean["Common name"]}">
+              
+              <div class="card-body">
+                <h5 class="cetacean-names">${cetacean["Common name"]}</h5>
+                <p class="text-muted"><em>${cetacean["Scientific name"]}</em></p>
+              </div>
+            </div>
+          `;
+
+
+          container.appendChild(card);
+        });
+      })
+      .catch(error => console.error('Error loading cetacean profiles:', error));
+  </script>
+
+
 
 </body>
