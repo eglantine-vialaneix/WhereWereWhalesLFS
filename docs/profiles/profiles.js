@@ -280,7 +280,8 @@ async function load_gallery(title){
         !image.url.includes('range') &&
         !image.url.includes('map') &&
         !image.url.includes('distribution') &&
-        !image.url.toLowerCase().includes('euphausia')
+        !image.url.toLowerCase().includes('euphausia') &&
+        !image.url.toLowerCase().includes('wapiti')
     );
 
 
