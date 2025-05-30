@@ -11488,15 +11488,31 @@ body {
     /* margin-top: ; */
 }
 
-.wiki-button:hover {
-    background-color: #fff;
-    color: #447ff5;
+#wikiButton {
+  display: none; /* Hidden by default (as in your JS logic) */
+  padding: 10px 20px;
+  background: #87b3b3;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-family: 'Segoe UI', Arial, sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  margin: 10px 0;
 }
 
-.scientific-name {
-    font-style: italic;
-    font-weight: normal;
-    margin-left: 8px;
+#wikiButton:hover {
+  background: #60a7a7;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+#wikiButton:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.2);
 }
 
 
