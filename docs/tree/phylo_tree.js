@@ -269,7 +269,7 @@
     }
 
     // Load data and call createChart
-    d3.json("data/PhilogeneticTree/hierarchical_tree.json").then(data => {
+    d3.json("data/PhylogeneticTree/hierarchical_tree.json").then(data => {
       createChart(data);
     });
 
