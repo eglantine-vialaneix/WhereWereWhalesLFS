@@ -55,7 +55,7 @@ async function setPageTitle(title) {
     // Get the h1 element by its ID
     const response = await fetch('data/cetacean_names.json');
     const data = await response.json();
-    const searchInput = title.toLowerCase();
+    let searchInput = title.toLowerCase();
     console.log('searchInput: ', searchInput)
 
     
@@ -107,6 +107,12 @@ async function setPageTitle(title) {
 // ################################## API FETCHING ############################################
 
 async function get_paragraph(title) {
+    if(title == 'Beluga'){
+        title = 'Beluga whale'
+    }
+    if(title == "Eden's whale"){
+        title = "Bryde's whale"
+    }
     const endpoint = 'https://en.wikipedia.org/w/api.php';
     const params = new URLSearchParams({
         action: "query",
@@ -134,6 +140,12 @@ async function get_paragraph(title) {
 }
 
 async function get_images(title) {
+    if(title == 'Beluga'){
+        title = 'Beluga whale'
+    }
+    if(title == "Eden's whale"){
+        title = "Bryde's whale"
+    }
     const endpoint = 'https://en.wikipedia.org/w/api.php';
     const params = new URLSearchParams({
         action: 'query',
@@ -244,6 +256,8 @@ async function load_svgs(title){
 
 async function load_gallery(title){
     let imageData = await get_images(title);
+    console.log(imageData)
+
     const gallery = document.getElementById('gallery');
     const thumbnailsContainer = document.getElementById('thumbnails');
 
@@ -254,14 +268,19 @@ async function load_gallery(title){
     // filter for jpeg and jpg
     imageData = imageData.filter(image => 
         image.url.toLowerCase().endsWith('.jpg') || 
-        image.url.toLowerCase().endsWith('.jpeg')
+        image.url.toLowerCase().endsWith('.jpeg') ||
+        image.url.toLowerCase().endsWith('.png')
     );
 
     // filter out unrelated images
     imageData = imageData.filter(image => 
         !image.url.toLowerCase().includes('yellow.tang') &&
         !image.url.toLowerCase().includes('okapi2.jpg') &&
-        !image.url.toLowerCase().includes('perm_whale_fluke')
+        !image.url.toLowerCase().includes('perm_whale_fluke') &&
+        !image.url.includes('range') &&
+        !image.url.includes('map') &&
+        !image.url.includes('distribution') &&
+        !image.url.toLowerCase().includes('euphausia')
     );
 
 
@@ -425,7 +444,12 @@ async function get_name_json(input) {
 
 
 async function handleSearch(input, isInitialSearch = false) {
-    const title = await get_name_json(input);
+    const problem_names = ['Sagmatias australis', 'Sagmatias obscurus', 'Sagmatias obliquidens', 'Leucopleurus acutus'];
+    if(problem_names.includes(input)){
+        
+    }
+    let title = await get_name_json(input);
+
     console.log('title from get name json: ', title);
     
     if (title === 'popup closed') return;
@@ -493,6 +517,28 @@ async function wikibutton(title) {
     }
 }
 
+// ################################# MAPS LINK #####################################
+function capitalizeAfterSpace(str) {
+  return str
+    .split(' ') // Split into words
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1)) // Capitalize each word
+    .join(' '); // Rejoin into a single string
+}
+
+async function adjust_maps_link(title){
+    const response = await fetch('data/cetacean_names.json');
+    const data = await response.json();
+    console.log('data: ', data)
+    console.log('title: ', title)
+    const row = data.filter(item => 
+        item['Common name'].toLowerCase() === title.toLowerCase()
+        );
+    console.log(row)
+    const scientific_name = capitalizeAfterSpace(row[0]['Scientific name']);
+    map_link = document.getElementById('map-link');
+    map_link.href = `maps.html?title=${encodeURIComponent(scientific_name)}`;
+}
+
 // ############################### FUNCTION CALLS #########################################
 
 async function loadProfilePage(title) {
@@ -501,6 +547,7 @@ async function loadProfilePage(title) {
     load_gallery(title);
     load_svgs(title);
     wikibutton(title);
+    adjust_maps_link(title);
 }
 
 // ###################################################################################
@@ -518,7 +565,6 @@ function handleProfilesPageLoad() {
     const searchTerm = urlParams.get('search');
     
     if (searchTerm) {
-        console.log('received search term in if cond of handleProfilesPageload')
         const decodedTerm = decodeURIComponent(searchTerm);
         // Load content for the searched term
         handleSearch(decodedTerm);
@@ -534,6 +580,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (window.location.pathname.includes('profiles_search.html')) {
         document.getElementById('main-search-form')?.addEventListener('submit', (e) => {
             e.preventDefault();
+            console.log('registered!!!')
             const input = document.getElementById('main-search-input');
             if (input.value) {
                 handleSearch(input.value, true); // true for initial search
