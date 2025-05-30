@@ -6,6 +6,24 @@
 | Cyrill Strassburg | 377372 |
 | Eglantine Vialaneix | 324293 |
 
+## Usage
+
+Explore the live interactive visualization and learn more about our findings.
+🌐 [Final Project Website](https://eglantine-vialaneix.github.io/WhereWereWhalesLFS/)  
+
+- Open `index.html` in a web browser to start exploring the website.  
+- Use `maps.html` to view whale sightings and threat visualizations on interactive maps.  
+- Explore evolutionary relationships on `phylogenetic_tree.html`.  
+- View detailed species profiles and search functionality via `profiles.html` and `profiles_search.html`.
+
+---
+
+## Organisation
+
+- All scripts are written in JavaScript and use D3.js for data visualization.  
+- Stylesheets are located within the `docs` folder, organized by feature for easy maintenance.  
+- Data files are stored separately in the `data` directory for clarity and separation of concerns.
+
 ```
 .
 ├── README.md
